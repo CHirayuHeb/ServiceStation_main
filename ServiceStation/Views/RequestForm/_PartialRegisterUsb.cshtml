@@ -1,0 +1,326 @@
+﻿@model ServiceStation.Models.Common.Class
+@{
+    string _UserId = User.Claims.FirstOrDefault(s => s.Type == "UserId")?.Value;
+    string _NickName = User.Claims.FirstOrDefault(s => s.Type == "NICKNAME")?.Value;
+    string _Name = User.Claims.FirstOrDefault(s => s.Type == "Name")?.Value;
+    string _SurName = User.Claims.FirstOrDefault(s => s.Type == "SurName")?.Value;
+    string _Division = User.Claims.FirstOrDefault(s => s.Type == "Division")?.Value;
+    string _Section = User.Claims.FirstOrDefault(s => s.Type == "Section")?.Value;
+
+}
+<link href="~/css/RequestForm/site.css" rel="stylesheet" />
+@*<script type="text/javascript">
+        $(document).ready(function () {
+            console.log("sssssss");
+        });
+    </script>*@
+<div>
+    <br />
+    <table class="center" style="@( (@_UserId == @Model._ViewsvsServiceRequest.srRequestBy|| @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode) && @Model._ViewsvsServiceRequest.srStep < 1  ? "" : "pointer-events: none;")">
+        <tr align="left" height="20">
+            <td class="tbpurple" rowspan="2">Objective Request</td>
+            <td id="insertdata2">
+                List Equipment can connect THS company by USB Ports Reference : RG-IT-007
+            </td>
+        </tr>
+        <tr align="left" height="20">
+            <td>
+                @*@Html.RadioButtonFor(m => m._ViewsvsRegisterUSB.ubStatusReq, "New", new { @class = "", id = "F4ubStatusReqNew", name = "F4ubStatusReq" }) <label class="form-check-label" for="StatusDis">New</label><br />
+                    @Html.RadioButtonFor(m => m._ViewsvsRegisterUSB.ubStatusReq, "Cancel", new { @class = "", id = "F4ubStatusReqCancel", name = "F4ubStatusReq" }) <label class="form-check-label" for="StatusDis">Cancel</label><br />*@
+
+                @Html.RadioButtonFor(m => m._ViewsvsRegisterUSB.ubStatusReq, "New", new { @class = "", id = "F4ubStatusReqNew", name = "F4ubStatusReq", onclick = "CheckF4NewCancel('New')" }) <label class="form-check-label" for="StatusDis">New</label><br />
+                @Html.RadioButtonFor(m => m._ViewsvsRegisterUSB.ubStatusReq, "Cancel", new { @class = "", id = "F4ubStatusReqCancel", name = "F4ubStatusReq", onclick = "CheckF4NewCancel('Cancel')" }) <label class="form-check-label" for="StatusDis">Cancel</label><br />
+
+            </td>
+        </tr>
+    </table>
+    <br />
+</div>
+
+@if (@ViewBag.Obstatus != null)
+{
+
+    if (@ViewBag.Obstatus == "Cancel")
+    {
+        <div id="f4Cancel">
+            <div class="grid-container " style="@(@_UserId == @Model._ViewsvsServiceRequest.srRequestBy|| @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode ? "" : "pointer-events: none;")">
+                <div class="grid-item" style="text-align:left">
+                    <label class="text-orange" style="font-weight:800">Cancel</label>
+                </div>
+                <div class="grid-item">
+                </div>
+                <div class="grid-item " style="text-align:right; margin-right:5px">
+                    <input type='button' class='Addcancel button btnOrange' value='+ เพิ่ม' style="width:80px;height:30px">
+                </div>
+            </div>
+            <table class="center tbpurple" id="tbCancel">
+                <tr>
+                    <td width="30px">NO</td>
+                    <td width="200px">Type</td>
+                    <td width="200px">USB No</td>
+                    <td>Reason</td>
+                    <td width="30px">Delete</td>
+                </tr>
+                @{int RowNo1 = 0;}
+                @for (var i = 0; i < Model._ViewsvsRegisterUSB_Cancel.Count; i++)
+                {
+                    <tr align="Center" style="vertical-align: top;">
+                        <td>
+                            @(RowNo1 += 1)
+                            <input type="text" asp-for="_ViewsvsRegisterUSB_Cancel[i].cuNo" class='cuUSBNo' style="display:none" />
+                            <input type="text" asp-for="_ViewsvsRegisterUSB_Cancel[i].cuCancelNo" class='cuUSBNo' style="display:none" />
+                        </td>
+                        <td style="@(@_UserId == @Model._ViewsvsServiceRequest.srRequestBy|| @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode ? "" : "pointer-events: none;")">
+                            @Html.DropDownListFor(m => m._ViewsvsRegisterUSB_Cancel[i].cuType, (SelectList)ViewBag.formMastUSB, "กรุณาเลือก", new { id = "txtF4MastUsb", autocomplete = "off", required = "required", @style = "width:90%;height:30px" })
+                        </td>
+                        <td style="@(@_UserId == @Model._ViewsvsServiceRequest.srRequestBy|| @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode ? "" : "pointer-events: none;")">
+                            <input type="text" asp-for="_ViewsvsRegisterUSB_Cancel[i].cuUSBNo" class='cuUSBNo' style="width:90%" />
+                        </td>
+                        <td align='left' style="@(@_UserId == @Model._ViewsvsServiceRequest.srRequestBy|| @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode ? "" : "pointer-events: none;")">
+                            @Html.RadioButtonFor(m => m._ViewsvsRegisterUSB_Cancel[i].cuReason, "Lost", new { @class = "", id = "txtF4cuReason'" + i + "'", name = "txtF4cuReason'" + i + "'" }) <label>สูญหาย</label><br />
+                            @Html.RadioButtonFor(m => m._ViewsvsRegisterUSB_Cancel[i].cuReason, "broken", new { @class = "", id = "txtF4cuReason'" + i + "'", name = "txtF4cuReason'" + i + "'" }) <label>พัง,เสีย</label><br />
+                            @Html.RadioButtonFor(m => m._ViewsvsRegisterUSB_Cancel[i].cuReason, "Other", new { @class = "", id = "txtF4cuReason'" + i + "'", name = "txtF4cuReason'" + i + "'" }) <label> อื่นๆ</label><br />
+                            <input type="text" asp-for="_ViewsvsRegisterUSB_Cancel[i].cuReason_other" style="width: 80%" />
+                        </td>
+                        <td width="30px"><input type='button' class='RemoveRow' value='&#x274C' style="@(@_UserId == @Model._ViewsvsServiceRequest.srRequestBy|| @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode ? "" : "pointer-events: none;")"></td>
+                    </tr>
+                }
+            </table>
+            @*<table class="center" id="tbCancel">
+                <tr align="Center">
+                    <td class="tbpurple" width="30px">NO</td>
+                    <td class="tbpurple" width="200px">Type</td>
+                    <td class="tbpurple" width="200px">USB No</td>
+                    <td class="tbpurple">Reason</td>
+                    <td class="tbpurple" width="30px">Delete</td>
+                </tr>
+                @{int RowNo = 0;}
+                @for (var i = 0; i < Model._ViewsvsRegisterUSB_Cancel.Count; i++)
+                {
+                    <tr align="Center" style="vertical-align: top;">
+                        <td>
+                            @{RowNo++;}@RowNo
+                            <input type="text" asp-for="_ViewsvsRegisterUSB_Cancel[i].cuNo" class='cuUSBNo' style="display:none" />
+                            <input type="text" asp-for="_ViewsvsRegisterUSB_Cancel[i].cuCancelNo" class='cuUSBNo' style="display:none" />
+                        </td>
+                        <td style="@(@_UserId == @Model._ViewsvsServiceRequest.srRequestBy|| @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode ? "" : "pointer-events: none;")">
+                            @Html.DropDownListFor(m => m._ViewsvsRegisterUSB_Cancel[i].cuType, (SelectList)ViewBag.formMastUSB, "กรุณาเลือก", new { id = "txtF4MastUsb", autocomplete = "off", required = "required", @style = "width:90%;height:30px" })
+                        </td>
+                        <td style="@(@_UserId == @Model._ViewsvsServiceRequest.srRequestBy|| @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode ? "" : "pointer-events: none;")">
+                            <input type="text" asp-for="_ViewsvsRegisterUSB_Cancel[i].cuUSBNo" class='cuUSBNo' style="width:90%" />
+                        </td>
+                        <td align='left' style="@(@_UserId == @Model._ViewsvsServiceRequest.srRequestBy|| @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode ? "" : "pointer-events: none;")">
+                            @Html.RadioButtonFor(m => m._ViewsvsRegisterUSB_Cancel[i].cuReason, "Lost", new { @class = "", id = "txtF4cuReason'" + i + "'", name = "txtF4cuReason'" + i + "'" }) <label>สูญหาย</label><br />
+                            @Html.RadioButtonFor(m => m._ViewsvsRegisterUSB_Cancel[i].cuReason, "broken", new { @class = "", id = "txtF4cuReason'" + i + "'", name = "txtF4cuReason'" + i + "'" }) <label>พัง,เสีย</label><br />
+                            @Html.RadioButtonFor(m => m._ViewsvsRegisterUSB_Cancel[i].cuReason, "Other", new { @class = "", id = "txtF4cuReason'" + i + "'", name = "txtF4cuReason'" + i + "'" }) <label> อื่นๆ</label><br />
+                            <input type="text" asp-for="_ViewsvsRegisterUSB_Cancel[i].cuReason_other" style="width: 80%" />
+                        </td>
+                        <td width="30px"><input type='button' class='RemoveRow' value='&#x274C' style="@(@_UserId == @Model._ViewsvsServiceRequest.srRequestBy|| @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode ? "" : "pointer-events: none;")"></td>
+                    </tr>
+                }
+              
+            </table>*@
+        </div>
+        <br />
+    }
+    else
+    {
+        <div id="f4New">
+            <div class="grid-container " style="@(@_UserId == @Model._ViewsvsServiceRequest.srRequestBy|| @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode ? "" : "pointer-events: none;")">
+                <div class="grid-item" style="text-align:left">
+                    <label style="color:green;font-weight:800">New</label>
+                </div>
+                <div class="grid-item">
+                </div>
+                <div class="grid-item " style="text-align:right; margin-right:5px">
+                    <input type='button' class='AddNew button ' value='+ เพิ่ม' style="width:80px;height:30px">
+                </div>
+            </div>
+            <table class="center" id="tbNew">
+                <tr align="Center">
+                    <td colspan="8" class="tbpurpleB">User(only)</td>
+                    <td colspan="3" class="tbgreenB">For IT(only)</td>
+                </tr>
+                <tr align="Center">
+                    <td class="tbpurple" width="30px">NO<br /></td>
+                    <td class="tbpurple">Type<br /></td>
+                    <td class="tbpurple">Equipment<br /></td>
+                    <td class="tbpurple">Objective<br /></td>
+                    <td class="tbpurple">User Incharge<br /></td>
+                    <td class="tbpurple">Intercom No.</td>
+                    <td class="tbpurple">Image(Equipment)<br /></td>
+                    <td class="tbpurple">Delete</td>
+                    <td class="tbgreen">Hardware ID</td>
+                    <td class="tbgreen">IT Code<br /></td>
+                    @*<td class="tbgreen" width="30px">Delete</td>*@
+                </tr>
+                @{int RowNo = 0;}
+                @for (var i = 0; i < Model._ViewsvsRegisterUSB_New.Count; i++)
+                {
+                    <tr align="Center" style="vertical-align: top;">
+                        <td style="@(@_UserId == @Model._ViewsvsServiceRequest.srRequestBy|| @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode ? "" : "pointer-events: none;")">
+                            @{RowNo++;}@RowNo
+                            <input type="text" asp-for="_ViewsvsRegisterUSB_New[i].nuNo" style="display:none" />
+                            <input type="text" asp-for="_ViewsvsRegisterUSB_New[i].nuNewNo" style="display:none" />
+                        </td>
+                        <td style="@(@_UserId == @Model._ViewsvsServiceRequest.srRequestBy|| @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode ? "" : "pointer-events: none;")">
+                            @Html.DropDownListFor(m => m._ViewsvsRegisterUSB_New[i].nuType, (SelectList)ViewBag.formMastUSB, "กรุณาเลือก", new { id = "txtF4NewMastUsb", autocomplete = "off", required = "required", @style = "width:100px;height:30px" })
+                        </td>
+                        <td style="@(@_UserId == @Model._ViewsvsServiceRequest.srRequestBy|| @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode ? "" : "pointer-events: none;")">
+                            <input type="text" asp-for="_ViewsvsRegisterUSB_New[i].nuEquipment" style="width:90%" />
+                        </td>
+                        <td style="@(@_UserId == @Model._ViewsvsServiceRequest.srRequestBy|| @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode ? "" : "pointer-events: none;")">
+                            <textarea asp-for="_ViewsvsRegisterUSB_New[i].nuObjective" class='cObject' value="" rows="3" cols="30"></textarea>
+                            @*<input type="text" asp-for="_ViewsvsRegisterUSB_New[i].nuObjective" style="width:90%" />*@
+                        </td>
+                        <td style="@(@_UserId == @Model._ViewsvsServiceRequest.srRequestBy|| @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode ? "" : "pointer-events: none;")">
+                            <input type="text" asp-for="_ViewsvsRegisterUSB_New[i].nuUserIncharge" style="width:90%" />
+                        </td>
+                        <td style="@(@_UserId == @Model._ViewsvsServiceRequest.srRequestBy|| @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode ? "" : "pointer-events: none;")">
+                            <input type="text" asp-for="_ViewsvsRegisterUSB_New[i].nuIntercomNo" style="width:90%" />
+                        </td>
+                        <td>
+                            @{
+                                byte[] result = System.Text.Encoding.Unicode.GetBytes(@"\\thsweb\\ServiceStation\\" + Model._ViewsvsRegisterUSB_New[i].nuImage);
+                                var base64 = Convert.ToBase64String(result);
+                                var imgSrc = String.Format("data:image/png;base64,{0}", base64);
+                            }
+                            @*<img src="@Url.Content(String.Format(@"\\thsweb\\ServiceStation\\{0}", @Model._ViewsvsRegisterUSB_New[i].nuImage))" />
+
+                                <img src="@imgSrc" />
+                                <img src="file:///C:/Users/t0015142/Downloads/__thsweb__ServiceStation___20240906%20133358-__thsweb__ServiceStation___user%20(1)%20(1).png" />*@
+                            <input type="text" asp-for="_ViewsvsRegisterUSB_New[i].nuImage" style="width:90%;display:none" />
+                            @if (Model._ViewsvsRegisterUSB_New[i].nuImage != null)
+                            {
+                                <a href="@Url.Action("openFile", "RequestForm", new { pathFile = Model._ViewsvsRegisterUSB_New[i].nuImage })" class="btn-image" target="_blank" style="padding-left:5px;text-decoration:auto;">
+                                    <span>
+                                        <img id="btnOpenfile" src="~/images/img1.png" class="btn-image" style="cursor: pointer; height:28px;width:30px;">
+                                    </span>
+                                    เปิดไฟล์
+                                </a>
+                            }
+
+                            @*<button class="button" style="width:130px;" onclick="OpenfileUsbNew($('#txtSRno').val(),'@Url.Action("History","RequestForm")')">
+                                    <img src="~/images/open-folder.png" style="width:30px;height:30px;padding-right:5px;margin-right:8px" />
+                                    เปิดไฟล์แนบ
+                                </button>*@
+
+                        </td>
+                        <td>
+                            <input type='button' class='RemoveRow' value='&#x274C' style="@(@_UserId == @Model._ViewsvsServiceRequest.srRequestBy|| @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode ? "" : "pointer-events: none;")">
+                        </td>
+                        <td style="@(@_UserId == @Model._ViewsvsServiceRequest.srRequestBy|| @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode ? "" : "pointer-events: none;")">
+                            @if (Model._ViewsvsServiceRequest.srStep <= 2)
+                            {
+                                <input type="text" asp-for="_ViewsvsRegisterUSB_New[i].nuHardwareID" style="width:90%" readonly />
+                            }
+                            else
+                            {
+                                <input type="text" asp-for="_ViewsvsRegisterUSB_New[i].nuHardwareID" style="width:90%" />
+                            }
+                        </td>
+                        <td style="@(@_UserId == @Model._ViewsvsServiceRequest.srRequestBy|| @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode ? "" : "pointer-events: none;")">
+                            @if (Model._ViewsvsServiceRequest.srStep <= 2)
+                            {
+                                <input type="text" asp-for="_ViewsvsRegisterUSB_New[i].nuITCode" style="width:90%" readonly />
+                            }
+                            else
+                            {
+                                <input type="text" asp-for="_ViewsvsRegisterUSB_New[i].nuITCode" style="width:90%" />
+                            }
+
+                        </td>
+                        @*<td>
+                                <input type='button' class='RemoveRow' value='&#x274C'>
+                            </td>*@
+                    </tr>
+                }
+            </table>
+        </div>
+        <br />
+
+    }
+
+}
+else
+{
+    <div id="f4New" style="display:none">
+        <div class="grid-container ">
+            <div class="grid-item" style="text-align:left">
+                <label style="color:green;font-weight:800">New</label>
+            </div>
+            <div class="grid-item">
+            </div>
+            <div class="grid-item " style="text-align:right; margin-right:5px">
+                <input type='button' class='AddNew button ' value='+ เพิ่ม' style="width:80px;height:30px">
+            </div>
+        </div>
+        <table class="center" id="tbNew">
+            <tr align="Center">
+                <td colspan="8" class="tbpurpleB">User(only)</td>
+                <td colspan="3" class="tbgreenB">For IT(only)</td>
+            </tr>
+            <tr align="Center">
+                <td class="tbpurple" width="30px">NO<br /></td>
+                <td class="tbpurple">Type<br /></td>
+                <td class="tbpurple">Equipment<br /></td>
+                <td class="tbpurple">Objective<br /></td>
+                <td class="tbpurple">User Incharge<br /></td>
+                <td class="tbpurple">Intercom No.</td>
+                <td class="tbpurple">Image(Equipment)<br /></td>
+                <td class="tbpurple">Delete</td>
+                <td class="tbgreen">Hardware ID</td>
+                <td class="tbgreen">IT Code<br /></td>
+                @*<td class="tbgreen" width="30px">Delete</td>*@
+            </tr>
+        </table>
+    </div>
+    <div id="f4Cancel" style="display:none">
+        <div class="grid-container ">
+            <div class="grid-item" style="text-align:left">
+                <label class="text-orange" style="font-weight:800">Cancel</label>
+            </div>
+            <div class="grid-item">
+            </div>
+            <div class="grid-item " style="text-align:right; margin-right:5px">
+                <input type='button' class='Addcancel button btnOrange' value='+ เพิ่ม' style="width:80px;height:30px">
+            </div>
+        </div>
+        <table class="tbpurple ">
+            <tr>
+                <td>
+                    sss
+                </td>
+            </tr>
+        </table>
+
+
+        <table class="center " id="tbCancel">
+            <tr align="Center">
+                <td class="tbpurple" width="30px">NO</td>
+                <td class="tbpurple">Type</td>
+                <td class="tbpurple">USB No</td>
+                <td class="tbpurple">Reason</td>
+                <td class="tbpurple" width="30px">Delete</td>
+            </tr>
+
+            @*<tr align="left" height="40" padding="8px">
+                    <td align="center">1</td>
+                    <td>Select master</td>
+                    <td>master</td>
+                    <td>
+                        <input type="radio" name="reason" value="loss" /> สูญหาย &emsp;&emsp;
+                        <input type="radio" name="reason" value="broken" />พัง,เสีย  &emsp;&emsp;
+                        <input type="radio" name="reason" value="broken" />อื่น ๆ  &emsp;
+                        <input type="text" id="namedata2" name="input" />
+                    </td>
+                    <td align="center" id="fbottom3">&#x274C;</td>
+
+                </tr>*@
+        </table>
+    </div>
+}
+
+<br />
+
+

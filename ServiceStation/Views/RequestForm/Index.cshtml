@@ -1,0 +1,621 @@
+﻿@model ServiceStation.Models.Common.Class
+@{
+    string _UserId = User.Claims.FirstOrDefault(s => s.Type == "UserId")?.Value;
+    string _NickName = User.Claims.FirstOrDefault(s => s.Type == "NICKNAME")?.Value;
+    string _Name = User.Claims.FirstOrDefault(s => s.Type == "Name")?.Value;
+    string _SurName = User.Claims.FirstOrDefault(s => s.Type == "SurName")?.Value;
+    string _Division = User.Claims.FirstOrDefault(s => s.Type == "Division")?.Value;
+    string _Section = User.Claims.FirstOrDefault(s => s.Type == "Section")?.Value;
+
+}
+@{
+    ViewData["Title"] = "New Request | Thai Stanley";
+    Layout = "~/Views/Shared/_MenuBar.cshtml";
+}
+<link href="~/css/RequestForm/site.css" rel="stylesheet" />
+@*Datepicker*@
+
+<script type="text/javascript">
+    document.onreadystatechange = () => {
+        if (document.readyState === "interactive") {
+            console.log("interactive");
+            PositionY("RequestForm");
+        }
+    }
+</script>
+
+<div class="home-content">
+    <div class="grid-container" style="margin-bottom:-20px">
+        <div class="grid-item" style="text-align:left;padding-left:10px">
+            <button class="btn btn-success" type="submit" style="width:auto;text-align:left;margin-left:10px " onclick="capture('@Model._ViewsvsServiceRequest.srServiceNo')">
+                <img src="~/images/capture.png" style="width:30px;height:26px;padding-right:0px;margin-right:0px" />
+            </button>
+        </div>
+        <div class="grid-item"> </div>
+        <div class="grid-item" style="text-align:right;padding-right:50px">
+            <button class="button" style="@( (@_UserId == @Model._ViewsvsServiceRequest.srRequestBy || @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode) && Model._ViewsvsServiceRequest.srStep >2 && Model._ViewsvsServiceRequest.srStep < 5 ? "width:100px; " : "display:none;")" onclick="savesubmit('@Url.Action("SavePageForm","RequestForm")')">
+                <img src="~/images/save_1.png" style="width:30px;height:26px;padding-right:5px;margin-right:8px;margin-top: 2px;margin-bottom: 2px;" />
+                บันทึก
+            </button>
+
+            @if (Model._ViewsvsServiceRequest.srStep == 3 && Model._ViewsvsServiceRequest.srFrom == "F3")
+            {
+                <button class="button btnBlue" style="width:150px;" onclick="sendmailF3Inform($('#txtSRno').val(),'@Url.Action("History_Inform","RequestForm")')">
+                    <img src="~/images/information.png" style="width:38px;height:30px;padding-right:5px;margin-right:8px" />
+                    แจ้งสถานะ
+                </button>
+            }
+
+            @if (Model._ViewsvsServiceRequest.srStep <= 2)
+            {
+                <button class="button btnOrange" style="width:130px;" onclick="sendMail($('#txtSRno').val(),'@Url.Action("History","RequestForm")')">
+                    <img src="~/images/direct.png" style="width:30px;height:30px;padding-right:5px;margin-right:8px" />
+                    ส่งคำร้อง
+                </button>
+            }
+            @if (Model._ViewsvsServiceRequest.srStep > 2)
+            {
+                <button class="button btnOrange" style="width:150px;" onclick="sendMailWorker($('#txtSRno').val(),'@Url.Action("History","RequestForm")')">
+                    <img src="~/images/bell.png" style="width:38px;height:30px;padding-right:5px;margin-right:8px" />
+                    แจ้งสถานะ
+                </button>
+                @*<button class="button btnOrange" style="width:150px;" onclick="sendMailWorker($('#txtSRno').val(),'@Url.Action("SendMail","RequestForm")')">
+                        <img src="~/images/bell.png" style="width:38px;height:30px;padding-right:5px;margin-right:8px" />
+                        แจ้งสถานะ
+                    </button>*@
+            }
+        </div>
+    </div>
+
+
+
+    <div id="DisplayContent" class="content-box " style=" margin: auto; padding: 10px; width: 95%;margin-bottom:-30px">
+        <div class="container card card-radius bg-gray-dot-3">
+            <div class="content-box" style="border:0px solid black">
+                @await Html.PartialAsync("_PartialStepFlow.cshtml", Model)
+            </div>
+
+        </div>
+    </div>
+    @*<div id="DisplayContent" class="content-box " style=" margin: auto; padding: 10px; width: 95%;margin-bottom:-30px">
+            <div class="container card card-radius bg-gray-dot-3">
+
+                <div class="content-box" style="border:0px solid black">
+                    @await Html.PartialAsync("_PartialHistory.cshtml", Model)
+                </div>
+            </div>
+        </div>*@
+    <form action="" id="formRequest" name="formData">
+        <div id="DisplayContent" class="content-box " style=" margin: auto; padding: 10px; width: 95%;">
+            <div class="container card card-radius bg-gray-dot-3">
+                <div class="content-box" style="border:0px solid black">
+                    @await Html.PartialAsync("_PartialHistory.cshtml", Model)
+                </div>
+                <div class="grid-container">
+                    <div class="grid-item fw-800" style="text-align:left;padding-left:10px"><label style="font-size:14px"> 1. ส่วนของผู้ขอใช้บริการ</label></div>
+                    <div class="grid-item"> <input id="txtvForm" value="@ViewBag.vForm" style="display:none" /></div>
+                    @Html.TextBoxFor(model => model._ViewsvsServiceRequest.srFrom, new { @class = "text-control", @readonly = "true", @id = "txtMsrFrom", @style = "display:none" })
+                    @Html.TextBoxFor(model => model._ViewsvsServiceRequest.srStep, new { @class = "text-control", @readonly = "true", @id = "txtMsrStep", @style = "display:none" })
+                    <div class="grid-item" style="text-align:right">
+                        @*<input type="submit" value="Submit" class="btn btn-primary">*@
+                    </div>
+
+
+                </div>
+                <table class="center" id="Toptable" border="1" style="color:black;">
+                    <tr align="left" height="20">
+                        <td id="tbottom" class="">Service No.</td>
+                        <td id="insertdata" class="text-gray" colspan="3">
+                            @*@Html.DisplayFor(model => model._ViewsvsServiceRequest.srNo)*@
+                            @Html.TextBoxFor(model => model._ViewsvsServiceRequest.srNo, new { @class = "text-control", @readonly = "true", @id = "txtSRno", @style = "display:none" })
+                            @*@Html.TextBoxFor(model => model._ViewsvsServiceRequest.srNo, new { @class = "text-control", @readonly = "true", @style = "display:none" })*@
+                            @Html.DisplayFor(model => model._ViewsvsServiceRequest.srServiceNo, new { @class = "text-control", @style = "font-size:10px;" })
+                            @Html.TextBoxFor(model => model._ViewsvsServiceRequest.srServiceNo, new { @class = "text-control", @readonly = "true", @style = "display:none" })
+
+                        </td>
+
+                    </tr>
+                    <tr align="left" height="20">
+                        <td id="tbottom" class="">ผู้ร้องขอ</td>
+                        <td id="insertdata" class="text-gray">
+                            @*<input class="form-check" type="checkbox" style="width:20px; height:20px;" />*@
+                            @Html.TextBoxFor(model => model._ViewsvsServiceRequest.srRequestBy, new { @class = "form-control", @readonly = "true", @style = "display:none", @id = "txtMIssueID" })
+                            @Html.TextBoxFor(model => model._ViewsvsServiceRequest.srRequestName, new { @class = "form-control", @readonly = "true", @style = "display:none" })
+                            <label>@Html.DisplayFor(model => model._ViewsvsServiceRequest.srRequestBy) @Html.DisplayFor(model => model._ViewAccEMPLOYEE.EMP_TNAME) @Html.DisplayFor(model => model._ViewAccEMPLOYEE.LAST_TNAME)</label>
+                        </td>
+                        <td id="tbottom" class="">เบอร์ติดต่อ</td>
+                        <td id="insertdata" class="text-gray">
+                            @Html.TextBoxFor(model => model._ViewsvsServiceRequest.srIntercom, new { @class = "form-control", @readonly = "true", @style = "display:none" })
+                            <label>@Html.DisplayFor(model => model._ViewAccEMPLOYEE.INTERCOMNO)</label>
+                        </td>
+                    </tr>
+                    <tr align="left" height="20">
+                        <td id="tbottom">แผนก</td>
+                        <td id="insertdata" class="text-gray">
+                            @Html.TextBoxFor(model => model._ViewsvsServiceRequest.srDeptCode, new { @class = "form-control", @readonly = "true", @style = "display:none" })
+                            <label>@Html.DisplayFor(model => model._ViewAccEMPLOYEE.DEPT_CODE)</label>
+                        </td>
+                        <td id="tbottom">ฝ่าย</td>
+                        <td id="insertdata" class="text-gray">
+                            @Html.TextBoxFor(model => model._ViewsvsServiceRequest.srSecCode, new { @class = "form-control", @readonly = "true", @style = "display:none" })
+                            <label>@Html.DisplayFor(model => model._ViewAccEMPLOYEE.SEC_CODE)</label>
+                        </td>
+                    </tr>
+                    <tr align="left" height="20">
+                        <td id="tbottom">วันที่ขอ</td>
+                        <td id="insertdata" class="text-gray">
+                            <input type="text" id="i_SDate" class="input-with-image text-gray form-control disabled" asp-for="_ViewsvsServiceRequest.srRequestDate" style="width:80%" readonly>
+                            @*<input type="text" class="datepicker form-control"  id="frmDate"></input>*@
+                            @*@Html.TextBoxFor(model => model._ViewsvsServiceRequest.srRequestDate, new { @class = "form-control", @readonly = "true" })*@
+                            @*<input class="datepicker form-control" id="i_SDate" type="text" style="width:70%; height:30px;text-align:left;font-size:12px" asp-for="_ViewsvsServiceRequest.srRequestDate" readonly />*@
+                            @*<input class="form-control" type="text" id="i_SDate" autocomplete="off" style="width:70%;height:30px;text-align:left;font-size:14px" readonly />*@
+                            @*<input class="datepicker form-control" id="i_chagestart" type="text" autocomplete="off" style="width:100%;text-align:center;font-size:10px" readonly />*@
+                        </td>
+                        <td id="tbottom">วันที่ต้องการ</td>
+                        <td id="insertdata" class="text-gray">
+                            <div style="@( (@_UserId == @Model._ViewsvsServiceRequest.srRequestBy|| @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode) &&  @Model._ViewsvsServiceRequest.srStep != 4  ? "" : "pointer-events: none;")">
+                                <input type="text" id="i_EDate" class="input-with-image datepicker text-gray form-control" asp-for="_ViewsvsServiceRequest.srDesiredDate" style="width:80%" readonly>
+                            </div>
+
+
+
+                            @*@if (@_UserId == @Model._ViewsvsServiceRequest.srRequestBy || @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode)
+                                {
+                                    <input type="text" id="i_EDate" class="input-with-image datepicker text-gray form-control" asp-for="_ViewsvsServiceRequest.srDesiredDate" style="width:80%" readonly>
+
+                                }
+                                else
+                                {
+                                    <input type="text" id="i_EDate" class="input-with-image datepicker text-gray form-control" asp-for="_ViewsvsServiceRequest.srDesiredDate" style="width:80%;pointer-events: none;" readonly>
+
+                                }*@
+
+
+                        </td>
+                    </tr>
+                    <tr align="left" height="20">
+                        <td id="tbottom">แผนกที่ให้บริการ</td>
+                        <td id="insertdata" class="text-gray" colspan="3">
+                            @Html.TextBoxFor(model => model._ViewsvsServiceRequest.srType, new { @class = "form-control", @readonly = "true", @style = "font-size:12px;display:none", @id = "txtMsrType" })
+                            <label>@Html.DisplayFor(model => model._ViewsvsServiceRequest.srType)</label>
+                            @*<label>@ViewBag.vTeam</label>*@
+                        </td>
+                        @*<td id="tbottom"></td>
+                            <td id="insertdata"></td>*@
+                    </tr>
+                    <tr align="left" height="20">
+                        <td id="tbottom">เรื่องขอใช้บริการ</td>
+                        <td id="insertdata" class="text-gray" width="300px" colspan="3">
+                            @*@Html.TextAreaFor(model => model._ViewsvsServiceRequest.srSubject, new { @class = "form-control", @rows = 3, @style = "font-size:12px;;display:none", @readonly = "true", @id = "txtMsrSubject" })*@
+                            @*<label>@Html.DisplayFor(model => model._ViewsvsServiceRequest.srSubject)</label>*@
+                            @Html.TextBoxFor(model => model._ViewsvsServiceRequest.srSubject, new { @class = "form-control", @readonly = "true", @id = "txtSUbject", @style = "font-size:12px;" })
+                            @*<label>@ViewBag.vForm</label>*@
+                        </td>
+
+                    </tr>
+                </table>
+
+                <div class="mt-3 bgwhitesmoke">
+                    @if (@ViewBag.vForm == "F1")
+                    {
+                        //New and Revise
+                        @if (@Model._ViewsvsServiceRequest.srSubject.IndexOf("Revise") > -1)
+                        {
+                            @await Html.PartialAsync("_PartialNewReviseProgram.cshtml", Model)
+                        }
+                        else
+                        {
+                            @await Html.PartialAsync("_PartialGenaral.cshtml", Model)
+                        }
+                        @*@await Html.PartialAsync("_PartialGenaral.cshtml", Model)*@
+                    }
+                    else if (@ViewBag.vForm == "F2")
+                    {
+                        @await Html.PartialAsync("_PartialRestoreData.cshtml", Model)
+                    }
+                    else if (@ViewBag.vForm == "F3")
+                    {
+                        @await Html.PartialAsync("_PartialBorrowSpare.cshtml", Model)
+                    }
+                    else if (@ViewBag.vForm == "F4")
+                    {
+                        @await Html.PartialAsync("_PartialRegisterUsb.cshtml", Model)
+                    }
+
+                    else if (@ViewBag.vForm == "F5")
+                    {
+                        @await Html.PartialAsync("_PartialVpnOTP.cshtml", Model)
+                    }
+                    else if (@ViewBag.vForm == "F6")
+                    {
+                        @await Html.PartialAsync("_PartialRegisterProgram.cshtml", Model)
+                    }
+                    else if (@ViewBag.vForm == "F7")
+                    {
+                        @await Html.PartialAsync("_PartialITMSSystemRegister.cshtml", Model)
+
+                    }
+                    @*chirayu add 06/02/2025*@
+                    else if (@ViewBag.vForm == "F8")
+                    {
+                        @await Html.PartialAsync("_PartialNewReviseProgram.cshtml", Model)
+                    }
+
+                </div>
+
+
+            </div>
+
+            @*@if (Model._ViewsvsServiceRequest.srStep == 4) {
+
+                }*@
+
+            @if (Model._ViewsvsServiceRequest.srStep > 2)
+            {
+                <div class="container card card-radius bg-gray-dot-3 bgwhitesmoke">
+                    @await Html.PartialAsync("_PartialWorker.cshtml", Model)
+                </div>
+
+                @*@if (@_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode && Model._ViewsvsServiceRequest.srStep == 3)
+                    {
+                        <div class="container card card-radius bg-gray-dot-3 bgwhitesmoke">
+                            @await Html.PartialAsync("_PartialWorker.cshtml", Model)
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="container card card-radius bg-gray-dot-3 bgwhitesmoke" style="pointer-events: none;">
+                            @await Html.PartialAsync("_PartialWorker.cshtml", Model)
+                        </div>
+                    }*@
+
+
+
+            }
+
+        </div>
+
+        <!-- Modal send mail -->
+        <div class="modal modal-lg fade" id="myModal1" style="background-color:#4f4b4b4d;" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                    @*<div>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>*@
+                    <div class="modal-body" id="myModalBodyDiv1">
+
+                        @*@await Html.PartialAsync("SendMail.cshtml", Model)*@
+                        @*Search Content Change to SendMail*@
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <!-- Modal openfile user-->
+        <div class="modal modal fade" id="myModal2" style="background-color:#4f4b4b4d;" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-body" id="myModalBodyDiv2">
+                        <div class="modal-header" style="margin-top:1px">
+                            <h5 class="modal-title">
+                                <span style="font-weight: bold; font-size: 16px;">เอกสาร​ทั้งหมดของผู้ร้องขอ @ViewBag.listAttachmentCOunt ไฟล์</span>
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class=" panel-group ir fadeInUp animated wowload animated" style="visibility: visible; animation-name: fadeInUp; margin-bottom: 5px; ">
+                            <div class="panel panel-default property">
+                                <div class=" panel-heading panel-heading-custom property" tabindex="0">
+                                    <br>
+                                    <h4 class="panel-title faq-title-range" data-bs-toggle="collapse" data-bs-target="#History" aria-expanded="true" aria-controls="collapseExample">
+                                        <label style="font-size:15px;font-weight:800">
+                                            ไฟล์แนบ
+                                        </label>
+                                        <label class="lbV">
+                                        </label>
+                                    </h4>
+                                </div>
+                                <div class="panel-collapse collapse show" id="History" style="overflow-y: scroll; max-height: 200px;">
+                                    @*<div id="divHistory" class="panel-body">
+                                        </div>*@
+                                    <div class="panel-body">
+                                        <table class="center" id="Toptable" border="1" style="color:black;">
+                                            <tr style="background-color:#E5E0FF">
+                                                <td>No</td>
+                                                <td>Name File</td>
+                                                <td style="width:50px">Delete</td>
+                                            </tr>
+
+
+                                            @if (@ViewBag.listAttachment != null)
+                                            {
+
+                                                var row = 0;
+                                                @foreach (var item in @ViewBag.listAttachment)
+                                                {
+                                                    <tr>
+                                                        <td> <label>@(row += 1)</label></td>
+                                                        <td>
+
+                                                            <a href="@Url.Action("openFile", "RequestForm", new { pathFile = @item.fnFilename })" class="btn-image" target="_blank" style="padding-left:5px;text-decoration:auto;">
+
+                                                                @item.fnFilename
+                                                            </a>
+                                                        </td>
+                                                        <td style="text-align:center">
+
+
+                                                            @if (@_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode && @Model._ViewsvsServiceRequest.srStep != 5)
+                                                            {
+                                                                <input type="button" style="font-size:14px" value="&#x274C" onclick="DeleteFileUser('@item.fnNo','@item.fnFilename','@Url.Action("DeteleDataFile","RequestForm")')">
+                                                            }
+                                                            else
+                                                            {
+                                                                <input type="button" style="font-size:14px" value="&#x274C" disabled>
+                                                            }
+                                                            @*<input type="button" style="@(@_UserId == @Model._ViewsvsServiceRequest.srRequestBy|| @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode ? "font-size:14px" : "pointer-events: none; font-size:14px")" value="&#x274C" onclick="DeleteFileUser('@item.fnNo','@item.fnFilename','@Url.Action("DeteleDataFile","RequestForm")')">*@
+
+                                                            @*<input type="button" style="font-size:14px" value="&#x274C" onclick="DeleteFileUser('@item.fnNo','@item.fnFilename','@Url.Action("DeteleDataFile","RequestForm")')">*@
+                                                        </td>
+                                                    </tr>
+
+
+                                                    @*<input type="button" value="&#x274C">*@
+
+                                                }
+
+                                            }
+                                        </table>
+                                    </div>
+
+
+                                </div>
+
+
+                            </div>
+                        </div>
+                        <div class="modal-footer" style="width: 100%;">
+                            <button type="button" class="button btnRed" data-bs-dismiss="modal" style="width:80px;height:30px">Close</button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal openfile worker-->
+        <div class="modal modal fade" id="myModal3" style="background-color:#4f4b4b4d;" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-body" id="myModalBodyDiv3">
+                        <div class="modal-header" style="margin-top:1px">
+                            <h5 class="modal-title">
+                                <span style="font-weight: bold; font-size: 16px;">เอกสาร​ทั้งหมดของผู้ปฏิบัติงาน @ViewBag.listAttachmentCOuntWorker  ไฟล์</span>
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class=" panel-group ir fadeInUp animated wowload animated" style="visibility: visible; animation-name: fadeInUp; margin-bottom: 5px; ">
+                            <div class="panel panel-default property">
+                                <div class=" panel-heading panel-heading-custom property" tabindex="0">
+                                    <br>
+                                    <h4 class="panel-title faq-title-range" data-bs-toggle="collapse" data-bs-target="#History" aria-expanded="true" aria-controls="collapseExample">
+                                        <label style="font-size:15px;font-weight:800">
+                                            ไฟล์แนบ
+                                        </label>
+                                        <label class="lbV">
+                                        </label>
+                                    </h4>
+                                </div>
+                                <div class="panel-collapse collapse show" id="History" style="overflow-y: scroll; max-height: 200px;">
+                                    @*<div id="divHistory" class="panel-body">
+                                        </div>*@
+                                    <div class="panel-body">
+
+                                        <table class="center" id="Toptable" border="1" style="color:black;">
+                                            <tr style="background-color:#E5E0FF">
+                                                <td>No</td>
+                                                <td>Name File</td>
+                                                <td style="width:50px">Delete</td>
+                                            </tr>
+
+
+
+                                            @if (@ViewBag.listAttachmentWorker != null)
+                                            {
+                                                var row = 0;
+                                                @foreach (var item in @ViewBag.listAttachmentWorker)
+                                                {
+                                                    <tr>
+                                                        <td> <label>@(row += 1)</label></td>
+                                                        <td>
+
+                                                            <a href="@Url.Action("openFile", "RequestForm", new { pathFile = @item.fnFilename })" class="btn-image" target="_blank" style="padding-left:5px;text-decoration:auto;">
+                                                                @item.fnFilename
+                                                            </a>
+                                                        </td>
+                                                        <td>
+                                                            @*<input type="button" style="@(@_UserId == @Model._ViewsvsServiceRequest.srRequestBy|| @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode ? "font-size:14px" : "pointer-events: none; font-size:14px")" value="&#x274C" onclick="DeleteFileUser('@item.fnNo','@item.fnFilename','@Url.Action("DeteleDataFile","RequestForm")')">*@
+
+                                                            @if (@_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode && @Model._ViewsvsServiceRequest.srStep != 5)
+                                                            {
+                                                                <input type="button" style="font-size:14px" value="&#x274C" onclick="DeleteFileUser('@item.fnNo','@item.fnFilename','@Url.Action("DeteleDataFile","RequestForm")')">
+                                                            }
+                                                            else
+                                                            {
+                                                                <input type="button" style="font-size:14px" value="&#x274C" disabled>
+                                                            }
+
+
+                                                            @*<input type="button" style="font-size:14px" value="&#x274C" onclick="DeleteFileUser('@item.fnNo','@item.fnFilename','@Url.Action("DeteleDataFile","RequestForm")')">*@
+                                                        </td>
+                                                    </tr>
+
+                                                    @*<a href="@Url.Action("openFile", "RequestForm", new { pathFile = @item.fnFilename })" class="btn-image" target="_blank" style="padding-left:5px;text-decoration:auto;">
+                                                            <span>
+                                                                <img id="btnOpenfile" src="~/images/open-folder.png" class="btn-image" style="cursor: pointer; height:30px;width:30px">
+                                                            </span>
+                                                            Open file
+                                                        </a>*@
+
+                                                }
+                                            }
+                                        </table>
+                                    </div>
+
+
+                                </div>
+
+
+                            </div>
+                        </div>
+                        <div class="modal-footer" style="width: 100%;">
+                            <button type="button" class="button btnRed" data-bs-dismiss="modal" style="width:80px;height:30px">Close</button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @*}*@
+
+
+        <!-- Modal Borrow NoteBook-->
+        <div class="modal modal-xl fade" id="myModal4" style="background-color:#4f4b4b4d;" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-body" id="myModalBodyDiv4">
+                        <div class="modal-header" style="margin-top:1px">
+                            <h5 class="modal-title">
+                                <span style="font-weight: bold; font-size: 16px;">รายการยืมคืนโน๊ตบุ๊คทั้งหมด</span>
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body" style="">
+                            <div style="width:100%;justify-content:center;display: flex;">
+
+                                <table style="width:400px;border:0px">
+                                    <tr style="border:0px">
+                                        <td style="border:0px">กรุณาเลือกเดือน</td>
+                                        <td style="border:0px"><input id="txtPListDateStart" type="text" class="input-with-image Monthpicker form-control" placeholder="YYYY/MM/DD" style="width:200px;"></td>
+                                        <td style="border:0px">   <input type='button' value='LOAD' style="width:80px;height:30px;vertical-align: sub;" onclick="getval('@Url.Action("ListBorrowNotebook", "RequestForm")')"></td>
+                                    </tr>
+                                </table>
+
+                            </div>
+
+
+                            <table style="width:100%" id="tbListNotebookSp">
+                                <tr>
+                                    <td style="text-align:center">รายการคอมพิวเตอร์</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="modal-body" style="width:100%;justify-content:center;display: flex;">
+                            <table style="width:600px;border:0px">
+                                <tr style="border:0px">
+                                    <td style="text-align:center;border:0px">วันที่ยืม</td>
+                                    <td style="text-align:center;border:0px">
+
+                                        <input id="idBorrowStart" type="text" class="input-with-image datepicker form-control" placeholder="YYYY/MM/DD" style="width:200px;">
+                                    </td>
+                                    <td style="text-align:center;border:0px">วันที่คืน</td>
+                                    <td style="text-align:center;border:0px">
+
+                                        <input id="idBorrowEnd" type="text" class="input-with-image datepicker form-control" placeholder="YYYY/MM/DD" style="width:200px;">
+                                    </td>
+                                </tr>
+                            </table>
+
+
+
+                            @*<table style="width:100%" id="tbListNotebookSp"></table>*@
+                        </div>
+                        <div class="modal-body">
+
+                            @*<table style="width:100%" id="tbListNotebookSp"></table>*@
+                        </div>
+                        <div class="modal-footer" style="width: 100%;">
+                            <button type="button" class="btn btn-success" onclick="btnChooseDate()" style="@(@_UserId == @Model._ViewsvsServiceRequest.srRequestBy|| @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode ? "" : "pointer-events: none;")">OK</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+
+
+
+
+
+                        @*@await Html.PartialAsync("_PartialCalBorrow.cshtml", Model);*@
+                        @*<div class="modal-header" style="margin-top:1px">
+                                <h5 class="modal-title">
+                                    <span style="font-weight: bold; font-size: 16px;">รายการการยืม/คืน โน๊ตบุ๊ต</span>
+                                </h5>
+
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>*@
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Open file USB new-->
+        <div class="modal modal-xl fade" id="myModal5" style="background-color:#4f4b4b4d;" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-body" id="myModalBodyDiv5">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    @*}*@
+
+    <!-- Modal send mail worker -->
+    <div class="modal modal-lg fade" id="myModal6" style="background-color:#4f4b4b4d;" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                @*<div>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>*@
+                <div class="modal-body" id="myModalBodyDiv6">
+
+                    @await Html.PartialAsync("SendMail_Woker.cshtml", Model);
+                    @*Search Content Change to SendMail*@
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+</div>
+
+<script>
+
+    $('.datepicker').datepicker({
+        autoclose: true,
+        todayHighlight: true,
+        format: 'yyyy/mm/dd'
+
+    });
+    //    //const i_Day_Cleaning = document.getElementById("i_moldday").value
+    //    //const i_chagestart = document.getElementById("i_chagestart").value
+    //    //document.getElementById("i_chageend").value = "11";
+    //    //// alert('i_chagestart!' + i_chagestart)
+    //    //console.log("tomorrow2" + addDays(i_chagestart, i_Day_Cleaning));
+    //    //document.getElementById("i_chageend").value = addDays(i_chagestart, i_Day_Cleaning);
+    //});
+
+
+    function getval(sel, action) {
+        console.log("11111");
+    }
+
+
+
+</script>

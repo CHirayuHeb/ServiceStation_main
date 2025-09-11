@@ -1,0 +1,83 @@
+﻿@model ServiceStation.Models.Common.Class
+@{
+    string _UserId = User.Claims.FirstOrDefault(s => s.Type == "UserId")?.Value;
+    string _NickName = User.Claims.FirstOrDefault(s => s.Type == "NICKNAME")?.Value;
+    string _Name = User.Claims.FirstOrDefault(s => s.Type == "Name")?.Value;
+    string _SurName = User.Claims.FirstOrDefault(s => s.Type == "SurName")?.Value;
+    string _Division = User.Claims.FirstOrDefault(s => s.Type == "Division")?.Value;
+    string _Section = User.Claims.FirstOrDefault(s => s.Type == "Section")?.Value;
+
+}
+<link href="~/css/RequestForm/site.css" rel="stylesheet" />
+
+<div>
+    <table class="center" id="Toptable" border="1" style="@(@_UserId == @Model._ViewsvsServiceRequest.srRequestBy|| @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode ? "" : "pointer-events: none;")">
+        <tr align="left" height="20">
+            <td id="tbottom">วันที่กู้ข้อมูลคืน<br /></td>
+            <td id="insertdata">
+                <input type="text" class="input-with-image datepicker form-control" asp-for="_ViewsvsDataRestore.drDateRestore" id="txtF2DateRestore">
+                @*<input class="datepicker form-control" type="text" id="vdateRe" style="width:170px; height:30px;text-align:left;font-size:14px ; background-image:url(../../wwwroot/images/calen.png)" readonly asp-for="_ViewsvsDataRestore.drDateRestore" />*@
+                @*<img src="~/images/calen.png" width="25px" height="25px" />*@
+                @*<input class="datepicker form-control" id="i_chagestart" type="text" autocomplete="off" style="width:100%;text-align:center;font-size:10px" readonly />*@
+
+            </td>
+
+        </tr>
+
+        <tr align="left" height="20">
+            <td id="tbottom">สาเหตุที่ขอกู้ข้อมูล</td>
+            <td id="insertdata">
+                @*<input  class="form-check"/>*@
+                @*<input class="form-control" autocomplete="on" type="text" id="txt1" style="width:500px; text-align:left;font-size:14px" asp-for="_ViewsvsDataRestore.drSys_PCLan" />*@
+                @Html.RadioButtonFor(m => m._ViewsvsDataRestore.drCause, "DeletebyUser", new { @class = "", id = "txtF2SystemCase1", name = "txtF2SystemCase", onclick = "CheckCA('DeletebyUser','Case')" }) <label>Delete by User</label><br />
+                @Html.RadioButtonFor(m => m._ViewsvsDataRestore.drCause, "Other", new { @class = "", id = "txtF2SystemCase2", name = "txtF2SystemCase", onclick = "CheckCA('Other','Case')" }) <label class="form-check-label" for="StatusDis">Other</label>
+                @*<input type="radio" autocomplete="on" name="SystemCase" value="1" asp-for="_ViewsvsDataRestore.drCause" onclick="CheckCA('DeletebyUser','Case')" /> <label class="form-check-label" >Delete by User</label><br />
+                    <input type="radio" autocomplete="on" name="SystemCase" value="2" asp-for="_ViewsvsDataRestore.drCause" onclick="CheckCA('Other','Case')" /> <label class="form-check-label" >Other</label><br />*@
+                <input autocomplete="on" class="form-control" type="text" id="txtCOther" style="width:500px; text-align:left;font-size:14px" asp-for="_ViewsvsDataRestore.drCause_RemarkOther" disabled/>
+            </td>
+        </tr>
+        <tr align="left" height="20">
+            <td id="tbottom">อยู่ในระบบ</td>
+            <td id="insertdata">
+                @Html.RadioButtonFor(m => m._ViewsvsDataRestore.drSystem, "PCLan", new { @class = "", id = "SystemPCLan", name = "System", onclick = "CheckSV('PCLan','Case')" }) <label class="form-check-label" for="StatusDis" style="font-size:12px">PC Lan</label><br />
+                @Html.RadioButtonFor(m => m._ViewsvsDataRestore.drSystem, "Server", new { @class = "", id = "SystemServer", name = "System", onclick = "CheckSV('Server','Case')" }) <label class="form-check-label" for="StatusDis" style="font-size:12px">Server</label><br />
+                @Html.RadioButtonFor(m => m._ViewsvsDataRestore.drSystem, "DB", new { @class = "", id = "SystemDB", name = "System", onclick = "CheckSV('DB','Case')" }) <label class="form-check-label" for="StatusDis" style="font-size:12px">Database</label><br />
+                @Html.RadioButtonFor(m => m._ViewsvsDataRestore.drSystem, "Other", new { @class = "", id = "SystemOther", name = "System", onclick = "CheckSV('Other','Case')" }) <label class="form-check-label" for="StatusDis" style="font-size:12px">Other</label><br />
+
+                @*<input type="radio" name="System1" value="1" asp-for="_ViewsvsDataRestore.drSystem" onclick="CheckSV('PCLan','Server')" /> <label class="form-check-label" for="StatusDis">PCLan</label><br />
+                    <input type="radio" name="System1" value="1" asp-for="_ViewsvsDataRestore.drSystem" onclick="CheckSV('Server','Server')" /> <label class="form-check-label" for="StatusDis">Server</label><br />
+                    <input type="radio" name="System1" value="1" asp-for="_ViewsvsDataRestore.drSystem" onclick="CheckSV('DB','Server')" /> <label class="form-check-label" for="StatusDis">Database</label><br />
+                    <input type="radio" name="System1" value="1" asp-for="_ViewsvsDataRestore.drSystem" onclick="CheckSV('Other','Server')" /> <label class="form-check-label" for="StatusDis">Other</label><br />*@
+                <input class="form-control" type="text" id="txtSOther" style="width:500px; text-align:left;font-size:14px" asp-for="_ViewsvsDataRestore.drSys_RemarkOther" disabled/>
+            </td>
+        </tr>
+        <tr align="left" style="height:auto">
+            <td id="tbottom">ที่อยู่ของไฟล์ที่ต้องการกู้ข้อมูล</td>
+            <td id="insertdata">
+                @*<input class="form-control" type="text" autocomplete="off" style="width:100%; height:30px;text-align:left;font-size:14px" asp-for="_ViewsvsDataRestore.drGroupUser" id="txtF2GroupUser" maxlength="255" />*@
+                @Html.TextAreaFor(model => model._ViewsvsDataRestore.drGroupUser, new { @class = "form-control", style = "font-size:12px;", @cols = 40, @rows = 2, @id = "txtF2GroupUser", maxlength = "255" })
+
+            </td>
+        </tr>
+        <tr align="left" height="20">
+            <td id="tbottom">ชื่อไฟล์</td>
+            <td id="insertdata">
+                @Html.TextAreaFor(model => model._ViewsvsDataRestore.drKeepFile, new { @class = "form-control", style = "font-size:12px;", @cols = 40, @rows = 3, @id = "txtF2KeepFile" , maxlength = "255" })
+                @*<input class="form-control" type="text" autocomplete="off" style="width:70%; height:30px;text-align:left;font-size:14px" asp-for="_ViewsvsDataRestore.drKeepFile" id="txtF2KeepFile" />*@
+            </td>
+            @*<tr align="left" height="20">
+                    <td id="tbottom">กลุ่แนบเอกสารรวมจำนวนไฟล์ 2 ไฟล์</td>
+                    <td id="insertdata">
+                        <label>แนบเอกสาร</label>
+                        <input id="file-upload" type="file" class="custom-file-upload button" />
+                    </td>
+                </tr>*@
+        </tr>
+
+    </table>
+    <br />
+</div>
+<script>
+
+
+</script>

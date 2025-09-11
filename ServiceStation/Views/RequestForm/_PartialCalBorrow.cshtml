@@ -1,0 +1,29 @@
+﻿@using System.Security.Claims;
+@model ServiceStation.Models.Common.Class
+
+@{
+    //Layout = "~/Views/Shared/_MenuBar.cshtml";
+}
+
+<div>
+    <div class="modal-header" style="margin-top:1px;">
+        <h5 class="modal-title">
+            <span style="font-weight: bold; font-size: 16px;">รายการยืมคืนโน๊ตบุ๊คทั้งหมด</span>
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+    <div class="modal-body">
+        <input id="txtPListDateStart" type="text" class="input-with-image Monthpicker form-control" placeholder="YYYY/MM/DD" style="width:300px;" onchange="getVal2(this.value)">
+        @*<table style="width:100%" id="tbListNotebookSp"></table>*@
+    </div>
+    <div class="modal-footer" style="width: 100%;">
+
+        <button type="button" class="btn btn-success" data-bs-dismiss="modal" style=" @( @Model._ViewsvsServiceRequest.srStep > 2 ? "display:none" : "")">
+            OK
+        </button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
+    </div>
+</div>
+
+

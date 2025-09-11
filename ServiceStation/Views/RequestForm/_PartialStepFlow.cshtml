@@ -1,0 +1,112 @@
+﻿@model ServiceStation.Models.Common.Class
+<div class="card-body" id="FormFlow" style="background-color: unset;padding-top:10px;">
+
+    <label style="color:black;font-size:16px;font-weight:600">Approve and Check step of Service station Sheet</label>
+    <br />
+  
+    <br />
+    <div>
+        <ul class="progressbar">
+            <li class="@(@Model._ViewsvsServiceRequest.srStep >= 0 ? "active" : "")"><h6 style="font-size:13px;color:black" class="step-title">Issue</h6></li>
+            @if (Model._ViewsvsServiceRequest.srFrom == "F5" || Model._ViewsvsServiceRequest.srSubject.Contains("Print Color"))
+            {
+                <li class="@(@Model._ViewsvsServiceRequest.srStep >= 1 ? "active" : "")"><p class="step-title" style="font-size:12px;color:black">Waiting for approval DM Up of Dept.</p></li>
+            }
+            else
+            {
+                <li class="@(@Model._ViewsvsServiceRequest.srStep >= 1 ? "active" : "")"><p class="step-title" style="font-size:12px;color:black">Waiting for approval CS Up of Dept.</p></li>
+            }
+
+            <li class="@(@Model._ViewsvsServiceRequest.srStep >= 2 ? "active" : "")"><p class="step-title" style="font-size:12px;color:black">Waiting for approval by CS of IS.</p></li>
+            <li class="@(@Model._ViewsvsServiceRequest.srStep >= 3 ? "active" : "")"><h6 class="step-title" style="font-size:13px;color:black">In Process</h6></li>
+            <li class="@(@Model._ViewsvsServiceRequest.srStep >= 4 ? "active" : "")"> <p class="step-title" style="font-size:13px;color:black">Waiting for accept by CS of IS</p></li>
+            <li class="@(@Model._ViewsvsServiceRequest.srStep >= 5 ? "active" : "")"> <h6 class="step-title" style="font-size:13px;color:black">Finish</h6>
+        </ul>
+    </div>
+
+</div>
+
+
+
+<style>
+
+
+    .container {
+        width: 100%;
+        margin: auto;
+    }
+    .text-msg {
+        margin: 20px 0;
+        display: block;
+        clear: both;
+        text-align: justify;
+    }
+
+    .progressbar {
+        margin: 0;
+        padding-left: 5%;
+        counter-reset: step;
+        clear: both;
+    }
+
+        .progressbar li {
+            list-style-type: none;
+            /*width: 11%;*/
+            /*width: 11%;*/
+            width: 14%;
+            /*width: 11%;*/
+            float: left;
+            font-size: 15px;
+            margin-top:25px;
+            padding-top:5px;
+            position: relative;
+            text-align: center;
+            /*text-transform: uppercase;*/
+            color: #7d7d7d;
+            z-index: 5;
+            margin: 9px;
+        }
+
+            .progressbar li:before {
+                width: 38px;
+                height: 38px;
+                content: counter(step);
+                counter-increment: step;
+                line-height: 30px;
+                border: 2px solid #7d7d7d;
+                display: block;
+                text-align: center;
+                margin: 0 auto 10px auto;
+                border-radius: 50%;
+                background-color: white;
+            }
+
+            .progressbar li:after {
+                width: 100%;
+                height: 2px;
+                content: '';
+                position: absolute;
+                background-color: #7d7d7d;
+                border: 1.5px solid ;
+                top: 23px;
+                left: -50%;
+                z-index: -1;
+            }
+
+            .progressbar li:first-child:after {
+                content: none;
+               
+            }
+
+            .progressbar li.active {
+                color: #0da9ef;
+            }
+
+                .progressbar li.active:before {
+                    border-color: #0da9ef;
+                }
+
+                .progressbar li.active + li:after {
+                    background-color: #0da9ef;
+                }
+</style>

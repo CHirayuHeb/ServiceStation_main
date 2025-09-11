@@ -1,0 +1,35 @@
+﻿.fc-view {
+    z-index: 1;
+    background: #ffffff;
+}
+
+.fc-view a{
+    color: black;
+    text-decoration: none;
+}
+    .fc-view a[aria-label="Sunday"]{
+        color: red;
+    }
+    .fc-view a[aria-label="Monday"] {
+        /*color: gold;*/
+        color: dimgray;
+    }
+    .fc-view a[aria-label="Tuesday"] {
+        /*color: hotpink;*/
+        color: dimgray;
+    }
+    .fc-view a[aria-label="Wednesday"] {
+        color: forestgreen;
+        color: dimgray;
+    }
+    .fc-view a[aria-label="Thursday"] {
+        /*color: orange;*/
+        color: dimgray;
+    }
+    .fc-view a[aria-label="Friday"] {
+        /*color: deepskyblue;*/
+        color: dimgray;
+    }
+    .fc-view a[aria-label="Saturday"] {
+        color: purple;
+    }

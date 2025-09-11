@@ -1,0 +1,107 @@
+﻿@model ServiceStation.Models.Common.Class
+@{
+    string _UserId = User.Claims.FirstOrDefault(s => s.Type == "UserId")?.Value;
+    string _NickName = User.Claims.FirstOrDefault(s => s.Type == "NICKNAME")?.Value;
+    string _Name = User.Claims.FirstOrDefault(s => s.Type == "Name")?.Value;
+    string _SurName = User.Claims.FirstOrDefault(s => s.Type == "SurName")?.Value;
+    string _Division = User.Claims.FirstOrDefault(s => s.Type == "Division")?.Value;
+    string _Section = User.Claims.FirstOrDefault(s => s.Type == "Section")?.Value;
+
+}
+<link href="~/css/RequestForm/site.css" rel="stylesheet" />
+<div >
+    <table class="center" id="Toptable" border="1" style="@(@_UserId == @Model._ViewsvsServiceRequest.srRequestBy|| @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode ? "" : "pointer-events: none;")">
+        <tr align="left" height="20">
+            <td id="tbottom" rowspan="5" style="vertical-align:top">Objective (วัตถุประสงค์) <span style="color:red"> *จำเป็น</span></td>
+            <td>
+                @Html.RadioButtonFor(m => m._ViewsvsNotebookSpare.nsObjective, "WaitOrderNew ", new { @class = "", id = "txtF3WaitOrderNew", name = "txtF3Obj", onclick = "CheckF3Obj('WaitOrderNew','Case')" })
+                <label>1.เนื่องจากเครื่องคอมพิวเตอร์ เสียรอการสั่งซื้อใหม่</label>
+            </td>
+        </tr>
+        <tr align="left" height="20">
+            <td>
+                @Html.RadioButtonFor(m => m._ViewsvsNotebookSpare.nsObjective, "ExternalTraining ", new { @class = "", id = "txtF3ExternalTraining", name = "txtF3Obj", onclick = "CheckF3Obj('ExternalTraining','Case')" })
+                <label>2.เพื่อนำออกไปใช้ฝึกอบรมภายนอก</label>
+            </td>
+        </tr>
+        <tr align="left" height="20">
+            <td>
+                @Html.RadioButtonFor(m => m._ViewsvsNotebookSpare.nsObjective, "MeetAbroad ", new { @class = "", id = "txtF3MeetAbroad", name = "txtF3Obj", onclick = "CheckF3Obj('MeetAbroad','Case')" })
+                <label>3.สำหรับยืมไปประชุมงานต่างประเทศ</label>
+
+            </td>
+        </tr>
+        <tr align="left" height="20">
+            <td>
+                @Html.RadioButtonFor(m => m._ViewsvsNotebookSpare.nsObjective, "MeetCustomer ", new { @class = "", id = "txtF3MeetCustomer", name = "txtF3Obj", onclick = "CheckF3Obj('MeetCustomer','Case')" })
+                <label>4.เพื่อนำไป Meeting กับลูกค้า</label>
+            </td>
+        </tr>
+        <tr align="left" height="20">
+            <td>
+                @Html.RadioButtonFor(m => m._ViewsvsNotebookSpare.nsObjective, "Other ", new { @class = "", id = "txtF3Other", name = "txtF3Obj", onclick = "CheckF3Obj('Other','Case')" })
+                <label>5.อื่นๆ</label>
+                <input class=" form-control" type="text" autocomplete="off" style="width:100%; height:30px;text-align:left;font-size:12px" id="txtF3InputOther" asp-for="_ViewsvsNotebookSpare.nsObjective_Other" disabled/>
+
+            </td>
+        </tr>
+
+
+        <tr align="left" height="50">
+            <td id="tbottom" style="vertical-align:top">รายละเอียด(เพิ่มเติม)  <span style="color:red"> *จำเป็น</span></td>
+            <td>
+                @Html.TextAreaFor(model => model._ViewsvsNotebookSpare.nsDescription, new { @class = "form-control", style = "font-size:12px;", @cols = 40, @rows = 3, @id = "txtF3Description" })
+                @*<textarea name="Text1" rows="5" style="width:100%" class="form-control"></textarea>*@
+            </td>
+        </tr>
+        <tr align="left" height="20">
+            <td id="tbottom">
+                Start(วันที่ยืม)
+                <span style="color:red"> *จำเป็น</span>
+            </td>
+            <td>
+                @*onclick="sendmailsubmit('@Url.Action("SendMail_post", "RequestForm", new { vform = @ViewBag.vForm, vSR = @ViewBag.SRno })')"*@
+                <input class="input-with-image  form-control" type="text" autocomplete="off" style="width:200px; height:30px;text-align:center;font-size:12px;" readonly id="txtF3BorrowStratDate" asp-for="_ViewsvsNotebookSpare.nsBorrowStratDate" onclick="getListNotebook('@Url.Action("ListBorrowNotebook", "RequestForm")')"/>
+            </td>
+        </tr>
+        <tr align="left" height="20">
+            <td id="tbottom">End Date(วันที่คืน) <span style="color:red"> *จำเป็น</span></td>
+            <td>
+                @*pointer-events: none;*@
+                <input class="input-with-image  form-control" type="text" autocomplete="off" style="width:200px; height:30px;text-align:center;font-size:12px;" readonly id="txtF3BorrowEndDate" asp-for="_ViewsvsNotebookSpare.nsBorrowEndDate"  onclick="getListNotebook('@Url.Action("ListBorrowNotebook", "RequestForm")')"/>
+            </td>
+        </tr>
+
+     
+
+    </table>
+    <table class="center" id="Toptable" border="1" >
+        <tr align="left" height="20">
+            <td colspan="2">
+                <button type="button" class="button " style="width:200px;height:35px; margin-right:10px" onclick="getListNotebook('@Url.Action("ListBorrowNotebook", "RequestForm")')">
+                    <img src="~/images/laptop.png" style="width:30px;height:30px;padding-right:5px;margin-right:8px" />
+                    View & Borrow Notebook
+                </button>
+
+
+
+            </td>
+        </tr>
+    </table>
+
+</div>
+
+
+<br />
+@if (Model._ViewsvsServiceRequest.srStep > 2 )
+{
+<div style="@( @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode ? "" : "pointer-events: none;")">
+
+    @await Html.PartialAsync("_PartialWorkerBorrowSpare.cshtml", Model)
+</div>
+   
+}
+
+<br />
+
+

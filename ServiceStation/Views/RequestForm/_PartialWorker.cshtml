@@ -1,0 +1,102 @@
+﻿@model ServiceStation.Models.Common.Class
+@{
+    string _UserId = User.Claims.FirstOrDefault(s => s.Type == "UserId")?.Value;
+    string _NickName = User.Claims.FirstOrDefault(s => s.Type == "NICKNAME")?.Value;
+    string _Name = User.Claims.FirstOrDefault(s => s.Type == "Name")?.Value;
+    string _SurName = User.Claims.FirstOrDefault(s => s.Type == "SurName")?.Value;
+    string _Division = User.Claims.FirstOrDefault(s => s.Type == "Division")?.Value;
+    string _Section = User.Claims.FirstOrDefault(s => s.Type == "Section")?.Value;
+
+}
+<link href="~/css/RequestForm/site.css" rel="stylesheet" />
+
+<div style=" width:100%;" class="center">
+    <div class="grid-container">
+        <div class="grid-item fw-800" style="text-align:left;padding-left:10px"> <label style="font-size:14px"> 2.ปฏิบัติงาน <span style="color:orangered">(เฉพาะ IS เท่านั่น)</span></label></div>
+        <div class="grid-item"> </div>
+        <div class="grid-item" style="text-align:right">
+            @*<input type="submit" value="Submit" class="btn btn-primary">*@
+
+        </div>
+    </div>
+
+    <table id="Toptable" class="center" style="@( ( @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode || _UserId == @ViewBag._empcs) && @Model._ViewsvsServiceRequest.srStep !=5 ? "" : "pointer-events: none;")">
+        <tr>
+            <td align="left" colspan="2" id="tbottom">สถานะ</td>
+        </tr>
+        <tr>
+            <td align="left" colspan="2">
+                กรุณาเลือก @Html.DropDownListFor(m => m._ViewsvsServiceRequest.srStatus, (SelectList)ViewBag.vbformfStatus, new { @class = "form-control", id = "txtwsrStatus", autocomplete = "off", required = "required", @style = "width:200px;font-size:12px" })
+                @*<select class="form-control" id="txtwsrStatus" style="width:250px;font-size:12px" asp-for="_ViewsvsServiceRequest.srStatus">
+                        <option value="">กรุณาเลือก</option>
+                        <option value="Pending​">Pending​</option>
+                        <option value="In Process​​">In Process​​</option>
+                        <option value="Done​">Done​</option>
+                    </select>*@
+
+            </td>
+        </tr>
+        <tr>
+            <td align="left" id="tbottom">วันคาดว่างานเสร็จสิ้น <span style="color:red;"> *จำเป็นต้องกรอก</span></td>
+            <td align="left" id="tbottom">วันที่งานเสร็จสิ้น <span style="color:red"> *จำเป็นต้องกรอก</span></td>
+        </tr>
+        <tr>
+            <td align="left">
+
+                <input class="input-with-image datepicker form-control" type="text" autocomplete="off" style="width:50%;height:30px;text-align:center;font-size:12px" readonly asp-for="_ViewsvsServiceRequest.srExpFinishDate" id="txtwExpFinish" />
+
+
+            </td>
+            <td align="left">
+
+                <input class="input-with-image datepicker form-control" type="text" autocomplete="off" style="width:50%; height:30px;text-align:center;font-size:12px" readonly asp-for="_ViewsvsServiceRequest.srFinishDate" id="txtwFinishDate" />
+
+            </td>
+        </tr>
+        <tr>
+            <td align="left" colspan="2" id="tbottom">เวลาการทำงานทั้งหมด(ชั่วโมง) <span style="color:red"> *จำเป็นต้องกรอก</span></td>
+
+        </tr>
+        <tr>
+            <td align="left" colspan="2">
+                <input type="number" class="text-gray" step="0.25" min="0" asp-for="_ViewsvsServiceRequest.srTotalWorkTime" id="txtwTotalWorkTime"> <span style="color:red">จำเป็นต้องกรอก</span>
+                @*<input type="number" step="0.25" min="0" class="form-control" name="input" value="0" style="width:100px" asp-for="_ViewsvsServiceRequest.srTotalWorkTime" />*@
+
+            </td>
+        </tr>
+        <tr>
+            <td align="left" colspan="2" id="tbottom">วิธีการแก้ไข<span style="color:red"> *จำเป็นต้องกรอก</span></td>
+        </tr>
+        <tr>
+            <td align="left" colspan="2">
+                @Html.TextAreaFor(model => model._ViewsvsServiceRequest.srSolveProblem, new { @class = "form-control", style = "font-size:12px;min-height:200px;resize:vertical;overflow-wrap:break-word;white-space:pre-wrap;", @id = "txtwSolveProblem", maxlength = "500" })
+
+
+                @*<textarea rows="3" class="form-control"></textarea>*@
+
+            </td>
+        </tr>
+
+
+    </table>
+    @*<table id="Toptable" class="center" style="@( ( @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode || _UserId == @ViewBag._empcs) && @Model._ViewsvsServiceRequest.srStep !=5 ? "" : "pointer-events: none;")">
+
+    </table>*@
+        <div class="center" style="width:95%">
+            <span>แนบเอกสารเพิ่มเติม(ถ้ามี)</span>
+            <div class="grid-container">
+                <input name="filesw" type="file" id="filesw" multiple="" class="button " style="width:400px;margin-right:0px;@( ( @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode || _UserId == @ViewBag._empcs) && @Model._ViewsvsServiceRequest.srStep !=5 ? "" : "pointer-events: none;")">
+                <button type="button" class="button btnOrange notification" style="width:140px; height:28px;background-color:#3253d1" data-bs-dismiss="modal" id="btnfilew">
+                    <img src="~/images/open-folder.png" style="width:25px;height:25px;padding-right:5px;margin-right:3px">
+                    เปิดไฟล์แนบ @ViewBag.listAttachmentCOuntWorker ไฟล์
+                    @if (@ViewBag.listAttachmentCOuntWorker > 0)
+                    {
+                    <span class="badge">@ViewBag.listAttachmentCOuntWorker</span>
+                    }
+                </button>
+            </div>
+
+        </div>
+
+</div>
+

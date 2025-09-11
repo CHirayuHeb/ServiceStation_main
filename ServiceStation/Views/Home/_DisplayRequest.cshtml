@@ -1,0 +1,76 @@
+﻿@model List<ServiceStation.Models.Table.IT.ViewDetail>;
+
+<div class="container " style="min-height:200px;width:100%">
+    <div id="divResult">
+        <table class="center" border="1" style="color:black; width:90%;">
+            <thead>
+                <tr align="Center">
+                    <td><tlabel>No.</tlabel></td>
+                    <td><tlabel>Service No.</tlabel></td>
+                    <td><tlabel>Service Type</tlabel></td>
+                    <td><tlabel>Name Request</tlabel></td>
+                    <td><tlabel>Intercom</tlabel></td>
+                    <td><tlabel>Dept.</tlabel></td>
+                    <td><tlabel>Date Request</tlabel></td>
+                    <td><tlabel>Operator</tlabel></td>
+                    <td><tlabel>Target Date</tlabel></td>
+                    <td><tlabel>Status</tlabel></td>
+                    <td><tlabel>Approve By​</tlabel></td>
+                    <td><tlabel>View​</tlabel></td>
+                    <td><tlabel>DELETE</tlabel></td>
+                </tr>
+            </thead>
+            <tbody>
+                @{int row = 0;}
+                @if (Model.Count > 0)
+                {
+                    @foreach (var item in Model)
+                    {
+                        <tr align="Center">
+                            <td>@(row += 1)</td>
+                            <td>@item.ServiceNo</td>
+                            <td style="width:200px">@item.Subject</td>
+                            <td>@item.NameReq</td>
+                            <td>@item.Intercom</td>
+                            <td>@item.Dept</td>
+                            <td>@item.DateRequest</td>
+                            <td>
+                                @if (@item.Step == 3)
+                                {
+                                    @item.ApproveName
+                                }
+                                @*else
+                                    {
+                                        <label><span style="color:blue">Wait Operator</span></label>
+                                    }*@
+                            </td>
+                            <td>@item.DesiredDate</td>
+                            <td>
+                                @if (@item.Step == 0)
+                                {<label><span class="text-red">@item.StatusService</span></label>}
+                            else if (@item.Step == 1)
+                            {<label><span style="color:yellow">@item.StatusService</span></label>}
+                        else if (@item.Step == 2)
+                        {<label><span style="color:yellowgreen">@item.StatusService</span></label>}
+                    else if (@item.Step == 3)
+                    {<label><span style="color:blue">@item.StatusService</span></label>}
+                else if (@item.Step == 4)
+                {<label><span style="color:green">@item.StatusService</span></label>}
+                            </td>
+                            <td>@item.ApproveName</td>
+                            <td>
+                                <input type="button" style="font-size:18px" value="&#x1F50E;" onclick="GoNewRequest('@item.No','Edit','@Url.Action("Index", "RequestForm")','@item.From','@item.Type','@item.Subject','@item.ServiceNo')">
+                                @*onclick="GoNewRequest('@_UserId','New','@Url.Action("Index", "RequestForm")','@Model._ListsvsMastServiceSub[j].msFrom','@Model._ListsvsMastServiceMain[i].mmSecCode','@Model._ListsvsMastServiceSub[j].msSubNameEN @Model._ListsvsMastServiceSub[j].msSubNameTH')"*@
+                            </td>
+                            <td class="rowDelete">
+                                <input type="button" style="font-size:14px" value="&#x274C" onclick="DeleteData('@item.No','@Url.Action("DeteleData","RequestForm")')">
+                                @*<input type="button" style="font-size:14px" value="&#x274C">*@
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+
+</div>

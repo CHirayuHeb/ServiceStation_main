@@ -1,0 +1,31 @@
+﻿@model ServiceStation.Models.Common.Class
+<link href="~/css/RequestForm/site.css" rel="stylesheet" />
+<table class="center" id="Toptable" border="1" style="color:black;">
+    <tr align="center" height="20">
+        <td colspan="2" style="background-color:gainsboro"><label>Operator</label></td>
+      
+    </tr>
+
+    <tr align="left" height="20">
+        <td id="tbottom">ชื่อเครื่อง</td>
+        <td>
+            @Html.DropDownListFor(m => m._ViewsvsNotebookSpare.nsComputerName, (SelectList)ViewBag.formMastNotebook, "กรุณาเลือก", new { id = "txtF3MastNB", autocomplete = "off", @style = "width:200px;height:30px" })
+
+            @*<input class=" form-control" type="text" autocomplete="off" style="width:300px; height:30px;text-align:left;font-size:12px" id="txtF3ComputerName" asp-for="_ViewsvsNotebookSpare.nsComputerName" />*@
+            @*<input class="form-control" type="text" autocomplete="off" style="width:200px; height:30px;text-align:center;font-size:14px" readonly id="txtF3ComputerName" asp-for="_ViewsvsNotebookSpare.nsComputerName" />*@
+
+        </td>
+    </tr>
+    <tr align="left" height="20">
+        <td id="tbottom">Start Date(วันที่ยืม)</td>
+        <td>
+            <input class="input-with-image datepicker form-control" type="text" autocomplete="off" style="width:200px; height:30px;text-align:center;font-size:12px" readonly id="txtF3ReturnStartDate" asp-for="_ViewsvsNotebookSpare.nsReturnStartDate" />
+        </td>
+    </tr>
+    <tr align="left" height="20">
+        <td id="tbottom">End Date(วันที่คืน)</td>
+        <td>
+            <input class="input-with-image datepicker form-control" type="text" autocomplete="off" style="width:200px; height:30px;text-align:center;font-size:12px" readonly id="txtF3ReturnEndDate" asp-for="_ViewsvsNotebookSpare.nsReturnEndDate" />
+        </td>
+    </tr>
+</table>

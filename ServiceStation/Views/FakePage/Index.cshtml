@@ -1,0 +1,92 @@
+﻿@model ServiceStation.Models.Common.Class
+@{
+
+    Layout = "~/Views/Shared/_MenuBar.cshtml";
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+
+    <style>
+        /** {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }*/
+
+      
+
+        .container {
+            text-align: center;
+            background-color: white;
+            padding: 50px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width:50%;
+            margin-top:20px;
+            /*border:1px solid black;*/
+        }
+
+        .error-code {
+            font-size: 100px;
+            color: #ff4d4d;
+        }
+
+        .error-message {
+            font-size: 24px;
+            margin: 20px 0;
+        }
+
+        /*.home-link {
+            font-size: 18px;
+            color: #007bff;
+            text-decoration: none;
+        }*/
+
+            /*.home-link:hover {
+                text-decoration: underline;
+            }*/
+    </style>
+</head>
+<body>
+    @*<div style="margin:50px">
+        <h3 style="color:black;font-weight:600">This thsweb page can’t be found !!!!!</h3>
+        <h6 style="color:black;font-weight:300"> No webpage was found for the web address.</h6>
+    </div>*@
+    <div class="container">
+        <h1 class="error-code">404</h1>
+        <p class="error-message">Oops! Page not found.</p>
+        @*<a href="/" class="home-link">Go back to Home</a>*@
+    </div>
+
+
+    <script>
+                        //document.addEventListener('readystatechange', event => {
+                        //    //if (document.readyState == "complete") {
+
+                        //    //    document.getElementById("id_btnload").click()
+
+                        //    //}
+
+                        //    switch (document.readyState) {
+                        //        case "loading":
+                        //            console.log("===> loading");
+                        //            break;
+                        //        //case "interactive":
+                        //        //    console.log("===> interactive");
+                        //        //    break;
+                        //        case "complete":
+                        //            console.log("===> complete");
+                        //            document.getElementById("id_btnload").click();
+
+                        //            break;
+                        //    }
+                        //});
+
+    </script>
+</body>
+</html>

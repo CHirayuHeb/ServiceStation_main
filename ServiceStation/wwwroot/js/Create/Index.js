@@ -1,0 +1,19 @@
+﻿
+
+$('input.datepicker').datepicker({
+    format: 'yyyy/mm/dd',
+    todayBtn: 'linked',
+    todayHighlight: true,
+    autoclose: true,
+    orientation: "auto"
+    
+});
+
+$('input.Monthpicker').datepicker({
+    format: 'yyyy/mm',
+    todayBtn: 'linked',
+    todayHighlight: true,
+    autoclose: true,
+    orientation: "auto"
+
+});

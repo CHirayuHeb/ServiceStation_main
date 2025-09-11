@@ -1,0 +1,158 @@
+﻿@*@model ServiceStation.Models.MyRequest.MultiDocMast*@
+@model ServiceStation.Models.Common.Class
+@{
+    ViewData["Title"] = "My Work | Thai Stanley";
+    Layout = "~/Views/Shared/_MenuBar.cshtml";
+}
+<link href="~/css/RequestForm/site.css" rel="stylesheet" />
+<link href="~/css/MyRequest/CmyRequest.css" rel="stylesheet" />
+<script type="text/javascript">document.onreadystatechange = () => { if (document.readyState === "interactive") { PositionY("work"); } }</script>
+<div class="home-content">
+    <div id="DisplayContent" class="content-box">
+        @using (Html.BeginForm("Index", "work", FormMethod.Post, new { enctype = "multipart/form-data", id = "formMyReq" }))
+        {
+
+            <div id="DisplayContent" class="content-box">
+                <div class="content-text" style=" margin: auto; padding: 10px; width: 95%;">
+            
+                    <h5 class="control-title">งานของฉัน <img src="~/images/work.png" height="35px" width="35px" style="vertical-align:middle" /></h5>
+          
+                    <div class="row" style="margin:auto; padding: 10px; width: 100%;height:100px;margin:5px; background-color: #c9c3f0;border:1px solid white;border-radius:3px" id="divMyreq">
+                        <div class="col-20">
+                            <label>Service No.</label>
+                            <input type="text" class=" text-gray form-control" style="width:90%;height:33px" id="txtsearchSR" asp-for="_ViewSearchMyReq.v_srNo">
+                        </div>
+                        <div class="col-20">
+                            <label>Title</label>
+                            <input type="text" class=" text-gray form-control" style="width:90%;height:33px" asp-for="_ViewSearchMyReq.v_Title">
+                        </div>
+                        <div class="col-20">
+                            <label>Status Working</label>
+                            @Html.DropDownListFor(m => m._ViewSearchMyReq.v_Status, (SelectList)ViewBag.vbformStatus, "กรุณาเลือก", new { @class = "form-control", id = "ipStatus", autocomplete = "off", @style = "width:100%;font-size:12px" })
+
+                            @*<input type="text" class=" text-gray form-control" style="width:90%;height:33px" readonly>*@
+                        </div>
+                        <div class="col-20">
+                            <label>Date Request</label>
+                            <input type="text" class="input-with-image datepicker text-gray form-control" style="width:90%" autocomplete="off" asp-for="_ViewSearchMyReq.v_DateReq">
+                        </div>
+
+                        <div class="col-20">
+                            <label>Target Date</label>
+                            <input type="text" class="input-with-image datepicker text-gray form-control" style="width:90%" autocomplete="off" asp-for="_ViewSearchMyReq.v_DateTarget">
+                        </div>
+
+                    </div>
+                    <div class="row " style=" justify-content: center;">
+                        <button class="button" style="width:110px;height:34px" value="SEARCH" name="submitButton">
+                            <img src="~/images/search.png" style="width:30px;padding-right:5px;margin-right:5px" />
+                            ค้นหา
+                        </button>
+                    </div>
+                    @if (Model._ListsvsServiceRequest != null)
+                    {
+                        @foreach (var item in Model._ListsvsServiceRequest)
+                        {
+                            <div class="centerdiv" style="" id="divMyreq">
+                                <div class="row">
+                                    <div class="col-50">
+                                        <label style="font-weight:800">Service No:</label>
+                                        <label>@item.srServiceNo</label>
+
+                                    </div>
+                                    <div class="col-40">
+                                        @if (@item.srStep == 1)
+                                        {
+
+                                            <img src="~/images/S1.png" width="25px" height="25px" />
+                                            <label>Waiting for approval of Dept.</label>
+                                        }
+                                        else if (@item.srStep == 2)
+                                        {
+                                            <img src="~/images/S2.png" width="25px" height="25px" />
+                                            <label>Waiting for approval by CS of IS.</label>
+                                        }
+                                        else if (@item.srStep == 3)
+                                        {
+                                            <img src="~/images/S3.png" width="25px" height="25px" />
+                                            <label>In Process.</label>
+                                        }
+
+                                        else if (@item.srStep == 4)
+                                        {
+                                            <img src="~/images/S4.png" width="25px" height="25px" />
+                                            <label>Waiting for accept by CS of IS.</label>
+                                        }
+                                        else if (@item.srStep == 5)
+                                        {
+                                            <img src="~/images/S5.png" width="25px" height="25px" />
+                                            <label>Finish.</label>
+                                        }
+                                        @*<label>@item.srStep</label>*@
+
+                                    </div>
+                                    <div class="col-10">
+                                        <input type="button" style="font-size:18px" value="&#x1F50E;" onclick="GoNewRequest('@item.srRequestBy','Edit','@Url.Action("Index", "RequestForm")','@item.srFrom','@item.srType','@item.srSubject','@item.srNo')">
+                                        <input type="button" style="font-size:18px" value="&#x1F5D1" onclick="DeleteData('@item.srNo','@Url.Action("DeteleData","RequestForm")')" disabled>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-50">
+                                        <label style="font-weight:800">Title:</label>
+                                        <label>@item.srSubject </label>
+
+                                    </div>
+                                    <div class="col-40">
+                                        <label style="font-weight:800">Request Date:</label>
+                                        <label>@item.srRequestDate </label>
+
+                                    </div>
+                                    <div class="col-10">
+
+
+                                    </div>
+                                </div>
+                                <div class="row" style=" align-items: center;">
+                                    <div class="col-50">
+                                        <label style="font-weight:800">Request By:</label>
+                                        <label>@item.srRequestName </label>
+                                        <label>(@item.srIntercom)</label>
+                                    </div>
+                                    <div class="col-40">
+                                        <label style="font-weight:800">Target Date:</label>
+                                        <label>@item.srDesiredDate </label>
+
+                                    </div>
+                                    <div class="col-10">
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+                        @*@for (int i = 0; i < Model._ListsvsServiceRequest.Count; i++)
+            {
+                <div id="box" class="center" style=" margin: auto; padding: 0px; width: 100%;height:100px;margin-top:5px">
+
+                </div>
+            }*@
+                    }
+
+                </div>
+
+
+            </div>
+        }
+    </div>
+</div>
+<script>
+    $('input.datepicker').datepicker({
+        format: 'yyyy/mm/dd',
+        todayBtn: 'linked',
+        todayHighlight: true,
+        autoclose: true,
+        orientation: "auto"
+
+    });
+</script>

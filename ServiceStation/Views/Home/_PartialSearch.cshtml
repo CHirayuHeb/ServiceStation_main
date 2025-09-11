@@ -1,0 +1,43 @@
+﻿@model ServiceStation.Models.Common.Class
+<table class="center" id="Bottomtable" border="1" , style="color:black" width="1150">
+    <tr align="Center">
+        <td id="tbottom">No.</td>
+        <td id="tbottom">Service No.</td>
+        <td id="tbottom">Service Type</td>
+        <td id="tbottom" width="400px">Name Request</td>
+        <td id="tbottom">Intercom</td>
+        <td id="tbottom">Dept.</td>
+        <td id="tbottom">Date Request</td>
+        <td id="tbottom">Operator</td>
+        <td id="tbottom">Target Date </td>
+        <td id="tbottom">Status</td>
+        <td id="tbottom">Approve By​</td>
+        <td id="tbottom">View</td>
+        <td id="tbottom">Delete</td>
+
+    </tr>
+    <tr>
+        @if (@ViewBag.SearchData != null)
+        {
+            var row = 0;
+            @foreach (var item in @ViewBag.SearchData)
+            {
+            <tr align="Center" height="50">
+                <td id="fbottom">@(row += 1)</td>
+                <td id="fbottom"></td>
+                <td id="fbottom"></td>
+                <td id="fbottom">@item.srRequestBy</td>
+                <td id="fbottom"></td>
+                <td id="fbottom"></td>
+                <td id="fbottom"></td>
+                <td id="fbottom"></td>
+                <td id="fbottom"></td>
+                <td id="fbottom"></td>
+                <td id="fbottom"></td>
+                <td id="fbottom"></td>
+                <td id="fbottom"><input type="button" class="RemoveRow" value="&#x274C"></td>
+            </tr>
+        }
+        }
+
+    </table>

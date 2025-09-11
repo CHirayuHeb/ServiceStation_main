@@ -1,0 +1,121 @@
+﻿@*@model ServiceStation.Models.Approval.MultiNewLate*@
+@model ServiceStation.Models.Common.Class
+@{
+
+    string _NickName = User.Claims.FirstOrDefault(s => s.Type == "NICKNAME")?.Value;
+    string _Name = User.Claims.FirstOrDefault(s => s.Type == "Name")?.Value;
+    string _SurName = User.Claims.FirstOrDefault(s => s.Type == "SurName")?.Value;
+    string _Division = User.Claims.FirstOrDefault(s => s.Type == "Division")?.Value;
+    string _Section = User.Claims.FirstOrDefault(s => s.Type == "Section")?.Value;
+
+}
+@{
+    ViewData["Title"] = "Home | Thai Stanley";
+    Layout = "~/Views/Shared/_MenuBar.cshtml";
+}
+@*<link href="~/css/Home/siteHome_1.css" rel="stylesheet" />*@
+<link href="~/css/Home/site.css" rel="stylesheet" />
+<script type="text/javascript">document.onreadystatechange = () => { if (document.readyState === "interactive") { PositionY("Home"); } }</script>
+@using (Html.BeginForm("Index", "Home", FormMethod.Post, new { enctype = "multipart/form-data", id = "formDataSearch" }))
+{
+    <div class="home-content">
+        <div id="DisplayContent" style=" margin: auto;  width: 90%;">
+            <div class="grid-container ">
+                <div class="grid-item container card card-radius">
+                    @*<h5>SEARCH</h5>*@
+                    <table class="center" id="Toptable" border="1" style="color:black;margin-top:10px; margin-bottom:10px;">
+                        <tr align="center">
+                            <td colspan="4" style=" margin: 0; padding: 0; " id="tbottom"><h5>SEARCH</h5></td>
+                        </tr>
+                        <tr align="Left">
+                            <td id="tbottom" width="250"> Service No.</td>
+                            <td>
+                                <input id="id_No" type="text" style="width:90%" class="form-control" />
+                            </td>
+                            <td id="tbottom" width="250"> Name Request</td>
+                            <td><input id="id_Name" type="text" style="width:90%" class="form-control" autocomplete="off" /> </td>
+                        </tr>
+                        <tr align="Left">
+                            <td id="tbottom" width="250"> Dept.</td>
+                            <td>
+                                @Html.DropDownListFor(m => m._viewCondition.Dept, (SelectList)ViewBag.vbformDept, "กรุณาเลือก", new { @class = "form-control", id = "ipCodeDept", autocomplete = "off", @style = "width:90%;" })
+                                @*@Html.DropDownListFor(m => m._ViewSearchData.v_Dept, (SelectList)ViewBag.vbformDept, "กรุณาเลือก", new { @class = "form-control h-fix-30p text-gray", id = "ipCodeDivi", onchange = "filterDivi(this.value, '', '', 'slDivi', '')", autocomplete = "off", required = "required" })*@
+                                @*<input style="width:80%" class="form-control" asp-for="_ViewSearchData.v_Dept" />*@
+                            </td>
+
+                            <td id="tbottom" width="250">Service Type</td>
+                            <td>
+                                @Html.DropDownListFor(m => m._viewCondition.ServiceType, (SelectList)ViewBag.vbformSubject, "กรุณาเลือก", new { @class = "form-control", id = "id_Type", autocomplete = "off", @style = "width:90%;" })
+                                @*<td><input id="id_Type" type="text" style="width:90%" class="form-control" /> </td>*@
+                                @*<h5>ยินดีต้อนรับ คุณ @_Name @_SurName</h5>*@
+                            </td>
+                        </tr>
+                        <tr align="Left">
+                            <td id="tbottom" width="250"> Data Request</td>
+                            <td>
+                                <input id="id_DataRequestFrom" type="text" class="input-with-image datepicker form-control" placeholder="YYYY/MM/DD" style="width:90%;">
+                                @*<input class="datepicker " type="text" style="width:60%" placeholder="YYYY/MM/DD" />
+                                    <img src="~/images/calen.png" width="25px" height="25px" />*@
+                            </td>
+                            <td id="tbottom" width="250"> TO</td>
+                            <td>
+                                <input id="id_DataRequestTo" type="text" class="input-with-image datepicker form-control" placeholder="YYYY/MM/DD" style="width:90%;">
+                                @*<input class="datepicker " type="text" style="width:60%" placeholder="YYYY/MM/DD" />
+                                    <img src="~/images/calen.png" width="25px" height="25px" />*@
+                            </td>
+                        </tr>
+                        <tr align="Left">
+                            <td id="tbottom" width="250"> Target Date</td>
+                            <td>
+                                <input id="id_TargetFrom" type="text" class="input-with-image datepicker form-control" placeholder="YYYY/MM/DD" style="width:90%;">
+                                @*<input class="datepicker " type="text" style="width:60%" placeholder="YYYY/MM/DD" />
+                                    <img src="~/images/calen.png" width="25px" height="25px" />*@
+                            </td>
+                            <td id="tbottom" width="250"> TO</td>
+                            <td>
+                                <input id="id_TargetTo" type="text" class="input-with-image datepicker form-control" placeholder="YYYY/MM/DD" style="width:90%;">
+                                @*<input class="datepicker " type="text" style="width:60%" placeholder="YYYY/MM/DD" />
+                                    <img src="~/images/calen.png" width="25px" height="25px" />*@
+                            </td>
+                        </tr>
+                        <tr align="Left">
+                            <td id="tbottom" width="250"> Operator</td>
+                            <td><input id="id_Operator" type="text" style="width:90%" class="form-control" /> </td>
+                            <td id="tbottom" width="250"> Approve by</td>
+                            <td><input id="id_ApproveBy" type="text" style="width:90%" class="form-control" /> </td>
+                        </tr>
+                        <tr align="Left">
+                            <td id="tbottom">Status Service</td>
+                            <td colspan="3">
+                                @Html.DropDownListFor(m => m._viewCondition.StatusService, (SelectList)ViewBag.vbformStatus, "กรุณาเลือก", new { @class = "form-control", id = "ipStatus", autocomplete = "off", @style = "width:60%;" })
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div style="text-align:center; padding:5px">
+                    @*<button class="button" style="width:130px;" onclick="SearchData('@_UserId','@Url.Action("History","RequestForm", new { vform = @ViewBag.vForm})')">
+                            <img src="~/images/direct.png" style="width:30px;height:30px;padding-right:5px;margin-right:8px" />
+                            ส่งคำร้อง onclick="SearchData('@Url.Action("SearchData","Home")')
+                        </button>*@
+
+                    <button id="btnLoadData" type="button" class="button" style="width:110px;height:34px">
+                        <div>
+                            <img src="~/images/search.png" style="width:30px;padding-right:5px;margin-right:5px" />
+                            ค้นหา
+                        </div>
+                    </button>
+                </div>
+
+                <div class="content">
+                    <div class="search-box">
+                        <div id="divtable">
+                            @await Html.PartialAsync("_DisplayRequest", Model.dataRequest)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+

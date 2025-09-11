@@ -1,0 +1,196 @@
+﻿@model ServiceStation.Models.Common.Class
+@{
+    string _UserId = User.Claims.FirstOrDefault(s => s.Type == "UserId")?.Value;
+    string _NickName = User.Claims.FirstOrDefault(s => s.Type == "NICKNAME")?.Value;
+    string _Name = User.Claims.FirstOrDefault(s => s.Type == "Name")?.Value;
+    string _SurName = User.Claims.FirstOrDefault(s => s.Type == "SurName")?.Value;
+    string _Division = User.Claims.FirstOrDefault(s => s.Type == "Division")?.Value;
+    string _Section = User.Claims.FirstOrDefault(s => s.Type == "Section")?.Value;
+
+}
+<link href="~/css/RequestForm/site.css" rel="stylesheet" />
+
+<div style="text-align:left;width:100%;" class="center">
+
+
+    @*<table class="center" id="Toptable" style="width:50%">
+            <tr align="Center">
+                <td id="tbottom" colspan="2">เลือกโปรแกรมที่ต้องการ​ </td>
+            </tr>
+
+            <tr align="left">
+                <td id="tbottom">ค้นหาโปรแกรม</td>
+                <td>
+
+
+                </td>
+            </tr>
+
+        </table>*@
+
+    <div id="f4New" style="@(@_UserId == @Model._ViewsvsServiceRequest.srRequestBy|| @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode ? "" : "pointer-events: none;")">
+        <div class="grid-container ">
+            <div class="grid-item" style="text-align:left">
+               
+            </div>
+            <div class="grid-item" style="text-align:right; margin-right:5px;">
+
+            </div>
+            <div class="grid-item " style="text-align:right; margin-right:5px;">
+                @Html.DropDownListFor(m => m._ViewsearchPrg.program, (SelectList)ViewBag.formPgm, "กรุณาเลือกโปรแกรม", new { @class = "", id = "ipF4pgm", autocomplete = "off", required = "required", @style = "width:180px;height:30px;vertical-align: sub;font-size:13px" })
+
+                <input type="text" style="width:100px;height:30px;vertical-align: sub;font-size:13px" placeholder="รหัสพนักงาน" id="txtF6empcode">
+                <input type='button' class='Addtbsde button btnOrange' value='+ เพิ่ม' style="width:80px;height:30px;vertical-align: sub;" onclick="btnaddF6('@Url.Action("SearchPersonal", "RequestForm")')">
+                @*<input type='button' class='AddtbUsb button' value='+เพิ่ม' style="width:80px;height:30px;vertical-align: sub;" onclick="addF6User('@Url.Action("SearchPersonal", "RequestForm")')">*@
+            </div>
+        </div>
+
+
+
+        <table class="center" id="tbUsb" style="@(@_UserId == @Model._ViewsvsServiceRequest.srRequestBy|| @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode ? "width:95%;" : "pointer-events: none;width:95%;")">
+            <tr align="Center">
+                <td class="tbpurpleB" width="30px" rowspan="2">No</td>
+                <td class="tbpurpleB" width="50px" rowspan="2" style="font-size:10px">Empcode</td>
+                <td class="tbpurpleB" rowspan="2" style="width:80px">ชื่อ</td>
+                <td class="tbpurpleB" rowspan="2" style="width:80px">นามสกุล</td>
+                <td class="tbpurpleB" rowspan="2">ฝ่าย/แผนก</td>
+                <td class="tbpurpleB" rowspan="2">ติดต่อ</td>
+                <td class="tbpurpleB" rowspan="2">Program name</td>
+                <td class="tbpurpleB" colspan="3" width="80px" >Object</td>
+                <td class="tbpurpleB" colspan="3">Permission</td>
+                <td class="tbpurpleB" rowspan="2">Remark</td>
+                <td class="tbpurpleB" rowspan="2" width="30px">
+                    ลบ
+                    @*<input type='button' class='RemoveRegis button btnOrange ' value='&#x274C' style="width:40px;height:20px">*@
+
+                </td>
+            </tr>
+            <tr>
+                <td class="tbpurple" style="font-size:9px">ผู้ใช้ใหม่</td>
+                <td class="tbpurple" style="font-size:9px">เปลี่ยนสิทธิ์</td>
+                <td class="tbpurple" style="font-size:9px">ยกเลิกผู้ใช้</td>
+                <td class="tbgreen" style="font-size:9px">สร้าง/แก้ไขเอกสาร​<br /></td>
+                <td class="tbgreen" style="font-size:9px">อ่านอย่างเดียว</td>
+                <td class="tbgreen" style="font-size:9px">ลบเอกสาร</td>
+            </tr>
+
+            @*_ViewsvsSDE_SystemRegister*@
+            @if (Model._ViewsvsSDE_SystemRegister != null)
+            {
+                @*@{int RowNo = 0;}*@
+                var row = 0;
+                @for (var i = 0; i < Model._ViewsvsSDE_SystemRegister.Count; i++)
+                {
+            <tr>
+                <td>
+                    @(row += 1)
+                    @*@{RowNo++;}@RowNo*@
+                    @*@i+1*@
+                    <input type="text" asp-for="_ViewsvsSDE_SystemRegister[i].sysNo" style="display:none" />
+                </td>
+                <td>
+                    @Html.DisplayFor(m => m._ViewsvsSDE_SystemRegister[i].sysEmpCode)
+                    <input type="text" asp-for="_ViewsvsSDE_SystemRegister[i].sysEmpCode" style="display:none" />
+
+                </td>
+                <td>
+                    @Html.DisplayFor(m => m._ViewsvsSDE_SystemRegister[i].sysName)
+                    <input type="text" asp-for="_ViewsvsSDE_SystemRegister[i].sysName" style="display:none" />
+                </td>
+                <td>
+                    @Html.DisplayFor(m => m._ViewsvsSDE_SystemRegister[i].sysLastName)
+                    <input type="text" asp-for="_ViewsvsSDE_SystemRegister[i].sysLastName" style="display:none" />
+                </td>
+                <td >
+                    @Html.DisplayFor(m => m._ViewsvsSDE_SystemRegister[i].sysDeptCode )/@Html.DisplayFor(m => m._ViewsvsSDE_SystemRegister[i].sysSectCode)
+                    <input type="text" asp-for="_ViewsvsSDE_SystemRegister[i].sysDeptCode" style="display:none" />
+                    <input type="text" asp-for="_ViewsvsSDE_SystemRegister[i].sysSectCode" style="display:none" />
+                </td>
+                <td>
+                    @Html.DisplayFor(m => m._ViewsvsSDE_SystemRegister[i].sysIntercomNo)
+                    <input type="text" asp-for="_ViewsvsSDE_SystemRegister[i].sysIntercomNo" style="display:none" />
+                </td>
+                <td>
+                    @Html.DisplayFor(m => m._ViewsvsSDE_SystemRegister[i].sysProgramName)
+                    <input type="text" asp-for="_ViewsvsSDE_SystemRegister[i].sysProgramName" style="display:none" />
+
+                </td>
+                <td align="center">
+                    @Html.RadioButtonFor(m => m._ViewsvsSDE_SystemRegister[i].sysObject, "New", new { @class = "", id = "txtF7txtF6itObjectiveNew", name = "txtF6itObjective" })
+
+                </td>
+                <td align="center">
+                    @Html.RadioButtonFor(m => m._ViewsvsSDE_SystemRegister[i].sysObject, "Change", new { @class = "", id = "txtF7txtF6itObjectiveChange", name = "txtF6itObjective" })
+
+                </td>
+                <td align="center">  @Html.RadioButtonFor(m => m._ViewsvsSDE_SystemRegister[i].sysObject, "Cancel", new { @class = "", id = "txtF7txtF6itObjectiveCancel", name = "txtF6itObjective" })</td>
+
+                <td align="center">
+                    @Html.RadioButtonFor(m => m._ViewsvsSDE_SystemRegister[i].sysPermissionEditor, "Editor", new { @class = "", id = "txtF6PermissionEditor", name = "txtF6PermissionEditor" }) <label style="color:green;font-size:8px;"> Yes</label><br />
+                    @Html.RadioButtonFor(m => m._ViewsvsSDE_SystemRegister[i].sysPermissionEditor, "No", new { @class = "", id = "txtF6PermissionEditor", name = "txtF6PermissionEditor" }) <label style="font-size:8px;"> No</label><br />
+                    @*@Html.CheckBoxFor(model => model._ViewsvsSDE_SystemRegister[i].sysPermissionEditor, new { @id = "txtF6PermissionEditor" })*@
+                </td>
+                <td align="center">
+                    @Html.RadioButtonFor(m => m._ViewsvsSDE_SystemRegister[i].sysPermissionRead, "Read", new { @class = "", id = "txtF6PermissionRead", name = "txtF6PermissionRead" }) <label style="color:green;font-size:8px;"> Yes</label><br />
+                    @Html.RadioButtonFor(m => m._ViewsvsSDE_SystemRegister[i].sysPermissionRead, "No", new { @class = "", id = "txtF6PermissionRead", name = "txtF6PermissionRead" }) <label style="font-size:8px;"> No</label><br />
+                    @*@Html.CheckBoxFor(model => model._ViewsvsSDE_SystemRegister[i].sysPermissionRead, new { @id = "txtF6PermissionRead" })*@
+                </td>
+                <td align="center">
+                    @Html.RadioButtonFor(m => m._ViewsvsSDE_SystemRegister[i].sysPermissionDelete, "Delete", new { @class = "", id = "txtF6PermissionDelete", name = "txtF6PermissionDelete" }) <label style="color:green"> Yes</label><br />
+                    @Html.RadioButtonFor(m => m._ViewsvsSDE_SystemRegister[i].sysPermissionDelete, "No", new { @class = "", id = "txtF6PermissionDelete", name = "txtF6PermissionDelete" }) <label style="font-size:8px;"> No</label><br />
+                    @*@Html.CheckBoxFor(model => model._ViewsvsSDE_SystemRegister[i].sysPermissionDelete, new { @id = "txtF6PermissionDelete" })*@
+                </td>
+                <td>
+                    @Html.TextAreaFor(model => model._ViewsvsSDE_SystemRegister[i].sysRemark, new { @class = "form-control", style = "font-size:12px;max-width:100% ;height: 80px;", @id = "txtgDes" })
+                    @*<textarea asp-for="_ViewsvsSDE_SystemRegister[i].sysRemark" cols="30" rows="3"></textarea>*@
+                    @*<input type="text" asp-for="_ViewsvsSDE_SystemRegister[i].sysRemark" style="height:30px" multiple />*@
+                </td>
+                <td>
+                    <input type="button" class="RemoveRow" value="&#x274C">
+                </td>
+            </tr>
+                }
+
+            }
+
+
+
+
+        </table>
+
+
+    </div>
+    <br />
+    <div style="width:100%">
+
+        <input name="files" type="file" id="files" multiple="" class="button " style="width:300px;margin-right:20px;@(@_UserId == @Model._ViewsvsServiceRequest.srRequestBy|| @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode ? "" : "pointer-events: none;")">
+        <button type="button" class="button notification" style="width:140px; height:28px;background-color:#7286D3" data-bs-dismiss="modal" id="btnfile">
+            <img src="~/images/open-folder.png" style="width:25px;height:25px;padding-right:5px;margin-right:8px">
+            เปิดไฟล์แนบ @ViewBag.listAttachmentCOunt ไฟล์
+            @if (@ViewBag.listAttachmentCOunt > 0)
+            {
+            <span class="badge">@ViewBag.listAttachmentCOunt</span>
+            }
+        </button>
+        <span class="text-red" style="font-size:13px;margin-left:10px"> กรณีขอใช้งานเกิน 8 คน รบกวนแนบไฟล์</span>
+    </div>
+</div>
+
+<script>
+                //$('input[type="radio"]').on('click', function () {
+                //    console.log("111");
+                //    //check = $(this).is(':checked');
+                //    var myRadio = $('input[type="radio"]:checked');
+                //    //console.log("11122" & myRadio.value);
+                //    myRadio.on('click', function () {
+                //        if (myRadio.attr('checked')) {
+                //            $(this).removeAttr('checked');
+                //            $(this).prop('checked', false);
+                //        } else {
+                //            $(this).attr('checked', 'checked');
+                //            $(this).prop('checked', true);
+                //        }
+                //    });
+                //});
+
+</script>

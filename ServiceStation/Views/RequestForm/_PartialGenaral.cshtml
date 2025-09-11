@@ -1,0 +1,65 @@
+﻿@model ServiceStation.Models.Common.Class
+@{
+    string _UserId = User.Claims.FirstOrDefault(s => s.Type == "UserId")?.Value;
+    string _NickName = User.Claims.FirstOrDefault(s => s.Type == "NICKNAME")?.Value;
+    string _Name = User.Claims.FirstOrDefault(s => s.Type == "Name")?.Value;
+    string _SurName = User.Claims.FirstOrDefault(s => s.Type == "SurName")?.Value;
+    string _Division = User.Claims.FirstOrDefault(s => s.Type == "Division")?.Value;
+    string _Section = User.Claims.FirstOrDefault(s => s.Type == "Section")?.Value;
+
+}
+<link href="~/css/RequestForm/site.css" rel="stylesheet" />
+
+<div style=" width:95%;" class="center">
+    <div style="@(@_UserId == @Model._ViewsvsServiceRequest.srRequestBy|| @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode ? "" : "pointer-events: none;")">
+        @*<div>*@
+        <label>รายละเอียด<span style="color:red">*</span></label>
+
+
+        @*@Html.TextBoxFor(model => model._ViewsvsGeneral.gnDescription, 1 ==2  ? new { @class = "form-control", @readonly = "true" }:null)*@
+        @*@Html.TextAreaFor(model => model._ViewsvsGeneral.gnDescription, new { @class = "form-control", style = "font-size:12px;max-width:100% ;height: 200px;", @id = "txtgDes" })*@
+        @Html.TextAreaFor(model => model._ViewsvsGeneral.gnDescription, new { @class = "form-control", style = "font-size:12px;max-width:100% ;field-sizing: content;min-height:200px", @id = "txtgDes" })
+        @*@Html.TextAreaFor(model => Model._ViewsvsGeneral.gnDescription, @Model._ViewsvsServiceRequest.srStep == 0  ? new { @readonly = false, @class = "form-control", @style = "font-size:12px", @cols = 40, @rows = 6, @id = "txtgDes" } : new { @readonly = true, @class = "form-control", @style = "font-size:12px", @cols = 40, @rows = 6, @id = "txtgDes" })*@
+        @*@Html.TextAreaFor(model => Model._ViewsvsGeneral.gnDescription, new { @readonly = (@_UserId == @Model._ViewsvsServiceRequest.srRequestBy || @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode) ? true : true, @class = "form-control", @style = "font-size:12px", @cols = 40, @rows = 8, @id = "txtgDes" })*@
+        @*@Html.TextAreaFor(model => Model._ViewsvsGeneral.gnDescription, @_UserId == @Model._ViewsvsServiceRequest.srRequestBy ? null : new { @readonly = true, @class = "form-control", @style = "font-size:12px", @cols = 40, @rows = 6, @id = "txtgDes" })
+        @Html.TextAreaFor(model => Model._ViewsvsGeneral.gnDescription, @_UserId == @Model._ViewsvsServiceRequest.srRequestBy ? null : new { @readonly = true, @class = "form-control", @style = "font-size:12px", @cols = 40, @rows = 6, @id = "txtgDes" }) pointer-events: none;*@
+    </div>
+
+    <div class="my-2">
+        <div class="my-1">
+            <label>แนบเอกสาร</label>
+            <div style="width:100%">
+
+                <input name="files" type="file" id="files" multiple="" class="button " style="width:300px;margin-right:20px;@(@_UserId == @Model._ViewsvsServiceRequest.srRequestBy|| @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode ? "" : "pointer-events: none;")">
+                <button type="button" class="button notification" style="width:140px; height:28px;background-color:#7286D3" data-bs-dismiss="modal" id="btnfile">
+                    <img src="~/images/open-folder.png" style="width:25px;height:25px;padding-right:5px;margin-right:8px">
+                    เปิดไฟล์แนบ @ViewBag.listAttachmentCOunt ไฟล์
+                    @if (@ViewBag.listAttachmentCOunt > 0)
+                    {
+                    <span class="badge">@ViewBag.listAttachmentCOunt</span>
+                    }
+                    @*<span class="badge">0</span>*@
+                </button>
+                @*<a href="#" class="notification">
+                    <span>Inbox</span>
+                    <span class="badge">3</span>
+                </a>*@
+            </div>
+
+            <div class="wx-100">
+
+            </div>
+
+        </div>
+
+        <div class="my-3" style="@(@_UserId == @Model._ViewsvsServiceRequest.srRequestBy|| @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode ? "" : "pointer-events: none;")">
+            <label> Kosu (Hrs./Month)</label>
+            <input type="number" class="text-gray" step="0.25" min="0" asp-for="_ViewsvsServiceRequest.srKosu" id="txtgkosu"> <span style="color:red">กรอกเฉพาะตัวเลขเท่านั่น</span>
+        </div>
+    </div>
+
+
+
+
+
+</div>

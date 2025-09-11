@@ -1,0 +1,372 @@
+﻿@*@model ServiceStation.Models.Approval.MultiNewLate*@
+@model ServiceStation.Models.Common.Class
+@{
+    string _EmpCode = User.Claims.FirstOrDefault(s => s.Type == "EmpCode")?.Value;
+    string _NickName = User.Claims.FirstOrDefault(s => s.Type == "NICKNAME")?.Value;
+    string _Name = User.Claims.FirstOrDefault(s => s.Type == "Name")?.Value;
+    string _SurName = User.Claims.FirstOrDefault(s => s.Type == "SurName")?.Value;
+    string _Division = User.Claims.FirstOrDefault(s => s.Type == "Division")?.Value;
+    string _Section = User.Claims.FirstOrDefault(s => s.Type == "Section")?.Value;
+
+}
+@{
+    ViewData["Title"] = "Home | Thai Stanley";
+    Layout = "~/Views/Shared/_MenuBar.cshtml";
+}
+@*<link href="~/css/Home/siteHome_1.css" rel="stylesheet" />*@
+<link href="~/css/Home/site.css" rel="stylesheet" />
+<link href="~/css/MyRequest/CmyRequest.css" rel="stylesheet" />
+<script type="text/javascript">document.onreadystatechange = () => { if (document.readyState === "interactive") { PositionY("Home"); } }</script>
+
+<div class="home-content">
+    <div id="DisplayContent">
+        @*<form id="formSearch">*@
+        @using (Html.BeginForm("Index", "Home", FormMethod.Post, new { enctype = "multipart/form-data", id = "formSearch" }))
+        {
+            <div>
+                <div class="grid-item container card card-radius" style="margin-inline: auto;border: 0px solid white; background-color: whitesmoke;border-radius:2px;">
+                    <div class="grid-item fw-800" style="text-align:center;padding-left:12px"><label style="font-size:18px">ค้นหาข้อมูล</label></div>
+                    <div style="width:100%;">
+                        <div class="row center">
+                            <div class="col-5 " style="">
+                            </div>
+                            <div class="col-20 border1_5 " style=" display: flex;align-items: center;background-color:#E5E0FF">
+                                <div class="center fw-800" style="text-align:left;font-size:12px">Service No.</div>
+                            </div>
+
+                            <div class="col-25" style=" display: flex;align-items: center; ">
+                                <input style="width:100%;font-size:13px" class="form-control" asp-for="_ViewSearchData.v_serviceNo" autocomplete="off" />
+                            </div>
+                            <div class="col-20 border1_5 " style=" display: flex;align-items: center;background-color:#E5E0FF">
+                                <div class="center fw-800" style="text-align:left;font-size:12px">Empcode Request</div>
+                            </div>
+                            <div class="col-25" style=" display: flex;align-items: center; ">
+                                <input style="width:100%;font-size:13px" class="form-control" asp-for="_ViewSearchData.v_NameReq" autocomplete="off" />
+                            </div>
+                            <div class="col-5 " style="">
+                            </div>
+                        </div>
+                        <div class="row center">
+                            <div class="col-5 " style="">
+                            </div>
+                            <div class="col-20 border1_5 " style=" display: flex;align-items: center;background-color:#E5E0FF">
+                                <div class="center fw-800" style="text-align:left;font-size:12px">Dept.</div>
+                            </div>
+
+                            <div class="col-25" style=" display: flex;align-items: center; ">
+                                @Html.DropDownListFor(m => m._ViewSearchData.v_Dept, (SelectList)ViewBag.vbformDept, "กรุณาเลือก", new { @class = "form-control", id = "ipCodeDept", autocomplete = "off", @style = "width:100%;font-size:13px" })
+                            </div>
+                            <div class="col-20 border1_5 " style=" display: flex;align-items: center;background-color:#E5E0FF">
+                                <div class="center fw-800" style="text-align:left;font-size:12px">Status Service</div>
+                            </div>
+                            <div class="col-25" style=" display: flex;align-items: center; ">
+                                @*@Html.DropDownListFor(m => m._ViewSearchData.v_StatusService, (SelectList)ViewBag.vbformStatus, "กรุณาเลือก", new { @class = "form-control", id = "ipStatus", autocomplete = "off", @style = "width:100%;font-size:13px" })*@
+
+
+                                @Html.DropDownListFor(
+    m => m._ViewSearchData.v_StatusService,
+    (IEnumerable<SelectListItem>)ViewBag.vbformStatus,
+    "กรุณาเลือก",
+    new { @class = "form-control", id = "ipStatus", autocomplete = "off", @style = "width:100%;font-size:12px" }
+)
+
+                                @*@Html.DropDownListFor(
+                                        m => m._ViewSearchData.v_StatusService,
+                                        (SelectList)ViewBag.vbformStatus1,
+                                        "กรุณาเลือก",
+                                        new { @class = "form-control", id = "ipStatus", autocomplete = "off", @style = "width:100%;font-size:12px" }
+                                    )*@
+                            </div>
+                            <div class="col-5 " style="">
+                            </div>
+                        </div>
+                        <div class="row center">
+                            <div class="col-5 " style="">
+                            </div>
+                            <div class="col-20 border1_5 " style=" display: flex;align-items: center;background-color:#E5E0FF">
+                                <div class="center fw-800" style="text-align:left;font-size:12px">Date Request From.</div>
+                            </div>
+
+                            <div class="col-25" style=" display: flex;align-items: center; ">
+                                <input type="text" class="input-with-image datepicker form-control" placeholder="YYYY/MM/DD" asp-for="_ViewSearchData.v_DateRequestFrom" autocomplete="off" style="width:100%">
+                            </div>
+                            <div class="col-20 border1_5 " style=" display: flex;align-items: center;background-color:#E5E0FF">
+                                <div class="center fw-800" style="text-align:left;font-size:12px">Date Request To</div>
+                            </div>
+                            <div class="col-25" style=" display: flex;align-items: center; ">
+                                <input type="text" class="input-with-image datepicker form-control" placeholder="YYYY/MM/DD" asp-for="_ViewSearchData.v_DateRequestTo" autocomplete="off" style="width:100%">
+                            </div>
+                            <div class="col-5 " style="">
+                            </div>
+                        </div>
+                        <div class="row center">
+                            <div class="col-5 " style="">
+                            </div>
+                            <div class="col-20 border1_5 " style=" display: flex;align-items: center;background-color:#E5E0FF">
+                                <div class="center fw-800" style="text-align:left;font-size:12px">Target Date From.</div>
+                            </div>
+
+                            <div class="col-25" style=" display: flex;align-items: center; ">
+                                <input type="text" class="input-with-image datepicker form-control" placeholder="YYYY/MM/DD" asp-for="_ViewSearchData.v_TargetDateFrom" autocomplete="off" style="width:100%">
+                            </div>
+                            <div class="col-20 border1_5 " style=" display: flex;align-items: center;background-color:#E5E0FF">
+                                <div class="center fw-800" style="text-align:left;font-size:12px">Target Date To</div>
+                            </div>
+                            <div class="col-25" style=" display: flex;align-items: center; ">
+                                <input type="text" class="input-with-image datepicker form-control" placeholder="YYYY/MM/DD" asp-for="_ViewSearchData.v_TargetDateTo" autocomplete="off" style="width:100%">
+                            </div>
+                            <div class="col-5 " style="">
+                            </div>
+                        </div>
+                        <div class="row center">
+                            <div class="col-5 " style="">
+                            </div>
+                            <div class="col-20 border1_5 " style=" display: flex;align-items: center;background-color:#E5E0FF">
+                                <div class="center fw-800" style="text-align:left;font-size:12px">Operator(EmpCode)</div>
+                            </div>
+
+                            <div class="col-25" style=" display: flex;align-items: center; ">
+                                <input style="width:100%;font-size:13px" class="form-control" asp-for="_ViewSearchData.v_Operator" autocomplete="off" />
+                            </div>
+                            <div class="col-20 border1_5 " style=" display: flex;align-items: center;background-color:#E5E0FF">
+                                <div class="center fw-800" style="text-align:left;font-size:12px">Approve by(EmpCode)</div>
+                            </div>
+                            <div class="col-25" style=" display: flex;align-items: center; ">
+                                <input style="width:100%;font-size:13px" class="form-control" asp-for="_ViewSearchData.v_ApproveBy" autocomplete="off" />
+
+                            </div>
+                            <div class="col-5 " style="">
+                            </div>
+                        </div>
+                        <div class="row center">
+                            <div class="col-5 " style="">
+                            </div>
+                            <div class="col-20 border1_5 " style=" display: flex;align-items: center;background-color:#E5E0FF">
+                                <div class="center fw-800" style="text-align:left;font-size:12px">Service Type</div>
+                            </div>
+
+                            <div class="col-25" style=" display: flex;align-items: center; ">
+                                @Html.DropDownListFor(m => m._ViewSearchData.v_serviceType, (SelectList)ViewBag.vbformServiceSub, "กรุณาเลือก", new { @class = "form-control", id = "ipServicesub", autocomplete = "off", @style = "width:100%;font-size:12px" })
+
+
+                            </div>
+
+                            <div class="col-40" style=" display: flex;align-items: center; ">
+
+                            </div>
+                            <div class="col-5 " style="">
+                            </div>
+                        </div>
+                    </div>
+                    <div style="text-align:center; padding:5px">
+
+                        <button class="button" style="width:110px;height:34px">
+                            <img src="~/images/search.png" style="width:30px;padding-right:5px;margin-right:5px" />
+                            ค้นหา
+                        </button>
+
+                    </div>
+                </div>
+                <div class="grid-item container card card-radius" style="margin-inline: auto;border: 0px solid white; background-color: whitesmoke;border-radius:2px;">
+                    <div class="grid-item fw-800" style="text-align:left;padding-left:10px;margin-bottom:10px">
+                        <span style="font-size:14px">
+                            จำนวน
+                            <span style="color:royalblue">
+                                <span style="color:royalblue">
+                                    @*@Model._ListsvsServiceRequest.Count()*@
+
+                                    @ViewBag.Listcount
+                                </span>
+                            </span>
+                            แถว
+                        </span>
+                    </div>
+                    <div class="pagination" style="text-align:right;padding-right: 10px;">
+                        @if (ViewBag.CurrentPage > 1)
+                        {
+                            <a href="@Url.Action("Index", new { page = 1,
+                            v_serviceNo =  @ViewBag.v_serviceNo,
+                            v_NameReq = @ViewBag.v_NameReq,
+                            v_Dept = @ViewBag.v_Dept,
+                            v_serviceType = @ViewBag.v_serviceType,
+                            v_DateRequestFrom = @ViewBag.v_DateRequestFrom,
+                            v_DateRequestTo = @ViewBag.v_DateRequestTo,
+                            v_TargetDateFrom = @ViewBag.v_TargetDateFrom,
+                            v_TargetDateTo = @ViewBag.v_TargetDateTo,
+                            v_Operator = @ViewBag.v_Operator,
+                            v_ApproveBy = @ViewBag.v_ApproveBy,
+                            v_StatusService = @ViewBag.v_StatusService
+                                })" class="first">«</a>
+                            @*<a href="@Url.Action("Index", new { page = ViewBag.CurrentPage - 1,
+                                v_serviceNo =  @ViewBag.v_serviceNo,
+                                v_NameReq = @ViewBag.v_NameReq,
+                                v_Dept = @ViewBag.v_Dept,
+                                v_serviceType = @ViewBag.v_serviceType,
+                                v_DateRequestFrom = @ViewBag.v_DateRequestFrom,
+                                v_DateRequestTo = @ViewBag.v_DateRequestTo,
+                                v_TargetDateFrom = @ViewBag.v_TargetDateFrom,
+                                v_TargetDateTo = @ViewBag.v_TargetDateTo,
+                                v_Operator = @ViewBag.v_Operator,
+                                v_ApproveBy = @ViewBag.v_ApproveBy,
+                                v_StatusService = @ViewBag.v_StatusService })" class="prev">&laquo; Previous</a>*@
+                        }
+
+                        @for (int i = ViewBag.StartPage; i <= ViewBag.EndPage; i++)
+                        {
+                            <a href="@Url.Action("Index", new { page = i,
+                            v_serviceNo =  @ViewBag.v_serviceNo,
+                            v_NameReq = @ViewBag.v_NameReq,
+                            v_Dept = @ViewBag.v_Dept,
+                            v_serviceType = @ViewBag.v_serviceType,
+                            v_DateRequestFrom = @ViewBag.v_DateRequestFrom,
+                            v_DateRequestTo = @ViewBag.v_DateRequestTo,
+                            v_TargetDateFrom = @ViewBag.v_TargetDateFrom,
+                            v_TargetDateTo = @ViewBag.v_TargetDateTo,
+                            v_Operator = @ViewBag.v_Operator,
+                            v_ApproveBy = @ViewBag.v_ApproveBy,
+                            v_StatusService = @ViewBag.v_StatusService })" class="@(i == @ViewBag.CurrentPage ? "active" : "")">@i</a>
+                        }
+
+                        @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+                        {
+                            @*<a href="@Url.Action("Index", new { page = ViewBag.CurrentPage + 1,
+                                v_serviceNo =  @ViewBag.v_serviceNo,
+                                v_NameReq = @ViewBag.v_NameReq,
+                                v_Dept = @ViewBag.v_Dept,
+                                v_serviceType = @ViewBag.v_serviceType,
+                                v_DateRequestFrom = @ViewBag.v_DateRequestFrom,
+                                v_DateRequestTo = @ViewBag.v_DateRequestTo,
+                                v_TargetDateFrom = @ViewBag.v_TargetDateFrom,
+                                v_TargetDateTo = @ViewBag.v_TargetDateTo,
+                                v_Operator = @ViewBag.v_Operator,
+                                v_ApproveBy = @ViewBag.v_ApproveBy,
+                                v_StatusService = @ViewBag.v_StatusService })" class="next">Next &raquo;</a>*@
+                            <a href="@Url.Action("Index", new { page = ViewBag.TotalPages,
+                            v_serviceNo =  @ViewBag.v_serviceNo,
+                            v_NameReq = @ViewBag.v_NameReq,
+                            v_Dept = @ViewBag.v_Dept,
+                            v_serviceType = @ViewBag.v_serviceType,
+                            v_DateRequestFrom = @ViewBag.v_DateRequestFrom,
+                            v_DateRequestTo = @ViewBag.v_DateRequestTo,
+                            v_TargetDateFrom = @ViewBag.v_TargetDateFrom,
+                            v_TargetDateTo = @ViewBag.v_TargetDateTo,
+                            v_Operator = @ViewBag.v_Operator,
+                            v_ApproveBy = @ViewBag.v_ApproveBy,
+                            v_StatusService = @ViewBag.v_StatusService })" class="last">»</a>
+                        }
+
+                    </div>
+                    <table class="center summarys">
+                        <tr>
+                            <th width="5%">No.</th>
+                            <th>Service No.</th>
+                            <th width="10%">Service Type</th>
+                            <th>Name Request</th>
+                            <th>Intercom</th>
+                            <th>Dept.</th>
+                            <th>Date/Time Request</th>
+                            <th>Operator</th>
+                            <th>Target Date</th>
+                            <th width="10%">Status</th>
+                            <th>Wait Approve By</th>
+                            <th>View</th>
+                            <th>DELETE</th>
+
+                        </tr>
+                        <tr>
+                            @if (Model._ListsvsServiceRequest != null)
+                            {
+                                var row = 0;
+
+                                int pageSize = 20; // หรือจำนวนที่คุณใช้แสดงต่อหน้า
+                                int startRow = ((int)ViewBag.CurrentPage - 1) * pageSize;
+                                int rowNumber = 1;
+
+
+                                @foreach (var item in @Model._ListsvsServiceRequest)
+                                {
+                                <tr align="Center">
+                                    @*<td>@(row += 1)</td>*@
+                                    <td>@(startRow + rowNumber)</td>
+                                    <td class="center">
+
+                                        <p style="font-size:10px;">@item.srServiceNo</p>
+
+                                        @*@if (@item.srServiceNo.Contains("wait"))
+                                        {
+                                        
+                                           <img src="~/images/loading_2.png" alt="icon" style="height: 23px; width: 23px;" />
+                                        }
+                                        else
+                                        {
+                                            <p style="font-size:10px;font-weight:600">@item.srServiceNo</p>
+                                        }*@
+                                        @*@item.srServiceNo*@
+                                    </td>
+                                    <td>@item.srSubject</td>
+                                    <td>@item.srRequestName</td>
+                                    <td>@item.srIntercom</td>
+                                    <td>@item.srDeptCode</td>
+                                    <td>
+                                        @{
+                                            string text = @item.srIssueDateTime;
+                                            string result = text.Substring(9, 8); // ดึงจาก index 9 ความยาว 8 ตัวอักษร
+                                        }
+                                        @item.srRequestDate  @result
+                                    </td>
+                                    <td>
+                                        @item.srOperatorEmpcode @item.srOperatorName
+                                    </td>
+                                    <td>
+                                        @item.srDesiredDate
+                                    </td>
+                                    <td>
+                                        @item.srStatus
+                                    </td>
+                                    <td>
+                                        @if (@item.srStep < 5)
+                                        {
+                                            @item.srApproveEmpcode <span> </span> @item.srApproveName
+                                        }
+
+                                    </td>
+                                    <td>
+                                        @*string id, string vtype, string vForm, string vTeam, string vSubject, string vSrNo*@
+                                        <a href="@Url.Action("Index", "RequestForm", new { id = @item.srNo,vtype ="Edit",vForm=@item.srFrom,vTeam=@item.srType,vSubject=@item.srSubject,vSrNo=@item.srNo })" target="_blank" style="font-size:22px;text-decoration: none;">
+                                            &#x1F50E;
+                                        </a>
+
+
+                                        @*<input type="button" style="font-size:18px" value="&#x1F50E;" onclick="GoNewRequest('@item.srRequestBy','Edit','@Url.Action("Index", "RequestForm")','@item.srFrom','@item.srType','@item.srSubject','@item.srNo')">*@
+                                    </td>
+                                    <td>
+
+                                        @if (_EmpCode == @item.srRequestBy && @item.srStep < 2)
+                                        {
+                                            <input type="button" style="font-size:14px" value="&#x274C" onclick="DeleteData('@item.srNo','@Url.Action("DeteleData","RequestForm")')">
+                                        }
+                                        else
+                                        {
+                                            <input type="button" style="font-size:14px" value="&#x274C" disabled />
+                                        }
+
+
+
+                                    </td>
+                                </tr>
+                                rowNumber++;
+                            }
+                            }
+                            </tr>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+
+            }
+        @*</form>*@
+    </div>
+</div>

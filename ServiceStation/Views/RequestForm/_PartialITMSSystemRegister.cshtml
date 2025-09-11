@@ -1,0 +1,144 @@
+﻿@using System.Security.Claims;
+@model ServiceStation.Models.Common.Class
+@{
+    string _UserId = User.Claims.FirstOrDefault(s => s.Type == "UserId")?.Value;
+    string _NickName = User.Claims.FirstOrDefault(s => s.Type == "NICKNAME")?.Value;
+    string _Name = User.Claims.FirstOrDefault(s => s.Type == "Name")?.Value;
+    string _SurName = User.Claims.FirstOrDefault(s => s.Type == "SurName")?.Value;
+    string _Division = User.Claims.FirstOrDefault(s => s.Type == "Division")?.Value;
+    string _Section = User.Claims.FirstOrDefault(s => s.Type == "Section")?.Value;
+
+}
+<link href="~/css/RequestForm/site.css" rel="stylesheet" />
+
+<div>
+    <label>ข้อมูลผู้ขอใช้ระบบ<span style="color:red">*</span></label>
+</div>
+<table class="center" id="Toptable" border="1" style="@(@_UserId == @Model._ViewsvsServiceRequest.srRequestBy|| @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode ? "" : "pointer-events: none;")">
+    <tr align="left" height="20">
+        <td id="tbottom" style="vertical-align:top">
+            วัตถุประสงค์
+        </td>
+        <td>
+            @Html.RadioButtonFor(m => m._ViewsvsITMS_SystemRegister.itObjective, "New ", new { @class = "", id = "txtF7txtF7itObjectiveNew", name = "txtF7itObjective" }) <label>ผู้ใช้งานใหม่</label><br>
+            @Html.RadioButtonFor(m => m._ViewsvsITMS_SystemRegister.itObjective, "Change ", new { @class = "", id = "txtF7txtF7itObjectiveChange", name = "txtF7itObjective" }) <label>เปลี่ยนสิทธิ์</label><br>
+            @Html.RadioButtonFor(m => m._ViewsvsITMS_SystemRegister.itObjective, "Cancel ", new { @class = "", id = "txtF7txtF7itObjectiveCancel", name = "txtF7itObjective" }) <label>ยกเลิก</label><br>
+        </td>
+    </tr>
+
+    <tr align="left" height="20">
+        <td id="tbottom" style="vertical-align:top">ข้อมูลผู้ร้องขอ</td>
+        <td>
+            <table class="tableBorder">
+                <tr class="Vtd">
+                    <td style="width:150px; " class="Vtd">รหัสพนักงาน</td>
+                    <td style="width:200px;font-size: 12px;" class="Vtd">
+                        <input type="text" class="form-control" style="@(@Model._ViewsvsServiceRequest.srStep < 1 ? "width:150px;height:28px" : "pointer-events: none;width:150px;height:28px")" id="txtF7ITMSitEmpcode" asp-for="_ViewsvsITMS_SystemRegister.itEmpcode" required />
+                    </td>
+                    <td class="Vtd">
+                        @*<button type="button" class="button " style="width:120px; height:28px;background-color:#7286D3" id="btnSearch">
+                                <img src="~/images/add1.png" style="width:30px;height:25px;padding-right:3px;margin-right:5px">
+                                ค้นหาข้อมูล
+                            </button>*@
+                        <button type="button" class="button " style="@(@Model._ViewsvsServiceRequest.srStep < 1 ? "width:120px; height:28px;background-color:#7286D3" : "pointer-events: none;width:120px; height:28px;background-color:#7286D3")" onclick="btnSearchData('@Url.Action("SearchPersonal", "RequestForm")')">
+                            <img src="~/images/add1.png" style="width:30px;height:25px;padding-right:3px;margin-right:5px">
+                            ค้นหาข้อมูล
+                        </button>
+                    </td>
+
+                </tr>
+                <tr class="Vtd">
+                    <td class="Vtd">ชื่อผู้ร้องขอ</td>
+                    <td colspan="2" class="Vtd">
+                        <label>@ViewBag.Name</label>
+                        <input type="text" class="form-control" style="width:200px;height:28px;display:none" id="txtF7ITMSFname"  value="@ViewBag.Name" readonly />
+                    </td>
+                </tr>
+                <tr class="Vtd">
+                    <td class="Vtd">นามสกุล</td>
+                    <td colspan="2" class="Vtd">
+                        <label id="txtF7ITMSLName">@ViewBag.lname</label>
+                        @*<input type="text" class="form-control" style="width:200px;height:28px" id="txtF7ITMSLName" required readonly />*@
+                    </td>
+                </tr>
+                <tr class="Vtd">
+                    <td class="Vtd">แผนก</td>
+                    <td colspan="2" class="Vtd">
+                        <label id="txtF7ITMSDept">@ViewBag.Dep</label>
+                        @*<input type="text" class="form-control" style="width:200px;height:28px" id="txtF7ITMSDept" required readonly />*@
+                    </td>
+                </tr>
+                <tr class="Vtd">
+                    <td class="Vtd">Intercom</td>
+                    <td colspan="2" class="Vtd">
+                        <label id="txtF7ITMSIntercom">@ViewBag.Intercom</label>
+                        @*<input type="text" class="form-control" style="width:200px;height:28px" id="txtF7ITMSDept" required readonly />*@
+                    </td>
+                </tr>
+            </table>
+
+
+        </td>
+    </tr>
+
+    <tr align="left" height="20">
+        <td id="tbottom" style="vertical-align:top">
+
+            @*@Html.CheckBoxFor(m => m._ViewsvsITMS_SystemRegister.IsChecked)*@
+            @Html.CheckBoxFor(model => model._ViewsvsITMS_SystemRegister.itPcLan, new{
+           @id = "txtF7itMPcLan",
+           @onclick = "CheckF7('Pclan')",
+       })
+
+
+            ขอใช้งานระบบ PC-Lan
+        </td>
+        <td>
+            @Html.RadioButtonFor(m => m._ViewsvsITMS_SystemRegister.itPcLan_Type, "THAI ", new { @class = "", id = "txtF7itPcLan_TypeThai", name = "txtF7PcLan_Type", disabled = "disabled" }) <label>THAI</label><br>
+
+            @Html.RadioButtonFor(m => m._ViewsvsITMS_SystemRegister.itPcLan_Type, "JAPAN ", new { @class = "", id = "txtF7itPcLan_TypeJapan", name = "txtF7PcLan_Type", disabled = "disabled" }) <label>JAPAN</label><br>
+
+
+        </td>
+    </tr>
+    <tr align="left" height="20">
+        <td id="tbottom" style="vertical-align:top">
+            @Html.CheckBoxFor(model => model._ViewsvsITMS_SystemRegister.itMail, new {
+           @id = "txtF7itMmail",
+           @onclick = "CheckF7('Mail')",
+       })
+            ขอใช้งาน Mail
+        </td>
+        <td>
+            @Html.RadioButtonFor(m => m._ViewsvsITMS_SystemRegister.itMail_Type, "LOTUSNOTES", new { @class = "", id = "txtF7itMail_TypeLOTUSNOTES", name = "txtF7itMail_Type", disabled = "disabled" }) <label>LOTUS NOTES​</label><br>
+
+            @Html.RadioButtonFor(m => m._ViewsvsITMS_SystemRegister.itMail_Type, "OUTLOOK", new { @class = "", id = "txtF7itMail_TypeOUTLOOK", name = "txtF7itMail_Type", disabled = "disabled" }) <label>OUTLOOK</label><br>
+        </td>
+    </tr>
+    <tr align="left" height="20">
+        <td id="tbottom" style="vertical-align:top">
+            @Html.CheckBoxFor(model => model._ViewsvsITMS_SystemRegister.itInternet,new {
+                   @id = "txtF7itMInternet",
+                   @onclick = "CheckF7('Internet')",
+                 })
+            ขอใช้งาน Internet
+        </td>
+        <td>
+            @Html.CheckBoxFor(model => model._ViewsvsITMS_SystemRegister.itInternet_choice1, new { @id = "txtF7itObjectiveTemporaryUser", disabled = "disabled" }) <label>1.Temporary User ขอใช้งานทั่วไป</label><br>
+            @Html.CheckBoxFor(model => model._ViewsvsITMS_SystemRegister.itInternet_choice2, new { @id = "txtF7itObjectiveGeneralInformation", disabled = "disabled" }) <label>2.General Information ค้นคว้าทั่วไป</label><br>
+            @Html.CheckBoxFor(model => model._ViewsvsITMS_SystemRegister.itInternet_choice3, new { @id = "txtF7itObjectiveResearchfortheJob", disabled = "disabled" }) <label>3.Research for the Job ค้นคว้าเกี่ยวกับงาน​</label><br>
+            @Html.CheckBoxFor(model => model._ViewsvsITMS_SystemRegister.itInternet_choice4, new { @id = "txtF7itObjectiveDirectConcernOnThejob", disabled = "disabled" }) <label>4.Direct concern on the job เกี่ยวกับงานโดยตรง</label><br>
+            @Html.CheckBoxFor(model => model._ViewsvsITMS_SystemRegister.itInternet_choice5, new { @id = "txtF7itObjectiveOutsideCommunicationByE", disabled = "disabled" })  <label>5.Outside communication by E-Mail ติดต่อ E-Mail ภายนอก​</label><br>
+            @Html.CheckBoxFor(model => model._ViewsvsITMS_SystemRegister.itInternet_choice6, new { @id = "txtF7itObjectiveGeneralInformationT9", disabled = "disabled" }) <label>6.General Information ค้นคว้าทั่วไป (เฉพาะ T9)</label><br>
+
+            @*@Html.RadioButtonFor(m => m._ViewsvsITMS_SystemRegister.itInternet_choice1, "TemporaryUser", new { @class = "", id = "txtF7itObjectiveTemporaryUser", name = "txtF7itInternet", disabled = "disabled" }) <label>1.Temporary User ขอใช้งานทั่วไป</label><br>
+                @Html.RadioButtonFor(m => m._ViewsvsITMS_SystemRegister.itInternet_choice2, "GeneralInformation", new { @class = "", id = "txtF7itObjectiveGeneralInformation", name = "txtF7itInternet", disabled = "disabled" }) <label>2.General Information ค้นคว้าทั่วไป</label><br>
+                @Html.RadioButtonFor(m => m._ViewsvsITMS_SystemRegister.itInternet_choice3, "ResearchfortheJob", new { @class = "", id = "txtF7itObjectiveResearchfortheJob", name = "txtF7itInternet", disabled = "disabled" }) <label>3.Research for the Job ค้นคว้าเกี่ยวกับงาน​</label><br>
+                @Html.RadioButtonFor(m => m._ViewsvsITMS_SystemRegister.itInternet_choice4, "DirectConcernOnThejob ", new { @class = "", id = "txtF7itObjectiveDirectConcernOnThejob", name = "txtF7itInternet", disabled = "disabled" }) <label>4.Direct concern on the job กี่ยวกับงานโดยตรง</label><br>
+                @Html.RadioButtonFor(m => m._ViewsvsITMS_SystemRegister.itInternet_choice5, "OutsideCommunicationByE-Mail", new { @class = "", id = "txtF7itObjectiveOutsideCommunicationByE", name = "txtF7itInternet", disabled = "disabled" }) <label>5.Outside communication by E-Mail ติดต่อ E-Mail ภายนอก​</label><br>
+                @Html.RadioButtonFor(m => m._ViewsvsITMS_SystemRegister.itInternet_choice6, "GeneralInformationT9", new { @class = "", id = "txtF7itObjectiveGeneralInformationT9", name = "txtF7itInternet", disabled = "disabled" }) <label>6.General Information ค้นคว้าทั่วไป (เฉพาะ T9)</label><br>*@
+
+        </td>
+    </tr>
+</table>
+

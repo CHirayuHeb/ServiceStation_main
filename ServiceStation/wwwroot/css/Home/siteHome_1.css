@@ -1,0 +1,179 @@
+﻿* {
+    box-sizing: border-box;
+}
+.grid-container {
+    display: grid;
+    grid-template-columns: auto auto auto;
+ 
+    /*background-color: #2196F3;*/
+}
+
+label {
+    font-size: 14px;
+}
+
+.grid-item {
+    /*background-color: rgba(255, 255, 255, 0.8);*/
+    border: 0px solid rgba(0, 0, 0, 0.8);
+    padding: 7px;
+    max-width: 280px;
+    min-height: 280px; /* Should be removed. Only for demonstration */
+    margin: 10px;
+    /*border:2px solid blue; #c9def4*/
+    background-color:Window;
+    border-radius: 3px;
+    border: 1px solid #000000;
+    color: #000000;
+    font-weight: 500;
+}
+.ITMS {
+    background: url("../../images/ITMS.png") no-repeat right center;
+    margin-right: 20px;
+    background-size: 80% 80%;
+}
+
+.ISMS {
+    background: url("../../images/ISMS.png") no-repeat right center;
+    margin-right: 20px;
+    background-size: 80% 80%;
+}
+
+.SDE {
+    background: url("../../images/SDE.png") no-repeat right center;
+    margin-right: 20px;
+    background-size: 80% 80%;
+}
+.MIS {
+    background: url("../../images/MIS.png") no-repeat right center;
+    margin-right: 20px;
+    background-size: 80% 80%;
+}
+.Other {
+    background: url("../../images/Other.png") no-repeat right center;
+    margin-right: 20px;
+    background-size: 80% 80%;
+}
+.NewEmployee {
+    background: url("../../images/New.png") no-repeat right center;
+    margin-right: 20px;
+    background-size: 80% 80%;
+ 
+}
+
+.grid-itemdes {
+    /*background-color: rgba(255, 255, 255, 0.8);*/
+    border: 0px solid rgba(0, 0, 0, 0.8);
+    padding: 7px;
+    width: 100%;
+    height: 80px; /* Should be removed. Only for demonstration */
+    margin: 0px;
+    /*border:2px solid blue;*/
+    /*background-color: #E5E0FF;*/
+    border-radius: 3px;
+    /*border: 0.5px solid #000000;*/
+    color: #000000;
+    font-weight: 400;
+    font-size: 12px;
+   
+}
+
+.grid-itemsubject {
+    /*background-color: rgba(255, 255, 255, 0.8);*/
+    width: 100%;
+    min-height: 160px;
+    /*height: 170px;*/
+    background-color: #E5E0FF;
+    margin-top: 5px;
+    border-radius: 3px;
+    padding: 5px;
+    display: block;
+}
+
+.grid-h1 {
+    display: grid;
+    grid-template-columns: 160px auto ;
+    /*background-color: #2196F3;*/
+    height: 80px;
+    width: 100%;
+}
+.grid-h2 {
+  /*background-color: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(0, 0, 0, 0.8);*/
+  font-size: 12px;
+  text-align: left;
+}
+
+
+
+
+.divTiltle {
+    /*position:absolute;*/
+    width: 100%;
+    height: 170px;
+    background-color: #ebf4f5;
+    margin-top: 5px;
+    border-radius: 3px;
+    padding: 5px;
+    display: block;
+}
+
+.divTopic {
+    /*position: absolute;*/
+    width: 100%;
+    height: 100px;
+    background-color: #ebf4f5;
+    margin-top: 10px;
+    border-radius: 3px;
+    padding: 5px;
+    /*background-image: url(../../images/newemployee.png);
+    background-repeat: no-repeat;
+    background-size: 50px 50px;*/
+}
+
+.button {
+    background-color: #7286D3; /* Green */
+    border: none;
+    color: white;
+    padding: 4px 25px;
+    text-align: left;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 12px;
+    margin: 3px 0px 3px 0px;
+    cursor: pointer;
+    width: 100%;
+    border-radius: 2px;
+    /*height: 30%;*/
+}
+    .button:hover {
+        background-color: #DFCCFB; /*  */
+        color: black;
+    }
+
+.btnBlue {
+    background-color: #008CBA;
+}
+/* Blue */
+.btnRed {
+    background-color: #f44336;
+}
+/* Red */
+.btnGray {
+    background-color: #e7e7e7;
+    color: black;
+}
+/* Gray */
+.btnBlack {
+    background-color: #555555;
+}
+/* Black */
+
+.btnOrange {
+    background-color: #f78e31;
+}
+/* Orange */
+.btnYellow {
+    color: black;
+    background-color: #fcec52;
+}
+/* yellow */

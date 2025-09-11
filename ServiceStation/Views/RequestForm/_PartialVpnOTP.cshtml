@@ -1,0 +1,78 @@
+﻿@model ServiceStation.Models.Common.Class
+@{
+    string _UserId = User.Claims.FirstOrDefault(s => s.Type == "UserId")?.Value;
+    string _NickName = User.Claims.FirstOrDefault(s => s.Type == "NICKNAME")?.Value;
+    string _Name = User.Claims.FirstOrDefault(s => s.Type == "Name")?.Value;
+    string _SurName = User.Claims.FirstOrDefault(s => s.Type == "SurName")?.Value;
+    string _Division = User.Claims.FirstOrDefault(s => s.Type == "Division")?.Value;
+    string _Section = User.Claims.FirstOrDefault(s => s.Type == "Section")?.Value;
+
+}
+<link href="~/css/RequestForm/site.css" rel="stylesheet" />
+<table class="center" id="Toptable" border="1" style="@(@_UserId == @Model._ViewsvsServiceRequest.srRequestBy|| @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode ? "" : "pointer-events: none;")">
+
+    <tr align="left" height="15">
+        <td id="tbottom">PC-Name(หมายเลขเครื่อง) <span class="text-red">*จำเป็น</span></td>
+        <td id="insertdata">
+            <input class="form-control" type="text" autocomplete="off" style="width:150px; height:30px;text-align:left;font-size:12px" id="txtF5vpnPCName" asp-for="_ViewsvsVPN.vpnPCName" />
+        </td>
+    </tr>
+    <tr>
+    <tr align="left" height="20">
+        <td id="tbottom">User(ผู้ใช้งาน) <span class="text-red">*จำเป็น</span></td>
+        <td id="insertdata">
+            @Html.RadioButtonFor(m => m._ViewsvsVPN.vpnStatusUse, "ever", new { @class = "", id = "txtF5vpnStatusUse1", name = "txtF5vpnStatusUse", onclick = "CheckCA('ever','Case')" }) <label>เคยใช้งาน</label><br />
+            @Html.RadioButtonFor(m => m._ViewsvsVPN.vpnStatusUse, "Notever", new { @class = "", id = "txtF5vpnStatusUse2", name = "txtF5vpnStatusUse", onclick = "CheckCA('Notever','Case')" }) <label class="form-check-label" for="StatusDis">ไม่เคยใช้งาน</label>
+
+        </td>
+    </tr>
+    <tr align="left" height="20">
+        <td id="op" colspan="3">Take Out For(วัตถุประสงค์การนำออก)</td>
+    </tr>
+    <tr align="left" height="20">
+        <td id="tbottom" style="vertical-align:top">รหัสพนักงาน<span class="text-red">*จำเป็น</span><p>กรอกรหัสพนักงาน 6 หลัก </p> <span style="font-size:12px;font-weight:400">หมายเหตุ กรณีส่งเเทนให้กรอกรหัสพนักงานของผู้ต้องการใช้</span></td>
+        <td id="insertdata" style="vertical-align:top">
+            <input class="form-control" type="text" autocomplete="off" style="width:150px; height:30px;text-align:left;font-size:12px" id="txtF5vpnEmpCode" asp-for="_ViewsvsVPN.vpnEmpCode" />
+        </td>
+    </tr>
+    <tr align="left" height="20">
+        <td id="tbottom">งานที่ได้รับมอบหมาย <span class="text-red">*จำเป็น</span></td>
+        <td id="insertdata">
+            @Html.TextAreaFor(model => model._ViewsvsVPN.vpnWork, new { @class = "form-control", style = "font-size:12px", @cols = 40, @rows = 3, @id = "txtF5vpnWork" })
+        </td>
+    </tr>
+    <tr align="left" height="20">
+        <td id="tbottom">หมายเหตุ<br />&emsp;<br />&emsp;</td>
+        <td id="insertdata">
+            @Html.TextAreaFor(model => model._ViewsvsVPN.vpnRemark, new { @class = "form-control", style = "font-size:12px;field-sizing: content;min-height:100px",  @rows = 5, @id = "txtF5vpnRemark" })
+        </td>
+    </tr>
+    <tr align="left" height="20">
+        <td id="tbottom">แนบเอกสารเพิ่มเติม</td>
+        <td id="insertdata">
+            <input name="files" type="file" id="files" multiple="" class="button " style="width:300px;margin-right:20px">
+            <button type="button" class="button notification" style="width:140px; height:28px;background-color:#7286D3" data-bs-dismiss="modal" id="btnfile">
+                <img src="~/images/open-folder.png" style="width:25px;height:25px;padding-right:5px;margin-right:8px">
+                เปิดไฟล์แนบ @ViewBag.listAttachmentCOunt ไฟล์
+                @if (@ViewBag.listAttachmentCOunt > 0)
+                {
+                <span class="badge">@ViewBag.listAttachmentCOunt</span>
+                }
+            </button>
+        </td>
+    </tr>
+    <tr align="left" height="20">
+        <td id="tbottom"> Date Start(วันที่เริ่มใช้) <span class="text-red">*จำเป็น</span></td>
+        <td id="insertdata">
+            <input type="text" class="input-with-image datepicker form-control" placeholder="YYYY/MM/DD" id="txtF5vpnStartDate" asp-for="_ViewsvsVPN.vpnStartDate" autocomplete="off">
+            @*<input class="datepicker form-control" type="text" autocomplete="off" style="width:200px; height:30px;text-align:center;font-size:14px" readonly />*@
+        </td>
+    </tr>
+    <tr align="left" height="20">
+        <td id="tbottom">Date End(วันที่สิ้นสุด) <span class="text-red">*จำเป็น</span></td>
+        <td id="insertdata">
+            <input type="text" class="input-with-image datepicker form-control" placeholder="YYYY/MM/DD" id="txtF5vpnEndDate" asp-for="_ViewsvsVPN.vpnEndDate" autocomplete="off">
+            @*<input class="datepicker form-control" type="text" autocomplete="off" style="width:200px; height:30px;text-align:center;font-size:14px" readonly />*@
+        </td>
+    </tr>
+</table>

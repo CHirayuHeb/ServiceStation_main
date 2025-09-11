@@ -1,0 +1,81 @@
+﻿@model ServiceStation.Models.Common.Class
+@{
+    string _UserId = User.Claims.FirstOrDefault(s => s.Type == "UserId")?.Value;
+    string _NickName = User.Claims.FirstOrDefault(s => s.Type == "NICKNAME")?.Value;
+    string _Name = User.Claims.FirstOrDefault(s => s.Type == "Name")?.Value;
+    string _SurName = User.Claims.FirstOrDefault(s => s.Type == "SurName")?.Value;
+    string _Division = User.Claims.FirstOrDefault(s => s.Type == "Division")?.Value;
+    string _Section = User.Claims.FirstOrDefault(s => s.Type == "Section")?.Value;
+
+}
+<link href="~/css/RequestForm/site.css" rel="stylesheet" />
+
+<div style=" width:95%;" class="center">
+    <div style="@(@_UserId == @Model._ViewsvsServiceRequest.srRequestBy|| @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode ? "" : "pointer-events: none;")">
+        @*<div>*@
+        <div class="grid-item fw-800" style="text-align:left;padding-left:10px"><label style="font-size:14px">ประเภทการร้องขอ<span style="color:red">*</span></label></div>
+
+        <div class="grid-container ">
+            <div class="grid-item" style="text-align:left; margin-right:5px;">
+                @Html.RadioButtonFor(m => m._ViewsvsGeneral.gnType, "New", new { @class = "", id = "F1TypeNew", name = "F1TypeNew", onclick = "CheckF1NewRevise('New')" }) <label class="form-check-label" for="StatusNew" style="color:green;font-weight:800">New</label><br />
+                @Html.RadioButtonFor(m => m._ViewsvsGeneral.gnType, "Revise", new { @class = "", id = "F1TypeRevise", name = "F1TypeRevise", onclick = "CheckF1NewRevise('Revise')" }) <label class="form-check-label" for="StatusRevise"style="color:orange;font-weight:800">Revise</label><br />
+                @*<div style="@(@ViewBag.gnType == "New" || @ViewBag.gnType == ""|| @ViewBag.gnType == null ? "display:none;" : "")">
+                        @Html.DropDownListFor(m => m._ViewsvsGeneral.gnProgramName, (SelectList)ViewBag.formPgm, "กรุณาเลือกโปรแกรม", new { @class = "", id = "ipF1pgm", autocomplete = "off", required = "required", @style = "width:200px;height:30px;vertical-align: sub;font-size:12px;margin-top: 6px" })
+                    </div>*@
+                @if (@ViewBag.gnType == "New" || @ViewBag.gnType == "" || @ViewBag.gnType == null)
+                {
+                    @Html.DropDownListFor(m => m._ViewsvsGeneral.gnProgramName, (SelectList)ViewBag.formPgm, "กรุณาเลือกโปรแกรม", new { @class = "", id = "ipF1pgm", autocomplete = "off", required = "required", @style = "width:200px;height:30px;vertical-align: sub;font-size:12px;margin-top: 6px;display:none;" })
+                }
+                else
+                {
+                    @Html.DropDownListFor(m => m._ViewsvsGeneral.gnProgramName, (SelectList)ViewBag.formPgm, "กรุณาเลือกโปรแกรม", new { @class = "", id = "ipF1pgm", autocomplete = "off", required = "required", @style = "width:200px;height:30px;vertical-align: sub;font-size:12px;margin-top: 6px;" })
+                }
+
+
+            </div>
+
+        </div>
+
+
+        <div class="grid-item fw-800" style="text-align:left;padding-left:10px"><label style="font-size:14px">รายละเอียด<span style="color:red">*</span></label></div>
+        @*<label>รายละเอียด<span style="color:red">*</span></label>*@
+
+        @Html.TextAreaFor(model => model._ViewsvsGeneral.gnDescription, new { @class = "form-control", style = "font-size:12px;max-width:100% ;field-sizing: content;min-height:200px", @id = "txtgDes" })
+
+    </div>
+
+    <div class="my-2">
+        <div class="my-1">
+            <label>แนบเอกสาร</label>
+            <div style="width:100%">
+
+                <input name="files" type="file" id="files" multiple="" class="button " style="width:300px;margin-right:20px;@(@_UserId == @Model._ViewsvsServiceRequest.srRequestBy|| @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode ? "" : "pointer-events: none;")">
+                <button type="button" class="button notification" style="width:140px; height:28px;background-color:#7286D3" data-bs-dismiss="modal" id="btnfile">
+                    <img src="~/images/open-folder.png" style="width:25px;height:25px;padding-right:5px;margin-right:8px">
+                    เปิดไฟล์แนบ @ViewBag.listAttachmentCOunt ไฟล์
+                    @if (@ViewBag.listAttachmentCOunt > 0)
+                    {
+                        <span class="badge">@ViewBag.listAttachmentCOunt</span>
+                    }
+                    @*<span class="badge">0</span>*@
+                </button>
+
+            </div>
+
+            <div class="wx-100">
+
+            </div>
+
+        </div>
+
+        <div class="my-3" style="@(@_UserId == @Model._ViewsvsServiceRequest.srRequestBy|| @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode ? "" : "pointer-events: none;")">
+            <label> Kosu (Hrs./Month)</label>
+            <input type="number" class="text-gray" step="0.25" min="0" asp-for="_ViewsvsServiceRequest.srKosu" id="txtgkosu"> <span style="color:red">กรอกเฉพาะตัวเลขเท่านั่น</span>
+        </div>
+    </div>
+
+
+
+
+
+</div>
