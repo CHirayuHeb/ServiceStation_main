@@ -864,6 +864,12 @@ function sendMail(getID, action) {
 
         //check new & revise program SDE
         if (vtxtSUbject.search("Revise") > -1) {
+            console.log("typeuser : " + document.getElementById("ipF1typeuser").value);
+            //if (document.getElementById("ipF1typeuser").value == "") {
+            //    msg = "กำหนดผู้ใช้งานโปรแกรม";
+            //    document.getElementById("ipF1typeuser").focus();
+            //}
+
             if (document.getElementById("F1TypeNew").checked == false
                 && document.getElementById("F1TypeRevise").checked == false) {
                 msg = "ประเภทการร้องขอ";
@@ -875,6 +881,9 @@ function sendMail(getID, action) {
                 }
 
             }
+
+
+
 
 
         }
@@ -1263,7 +1272,7 @@ function sendMail(getID, action) {
 
                 console.log("url" + url);
                 $("#myModalBodyDiv1").load(url, function () {
-                   // $('#divHistory').html(htmls);
+                    // $('#divHistory').html(htmls);
                     $("#myModal1").modal("show");
                 })
             }

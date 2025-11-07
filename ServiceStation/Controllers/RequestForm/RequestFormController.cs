@@ -53,51 +53,59 @@ namespace ServiceStation.Controllers.RequestForm
             ViewBag.vForm = vForm;
             ViewBag.vSubject = vSubject;
             Class @class = new Class();
-     
+            //if (vtype == "New")
+            //{ }
+            //string vid = "015142";
 
-            @class._ViewsvsRegisterUSB = new ViewsvsRegisterUSB();
-            List<ViewsvsMastUSB> _ViewsvsMastUSB = _IT.svsMastUSB.ToList();
-            SelectList formMastUSB = new SelectList(_ViewsvsMastUSB.Select(s => s.muUSBName).Distinct());
-            ViewBag.formMastUSB = formMastUSB;
+            //list in page
+            //ViewBag.listAttachmentCOunt = "0";
+            //ViewBag.listAttachmentCOuntWorker = "0";
 
-            List<ViewProgramList> _ViewProgramList = _IT.ProgramList.Where(x => x.PdStatus == "USE" && x.pdseccode == "SDE" && x.pdWorking == null).OrderBy(x => x.PdPgm).ToList();
-            SelectList formPgm = new SelectList(_ViewProgramList.Select(s => s.PdPgm).Distinct());
-            ViewBag.formPgm = formPgm;
+            @class._ListViewsvsHistoryApproved = new List<ViewsvsHistoryApproved>();
+            @class._ViewsvsGeneral = new ViewsvsGeneral();
 
-            //if (vForm == "F4")
-            //{
-            //    //ViewsvsMastUSB
-            //    List<ViewsvsMastUSB> _ViewsvsMastUSB = _IT.svsMastUSB.ToList();
-            //    SelectList formMastUSB = new SelectList(_ViewsvsMastUSB.Select(s => s.muUSBName).Distinct());
-            //    ViewBag.formMastUSB = formMastUSB;
-            //}
-            //else 
-            //if (vForm == "F6" || vForm == "F1")
-            //{
+            if (vForm == "F4")
+            {
+                //ViewsvsMastUSB
+                List<ViewsvsMastUSB> _ViewsvsMastUSB = _IT.svsMastUSB.ToList();
+                SelectList formMastUSB = new SelectList(_ViewsvsMastUSB.Select(s => s.muUSBName).Distinct());
+                ViewBag.formMastUSB = formMastUSB;
+            }
+            else if (vForm == "F6" || vForm == "F1")
+            {
 
-            //    List<ViewProgramList> _ViewProgramList = _IT.ProgramList.Where(x => x.PdStatus == "USE" && x.pdseccode == "SDE" && x.pdWorking == null).OrderBy(x => x.PdPgm).ToList();
-            //    SelectList formPgm = new SelectList(_ViewProgramList.Select(s => s.PdPgm).Distinct());
-            //    ViewBag.formPgm = formPgm;
-
-            //    //string a = "";
-            //    //try
-            //    //{
-
-            //    //}
-            //    //catch (Exception e)
-            //    //{
-            //    //    a = e.Message;
-            //    //}
-
-            //    // var a = _IT.ProgramList.Where(x => x.PdStatus == "USE").FirstOrDefault();
-
-            //    //List<ViewProgramList> _ViewProgramList = _IT.ProgramList.Where(x => x.PdStatus == "USE").ToList();
-            //    //SelectList formPgm = new SelectList(_ViewProgramList.Select(s => s.PdPgm).Distinct());
-            //    //ViewBag.formPgm = formPgm;
-            //}
+                List<ViewProgramList> _ViewProgramList = _IT.ProgramList.Where(x => x.PdStatus == "USE" && x.pdseccode == "SDE" && x.pdWorking == null).OrderBy(x => x.PdPgm).ToList();
+                SelectList formPgm = new SelectList(_ViewProgramList.Select(s => s.PdPgm).Distinct());
+                ViewBag.formPgm = formPgm;
 
 
-            @class._ViewsvsServiceRequest = new ViewsvsServiceRequest();
+                //พนักงานภายในบริษัททั้งหมด  /  กำหนดผู้ใช้งาน  (พร้อมแนบรายชื่อผู้ใช้งาน)
+                List<string> _listTypeUser = new List<string>{
+                                                "พนักงานภายในบริษัททั้งหมด",
+                                                "กำหนดผู้ใช้งาน (พร้อมแนบรายชื่อผู้ใช้งาน)"};
+                SelectList _listofTypeUser = new SelectList(_listTypeUser);
+                ViewBag.listTypeUser = _listofTypeUser;
+
+
+                //string a = "";
+                //try
+                //{
+
+                //}
+                //catch (Exception e)
+                //{
+                //    a = e.Message;
+                //}
+
+                // var a = _IT.ProgramList.Where(x => x.PdStatus == "USE").FirstOrDefault();
+
+                //List<ViewProgramList> _ViewProgramList = _IT.ProgramList.Where(x => x.PdStatus == "USE").ToList();
+                //SelectList formPgm = new SelectList(_ViewProgramList.Select(s => s.PdPgm).Distinct());
+                //ViewBag.formPgm = formPgm;
+            }
+
+
+
 
             ViewAccEMPLOYEE vAcc = new ViewAccEMPLOYEE();
             if (vSrNo == null)
@@ -105,6 +113,8 @@ namespace ServiceStation.Controllers.RequestForm
                 if (id != null)
                 {
                     @class._ViewAccEMPLOYEE = _HRMS.AccEMPLOYEE.Where(x => x.EMP_CODE == id).FirstOrDefault();
+                    @class._ViewsvsServiceRequest = new ViewsvsServiceRequest();
+                    // @class._ViewsvsServiceRequest.srNo = ;
                     @class._ViewsvsServiceRequest.srServiceNo = "";
                     @class._ViewsvsServiceRequest.srRequestBy = @class._ViewAccEMPLOYEE.EMP_CODE;
                     @class._ViewsvsServiceRequest.srRequestName = @class._ViewAccEMPLOYEE.NICKNAME;
@@ -112,10 +122,17 @@ namespace ServiceStation.Controllers.RequestForm
                     @class._ViewsvsServiceRequest.srSecCode = @class._ViewAccEMPLOYEE.SEC_CODE;
                     @class._ViewsvsServiceRequest.srDeptCode = @class._ViewAccEMPLOYEE.DEPT_CODE;
                     @class._ViewsvsServiceRequest.srRequestDate = DateTime.Now.ToString("yyyy/MM/dd");
+                    //_svsServiceRequest.srDesiredDate = @class._ViewAccEMPLOYEE.DEPT_CODE;
                     @class._ViewsvsServiceRequest.srType = vTeam;
                     @class._ViewsvsServiceRequest.srSubject = vSubject;
                     @class._ViewsvsServiceRequest.srFrom = vForm;
-                 
+                    // @class._ViewsvsServiceRequest.srKosu = 12;
+
+                    // @class._ViewsvsGeneral = new ViewsvsGeneral();
+                    // @class._ViewsvsGeneral.gnDescription = "test";
+
+                    //@class._ViewsvsDataRestore = new ViewsvsDataRestore();
+                    //@class._ViewsvsDataRestore.drSys_PCLan = 1;
                 }
             }
             else
@@ -128,6 +145,8 @@ namespace ServiceStation.Controllers.RequestForm
                 {
                     @class._ViewsvsGeneral = _IT.svsGeneral.Where(x => x.gnNo == int.Parse(vSrNo)).FirstOrDefault();
                     ViewBag.gnType = @class._ViewsvsGeneral.gnType;
+
+                    
                 }
 
                 //F2
@@ -169,7 +188,10 @@ namespace ServiceStation.Controllers.RequestForm
                 //F6 User Register Application
                 if (vForm == "F6")
                 {
+
                     @class._ViewsvsSDE_SystemRegister = _IT.svsSDE_SystemRegister.Where(x => x.sysNo == int.Parse(vSrNo)).ToList();
+
+
                 }
 
                 if (vForm == "F7")
@@ -191,6 +213,9 @@ namespace ServiceStation.Controllers.RequestForm
 
 
                     }
+                
+
+
 
 
                 }
@@ -237,17 +262,15 @@ namespace ServiceStation.Controllers.RequestForm
                 ViewBag._listHistory = _listHistory.ToList();
 
 
+
                 @class._ListViewsvsHistoryApproved = _IT.svsHistoryApproved.Where(x => x.htSrNo == vSrNo).ToList();
-
-
-
 
 
             }
 
             //return RedirectToAction("Index", "RequestForm", new { @class = @class });
             return View(@class);
-      
+
         }
 
 
@@ -999,8 +1022,8 @@ namespace ServiceStation.Controllers.RequestForm
                 msg = chkPermis[1];
             }
 
-            //check vpn step 1 cs up 13 / 01 / 2024
-            if ((vform == "F5" || vSrSubject.Contains("Print Color")) && i_Step == 1)
+            //check vpn step 1 cs up 13 / 01 / 2024 if ((vform == "F5" || vSrSubject.Contains("Print Color") || vSrSubject.Contains("Admin Access Request")) && i_Step == 1)
+            if ((vform == "F5" || vSrSubject.Contains("Print Color") || vSrSubject.Contains("Admin Access Request")) && i_Step == 1)
             {
                 //check emp positon
                 try
@@ -1027,7 +1050,7 @@ namespace ServiceStation.Controllers.RequestForm
 
                     if (v_chk == null || v_chk == "")
                     {
-                        config = "E";
+                        config = "W";
                         msg = "Please send approval to DM Up of Dept.!!!";
                     }
 
@@ -1766,6 +1789,8 @@ namespace ServiceStation.Controllers.RequestForm
                         _svsGeneral.gnProgramName = @class._ViewsvsGeneral.gnProgramName;
                         _svsGeneral.gnType = @class._ViewsvsGeneral.gnType;
 
+                        _svsGeneral.gnProgramUser = @class._ViewsvsGeneral.gnProgramUser; //add SR2502616
+
                         _IT.svsGeneral.Add(_svsGeneral);
                         _IT.SaveChanges();
                     }
@@ -1781,6 +1806,8 @@ namespace ServiceStation.Controllers.RequestForm
                         //chirayu add 07/02/2025
                         _ViewsvsGeneral.gnType = @class._ViewsvsGeneral.gnType;
                         _ViewsvsGeneral.gnProgramName = @class._ViewsvsGeneral.gnProgramName;
+
+                        _ViewsvsGeneral.gnProgramUser = @class._ViewsvsGeneral.gnProgramUser; //add SR2502616
 
                         _IT.svsGeneral.Update(_ViewsvsGeneral);
                         _IT.SaveChanges();

@@ -273,7 +273,7 @@ namespace ServiceStation.Controllers.Account
                 claims.Add(new Claim(ClaimTypes.Country, "ServiceStation"));
                 claims.Add(new Claim(ClaimTypes.Name, acc.EMP_CODE.ToString()));
                 claims.Add(new Claim(ClaimTypes.Actor, acc.EMP_TNAME + " " + acc.LAST_TNAME));
-                claims.Add(new Claim("UserId", acc.EMP_CODE.ToString()));
+                claims.Add(new Claim("UserId", acc.EMP_CODE.Trim().ToString()));
                 claims.Add(new Claim("Password", vpassword.ToString()));
                 claims.Add(new Claim("EmpCode", acc.EMP_CODE?.ToString()));
                 // claims.Add(new Claim("Permission", login.Permission?.ToString()));
@@ -297,9 +297,9 @@ namespace ServiceStation.Controllers.Account
                 await this.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme
                     , principal, new AuthenticationProperties()
                     {
-                        IsPersistent = true,
+                        IsPersistent = false,
                         AllowRefresh = true, // ✅ อนุญาตให้ session ถูกยืดอายุ
-                        ExpiresUtc = DateTime.UtcNow.AddMinutes(15)
+                        //ExpiresUtc = DateTime.UtcNow.AddMinutes(15)
                     }); //true is remember login
 
                 string[] stat = { "Ok" };

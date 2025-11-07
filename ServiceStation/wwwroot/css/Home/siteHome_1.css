@@ -59,6 +59,11 @@ label {
     background-size: 80% 80%;
  
 }
+.TSC {
+    background: url("../../images/TSC.png") no-repeat right center;
+    margin-right: 20px;
+    background-size: 80% 80%;
+}
 
 .grid-itemdes {
     /*background-color: rgba(255, 255, 255, 0.8);*/

@@ -99,6 +99,8 @@ namespace ServiceStation.Models.Table.IT
 
         public string gnType { get; set; } //chirayu add 06/02/2025
         public string gnProgramName { get; set; }  //chirayu add 06/02/2025
+
+        public string gnProgramUser { get; set; } //chirayu add 05/11/2025
     }
     //   Attachment
     //   svsDataRestore

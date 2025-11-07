@@ -103,7 +103,7 @@ namespace ServiceStation.Controllers.Home
                 //@class._ListsvsServiceRequest = _IT.svsServiceRequest.OrderByDescending(x => x.srRequestDate).ThenByDescending(x => x.srIssueDateTime).ToList();
                 if (@class._ViewSearchData.v_serviceNo != null && @class._ViewSearchData.v_serviceNo != "")
                 {
-                    @class._ListsvsServiceRequest = @class._ListsvsServiceRequest.Where(x => x.srServiceNo.Contains(@class._ViewSearchData.v_serviceNo)).ToList();
+                    @class._ListsvsServiceRequest = @class._ListsvsServiceRequest.Where(x => x.srServiceNo.Contains(@class._ViewSearchData.v_serviceNo.ToUpper())).ToList();
                 }
                 if (@class._ViewSearchData.v_NameReq != null && @class._ViewSearchData.v_NameReq != "")
                 {

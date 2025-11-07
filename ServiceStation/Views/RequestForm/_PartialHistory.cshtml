@@ -36,7 +36,7 @@
                                         else if (@Model._ListViewsvsHistoryApproved[i].htStep == 2)
                                         {
 
-                                            @if (Model._ViewsvsServiceRequest.srFrom == "F5" || Model._ViewsvsServiceRequest.srSubject.Contains("Print Color"))
+                                            @if (Model._ViewsvsServiceRequest.srFrom == "F5" || Model._ViewsvsServiceRequest.srSubject.Contains("Print Color") || Model._ViewsvsServiceRequest.srSubject.Contains("Admin"))
                                             {
                                                 <label style='color:mediumpurple'>Approval by DM Up of Dept</label>
                                             }
@@ -44,7 +44,6 @@
                                             {
                                                 <label style='color:mediumpurple'>Approval of Dept.</label>
                                             }
-
 
                                             @*<label style='color:orange'>Approval by CS of IS</label>*@
 
@@ -104,98 +103,6 @@
 
 
 
-
-                            @*@if (@ViewBag._listHistory != null)
-                            {
-                                @foreach (var item in @ViewBag._listHistory)
-                                {
-                                    <div class='panel-heading panel-heading-custom property' tabindex='0'>
-                                        <h4 class='panel-title faq-title-range collapsed' data-bs-toggle='collapse' data-bs-target='#Ans_@item.htStep' aria-expanded='false' aria-controls='collapseExample'>
-                                            @{
-                                                int step = item.htStep + 1;
-
-                                            }
-                                            <label style='font-size: 13px;'>Step   @step.ToString() </label> <label class='lbV'></label>
-                                            @if (item.htStep == 0)
-                                            {
-
-                                                <label style='color:red'>Disapprove</label>
-                                            }
-                                            else if (item.htStep == 1)
-                                            {
-
-
-                                                @if (Model._ViewsvsServiceRequest.srFrom == "F5" || Model._ViewsvsServiceRequest.srSubject.Contains("Print Color"))
-                                                {
-                                                    <label style='color:mediumpurple'>Approval by DM Up of Dept</label>
-                                                }
-                                                else
-                                                {
-                                                    <label style='color:mediumpurple'>Approval of Dept.</label>
-                                                }
-
-
-
-                                            }
-                                            else if (item.htStep == 2)
-                                            {
-
-                                                <label style='color:orange'>Approval by CS of IS</label>
-
-                                            }
-                                            else if (item.htStep == 3)
-                                            {
-
-                                                <label style='color:blue'>Process (Assigning tasks)</label>
-                                            }
-                                            else if (item.htStep == 4)
-                                            {
-                                                <label style='color:YellowGreen'>Accept by CS of IS</label>
-                                            }
-                                            else if (item.htStep == 5)
-                                            {
-
-                                                <label style='color:Green'>Finish</label>
-                                            }
-                                        </h4>
-                                    </div>
-                                    <div class='panel-collapse collapse' style='overflow: auto;' id='Ans_@item.htStep'>
-                                        <div class='panel-body'>
-                                            <div style='font-size: x-small; clear: both; width: 100%; tetx-align: left; font-weight: bold;'>
-                                                <label> @item.htDate :: @item.htTime น.</label>
-                                            </div>
-                                            <div style='font-size: x-small; float: left; width: 20%; tetx-align: left;'>
-                                                <label>FROM : </label>
-                                                <label>@item.htFrom</label>
-                                            </div>
-                                            <div style='font-size: x-small; float: left; width: 20%; tetx-align: left;'>
-                                                <label>TO : </label><br>
-                                                <label>@item.htTo </label>
-                                            </div>
-                                            <div style='font-size: x-small; float: left; width: 20%; tetx-align: left;'>
-                                                <label>CC : </label>
-                                                <label>@item.htCC</label>
-                                            </div>
-                                            <div style='font-size: x-small; float: right; width: 20%; tetx-align: left;'>
-                                                <label>Remark : </label>
-                                                <label>@item.htRemark</label>
-                                            </div>
-                                            <div style='font-size: x-small; float: right; width: 20%; tetx-align: left;'>
-                                                <label>Status : </label>
-                                                <label><span style=''>@item.htStatus </span></label>
-                                            </div>
-                                        </div>
-                                    </div>
-
-
-
-                                }
-
-                            }
-                            else
-                            {
-                                <label style="color:navy;padding-left:30px">ไม่มีประวัติการส่งเมล์</label>
-                            }*@
 
                         </div>
 

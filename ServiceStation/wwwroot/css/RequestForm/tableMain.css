@@ -1,0 +1,49 @@
+﻿/* container ให้ table ไม่เกินขนาด div */
+.table-container {
+    max-width: 100%;
+    overflow-x: auto;
+    margin: 20px auto;
+    /*background-color: #fff;*/
+    padding:5px;
+    margin-top:2px;
+}
+
+/* ตารางเต็มความกว้าง container */
+.purple-table {
+    width: 100%;
+    border-collapse: collapse; /* เปลี่ยนจาก separate เป็น collapse เพื่อไม่ให้เส้นทับ */
+    font-family: "Prompt", sans-serif;
+}
+
+    /* หัวตาราง */
+    .purple-table th {
+        background-color: #E5E0FF; /* หัวตารางสีม่วงอ่อน */
+        color: black;
+        padding: 8px;
+        font-size: 11px;
+        font-weight: 500;
+        text-align: center;
+        border: 0.5px solid #d1c9ff; /* เพิ่มเส้นรอบหัวตาราง */
+        border-top-left-radius: 4px;
+        border-top-right-radius: 4px;
+    }
+
+    /* ตัวตาราง */
+    .purple-table td {
+        /*background-color: #FAF5FF;*/ /* สีพื้น td เข้ากับหัวตาราง */
+        color: black;
+        padding: 8px;
+        font-size: 10px;
+        text-align: center;
+        border: 0.5px solid #d1c9ff; /* เส้นรอบ td */
+    }
+
+    /* hover effect */
+    .purple-table tr:hover td {
+        /*background-color: #eeebf7;*/ /* สีเวลาชี้ */
+        transition: 0.2s;
+    }
+
+    /* โค้งมุมแถวสุดท้าย */
+    .purple-table tr:last-child td:first-child {
+        border-

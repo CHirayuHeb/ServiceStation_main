@@ -56,7 +56,7 @@ namespace ServiceStation
                 {
                     x.Cookie.Name = "Remember";
                     // x.ExpireTimeSpan = TimeSpan.FromDays(1);
-                    x.ExpireTimeSpan = TimeSpan.FromMinutes(15); // อายุของ session
+                    x.ExpireTimeSpan = TimeSpan.FromMinutes(30); // อายุของ session
                     x.LoginPath = "/Login/Index"; //path login
                     x.LogoutPath = "/Login/Logout"; //path loout
                     x.AccessDeniedPath = "/ErrorCase/Index";

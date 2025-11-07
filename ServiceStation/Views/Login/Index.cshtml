@@ -4,7 +4,6 @@
     Layout = "_Login";
     ViewData["Title"] = "Login | Thai Stanley";
 }
-
 <div class="layout-container">
     <div></div>
     @using (Html.BeginForm("Autherize", "Login", FormMethod.Post))
@@ -15,7 +14,7 @@
                 <div class="logo">
                     <div class="sub-logo">
                         <h1 class="lettleSpace-5" style="font-size:60px"><span class="text-orange">SERVICE</span> STATION </h1>
-                        <div class="title" >
+                        <div class="title">
                             <h4>Welcome To Service station</h4>
                         </div>
                     </div>
@@ -25,7 +24,6 @@
                         <p>
                             กรอกชื่อผู้ใช้งาน และ รหัสผ่านของท่านเพื่อเข้าใช้งาน
                         </p>
-
                         <div class="input-boxset username">
                             <div class="input-container">
                                 <input asp-for="_ViewLogin.UserId" type="text" class="form-control username" placeholder="รหัสพนักงาน 6 หลัก" required />
@@ -33,7 +31,7 @@
                         </div>
                         <div class="input-boxset password">
                             <div class="input-container">
-                               <input asp-for="_ViewLogin.Password" type="password" class="form-control password" placeholder="หมายเลขบัตรประชาชน 6 ตัวท้าย" required />
+                                <input asp-for="_ViewLogin.Password" type="password" class="form-control password" placeholder="หมายเลขบัตรประชาชน 6 ตัวท้าย" required />
                             </div>
                         </div>
                         <div class="input-boxset">
@@ -41,16 +39,16 @@
                             <label class="status-invalid" style="font-size:13px">@Html.DisplayFor(model => model._Error.validation)</label>
                         </div>
                         <div class="btn-container">
-                            <input asp-for="paramvrNo" type="text" class="form-control" style="display:none"  />
+                            <input asp-for="paramvrNo" type="text" class="form-control" style="display:none" />
                             <input type="submit" class="btn btn-login" value="LOGIN" />
                         </div>
                         @*<div class="forgotten-password">
-            <a href="#">Forgotten password?</a>
-        </div>*@
+                                <a href="#">Forgotten password?</a>
+                            </div>*@
                         @*<hr />*@
                         @*<div class="btn-container">
-            <input type="submit" class="btn btn-success create-newaccount" value="Create New Acount" />
-        </div>*@
+                                <input type="submit" class="btn btn-success create-newaccount" value="Create New Acount" />
+                            </div>*@
                     </div>
                 </div>
             </div>
@@ -58,6 +56,6 @@
     }
 </div>
 <footer style="width: 100%; margin-top: auto; position: relative; bottom: 0; font-size: x-small;">
-    <div class="grid-item fw-800" style="text-align:left;padding-left:10px"><label style="font-size:10px">&copy; Thai Stanley 2024 - Service Station : V 1.0 Last update 09/06/2025 11:40</label></div>
+    <div class="grid-item fw-800" style="text-align:left;padding-left:10px"><label style="font-size:10px">&copy; Thai Stanley 2024 - Service Station : V 1.0 Last update 05/11/2025 18:00 : Refer to SR2502616 </label></div>
     @*<p style="color:black;"> &copy; Thai Stanley 2024 - Service Station : V 1.0 Last update 07/02/2025 14:12 </p>*@
 </footer>

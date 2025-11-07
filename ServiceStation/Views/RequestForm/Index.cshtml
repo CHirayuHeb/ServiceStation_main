@@ -13,8 +13,8 @@
     Layout = "~/Views/Shared/_MenuBar.cshtml";
 }
 <link href="~/css/RequestForm/site.css" rel="stylesheet" />
+<link href="~/css/RequestForm/tableMain.css" rel="stylesheet" />
 @*Datepicker*@
-
 <script type="text/javascript">
     document.onreadystatechange = () => {
         if (document.readyState === "interactive") {
@@ -23,7 +23,6 @@
         }
     }
 </script>
-
 <div class="home-content">
     <div class="grid-container" style="margin-bottom:-20px">
         <div class="grid-item" style="text-align:left;padding-left:10px">
@@ -37,7 +36,6 @@
                 <img src="~/images/save_1.png" style="width:30px;height:26px;padding-right:5px;margin-right:8px;margin-top: 2px;margin-bottom: 2px;" />
                 บันทึก
             </button>
-
             @if (Model._ViewsvsServiceRequest.srStep == 3 && Model._ViewsvsServiceRequest.srFrom == "F3")
             {
                 <button class="button btnBlue" style="width:150px;" onclick="sendmailF3Inform($('#txtSRno').val(),'@Url.Action("History_Inform","RequestForm")')">
@@ -45,7 +43,6 @@
                     แจ้งสถานะ
                 </button>
             }
-
             @if (Model._ViewsvsServiceRequest.srStep <= 2)
             {
                 <button class="button btnOrange" style="width:130px;" onclick="sendMail($('#txtSRno').val(),'@Url.Action("History","RequestForm")')">
@@ -67,14 +64,11 @@
         </div>
     </div>
 
-
-
     <div id="DisplayContent" class="content-box " style=" margin: auto; padding: 10px; width: 95%;margin-bottom:-30px">
         <div class="container card card-radius bg-gray-dot-3">
             <div class="content-box" style="border:0px solid black">
                 @await Html.PartialAsync("_PartialStepFlow.cshtml", Model)
             </div>
-
         </div>
     </div>
     @*<div id="DisplayContent" class="content-box " style=" margin: auto; padding: 10px; width: 95%;margin-bottom:-30px">
@@ -100,8 +94,9 @@
                         @*<input type="submit" value="Submit" class="btn btn-primary">*@
                     </div>
 
-
                 </div>
+              
+
                 <table class="center" id="Toptable" border="1" style="color:black;">
                     <tr align="left" height="20">
                         <td id="tbottom" class="">Service No.</td>
@@ -111,9 +106,7 @@
                             @*@Html.TextBoxFor(model => model._ViewsvsServiceRequest.srNo, new { @class = "text-control", @readonly = "true", @style = "display:none" })*@
                             @Html.DisplayFor(model => model._ViewsvsServiceRequest.srServiceNo, new { @class = "text-control", @style = "font-size:10px;" })
                             @Html.TextBoxFor(model => model._ViewsvsServiceRequest.srServiceNo, new { @class = "text-control", @readonly = "true", @style = "display:none" })
-
                         </td>
-
                     </tr>
                     <tr align="left" height="20">
                         <td id="tbottom" class="">ผู้ร้องขอ</td>
@@ -156,21 +149,6 @@
                             <div style="@( (@_UserId == @Model._ViewsvsServiceRequest.srRequestBy|| @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode) &&  @Model._ViewsvsServiceRequest.srStep != 4  ? "" : "pointer-events: none;")">
                                 <input type="text" id="i_EDate" class="input-with-image datepicker text-gray form-control" asp-for="_ViewsvsServiceRequest.srDesiredDate" style="width:80%" readonly>
                             </div>
-
-
-
-                            @*@if (@_UserId == @Model._ViewsvsServiceRequest.srRequestBy || @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode)
-                                {
-                                    <input type="text" id="i_EDate" class="input-with-image datepicker text-gray form-control" asp-for="_ViewsvsServiceRequest.srDesiredDate" style="width:80%" readonly>
-
-                                }
-                                else
-                                {
-                                    <input type="text" id="i_EDate" class="input-with-image datepicker text-gray form-control" asp-for="_ViewsvsServiceRequest.srDesiredDate" style="width:80%;pointer-events: none;" readonly>
-
-                                }*@
-
-
                         </td>
                     </tr>
                     <tr align="left" height="20">
@@ -178,23 +156,18 @@
                         <td id="insertdata" class="text-gray" colspan="3">
                             @Html.TextBoxFor(model => model._ViewsvsServiceRequest.srType, new { @class = "form-control", @readonly = "true", @style = "font-size:12px;display:none", @id = "txtMsrType" })
                             <label>@Html.DisplayFor(model => model._ViewsvsServiceRequest.srType)</label>
-                            @*<label>@ViewBag.vTeam</label>*@
+
                         </td>
-                        @*<td id="tbottom"></td>
-                            <td id="insertdata"></td>*@
+
                     </tr>
                     <tr align="left" height="20">
                         <td id="tbottom">เรื่องขอใช้บริการ</td>
                         <td id="insertdata" class="text-gray" width="300px" colspan="3">
-                            @*@Html.TextAreaFor(model => model._ViewsvsServiceRequest.srSubject, new { @class = "form-control", @rows = 3, @style = "font-size:12px;;display:none", @readonly = "true", @id = "txtMsrSubject" })*@
-                            @*<label>@Html.DisplayFor(model => model._ViewsvsServiceRequest.srSubject)</label>*@
                             @Html.TextBoxFor(model => model._ViewsvsServiceRequest.srSubject, new { @class = "form-control", @readonly = "true", @id = "txtSUbject", @style = "font-size:12px;" })
-                            @*<label>@ViewBag.vForm</label>*@
-                        </td>
 
+                        </td>
                     </tr>
                 </table>
-
                 <div class="mt-3 bgwhitesmoke">
                     @if (@ViewBag.vForm == "F1")
                     {
@@ -207,7 +180,6 @@
                         {
                             @await Html.PartialAsync("_PartialGenaral.cshtml", Model)
                         }
-                        @*@await Html.PartialAsync("_PartialGenaral.cshtml", Model)*@
                     }
                     else if (@ViewBag.vForm == "F2")
                     {
@@ -240,15 +212,9 @@
                     {
                         @await Html.PartialAsync("_PartialNewReviseProgram.cshtml", Model)
                     }
-
                 </div>
 
-
             </div>
-
-            @*@if (Model._ViewsvsServiceRequest.srStep == 4) {
-
-                }*@
 
             @if (Model._ViewsvsServiceRequest.srStep > 2)
             {
@@ -272,28 +238,21 @@
 
 
             }
-
         </div>
-
         <!-- Modal send mail -->
         <div class="modal modal-lg fade" id="myModal1" style="background-color:#4f4b4b4d;" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
-
                     @*<div>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>*@
                     <div class="modal-body" id="myModalBodyDiv1">
-
                         @*@await Html.PartialAsync("SendMail.cshtml", Model)*@
                         @*Search Content Change to SendMail*@
-
                     </div>
                 </div>
             </div>
         </div>
-
-
 
         <!-- Modal openfile user-->
         <div class="modal modal fade" id="myModal2" style="background-color:#4f4b4b4d;" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -329,7 +288,6 @@
                                                 <td style="width:50px">Delete</td>
                                             </tr>
 
-
                                             @if (@ViewBag.listAttachment != null)
                                             {
 
@@ -339,14 +297,11 @@
                                                     <tr>
                                                         <td> <label>@(row += 1)</label></td>
                                                         <td>
-
                                                             <a href="@Url.Action("openFile", "RequestForm", new { pathFile = @item.fnFilename })" class="btn-image" target="_blank" style="padding-left:5px;text-decoration:auto;">
-
                                                                 @item.fnFilename
                                                             </a>
                                                         </td>
                                                         <td style="text-align:center">
-
 
                                                             @if (@_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode && @Model._ViewsvsServiceRequest.srStep != 5)
                                                             {
@@ -357,7 +312,6 @@
                                                                 <input type="button" style="font-size:14px" value="&#x274C" disabled>
                                                             }
                                                             @*<input type="button" style="@(@_UserId == @Model._ViewsvsServiceRequest.srRequestBy|| @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode ? "font-size:14px" : "pointer-events: none; font-size:14px")" value="&#x274C" onclick="DeleteFileUser('@item.fnNo','@item.fnFilename','@Url.Action("DeteleDataFile","RequestForm")')">*@
-
                                                             @*<input type="button" style="font-size:14px" value="&#x274C" onclick="DeleteFileUser('@item.fnNo','@item.fnFilename','@Url.Action("DeteleDataFile","RequestForm")')">*@
                                                         </td>
                                                     </tr>
@@ -371,21 +325,17 @@
                                         </table>
                                     </div>
 
-
                                 </div>
-
 
                             </div>
                         </div>
                         <div class="modal-footer" style="width: 100%;">
                             <button type="button" class="button btnRed" data-bs-dismiss="modal" style="width:80px;height:30px">Close</button>
-
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
         <!-- Modal openfile worker-->
         <div class="modal modal fade" id="myModal3" style="background-color:#4f4b4b4d;" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -413,15 +363,12 @@
                                     @*<div id="divHistory" class="panel-body">
                                         </div>*@
                                     <div class="panel-body">
-
                                         <table class="center" id="Toptable" border="1" style="color:black;">
                                             <tr style="background-color:#E5E0FF">
                                                 <td>No</td>
                                                 <td>Name File</td>
                                                 <td style="width:50px">Delete</td>
                                             </tr>
-
-
 
                                             @if (@ViewBag.listAttachmentWorker != null)
                                             {
@@ -431,14 +378,12 @@
                                                     <tr>
                                                         <td> <label>@(row += 1)</label></td>
                                                         <td>
-
                                                             <a href="@Url.Action("openFile", "RequestForm", new { pathFile = @item.fnFilename })" class="btn-image" target="_blank" style="padding-left:5px;text-decoration:auto;">
                                                                 @item.fnFilename
                                                             </a>
                                                         </td>
                                                         <td>
                                                             @*<input type="button" style="@(@_UserId == @Model._ViewsvsServiceRequest.srRequestBy|| @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode ? "font-size:14px" : "pointer-events: none; font-size:14px")" value="&#x274C" onclick="DeleteFileUser('@item.fnNo','@item.fnFilename','@Url.Action("DeteleDataFile","RequestForm")')">*@
-
                                                             @if (@_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode && @Model._ViewsvsServiceRequest.srStep != 5)
                                                             {
                                                                 <input type="button" style="font-size:14px" value="&#x274C" onclick="DeleteFileUser('@item.fnNo','@item.fnFilename','@Url.Action("DeteleDataFile","RequestForm")')">
@@ -447,7 +392,6 @@
                                                             {
                                                                 <input type="button" style="font-size:14px" value="&#x274C" disabled>
                                                             }
-
 
                                                             @*<input type="button" style="font-size:14px" value="&#x274C" onclick="DeleteFileUser('@item.fnNo','@item.fnFilename','@Url.Action("DeteleDataFile","RequestForm")')">*@
                                                         </td>
@@ -465,22 +409,18 @@
                                         </table>
                                     </div>
 
-
                                 </div>
-
 
                             </div>
                         </div>
                         <div class="modal-footer" style="width: 100%;">
                             <button type="button" class="button btnRed" data-bs-dismiss="modal" style="width:80px;height:30px">Close</button>
-
                         </div>
                     </div>
                 </div>
             </div>
         </div>
         @*}*@
-
 
         <!-- Modal Borrow NoteBook-->
         <div class="modal modal-xl fade" id="myModal4" style="background-color:#4f4b4b4d;" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -495,7 +435,6 @@
                         </div>
                         <div class="modal-body" style="">
                             <div style="width:100%;justify-content:center;display: flex;">
-
                                 <table style="width:400px;border:0px">
                                     <tr style="border:0px">
                                         <td style="border:0px">กรุณาเลือกเดือน</td>
@@ -503,9 +442,7 @@
                                         <td style="border:0px">   <input type='button' value='LOAD' style="width:80px;height:30px;vertical-align: sub;" onclick="getval('@Url.Action("ListBorrowNotebook", "RequestForm")')"></td>
                                     </tr>
                                 </table>
-
                             </div>
-
 
                             <table style="width:100%" id="tbListNotebookSp">
                                 <tr>
@@ -518,32 +455,24 @@
                                 <tr style="border:0px">
                                     <td style="text-align:center;border:0px">วันที่ยืม</td>
                                     <td style="text-align:center;border:0px">
-
                                         <input id="idBorrowStart" type="text" class="input-with-image datepicker form-control" placeholder="YYYY/MM/DD" style="width:200px;">
                                     </td>
                                     <td style="text-align:center;border:0px">วันที่คืน</td>
                                     <td style="text-align:center;border:0px">
-
                                         <input id="idBorrowEnd" type="text" class="input-with-image datepicker form-control" placeholder="YYYY/MM/DD" style="width:200px;">
                                     </td>
                                 </tr>
                             </table>
 
-
-
                             @*<table style="width:100%" id="tbListNotebookSp"></table>*@
                         </div>
                         <div class="modal-body">
-
                             @*<table style="width:100%" id="tbListNotebookSp"></table>*@
                         </div>
                         <div class="modal-footer" style="width: 100%;">
                             <button type="button" class="btn btn-success" onclick="btnChooseDate()" style="@(@_UserId == @Model._ViewsvsServiceRequest.srRequestBy|| @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode ? "" : "pointer-events: none;")">OK</button>
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         </div>
-
-
-
 
 
                         @*@await Html.PartialAsync("_PartialCalBorrow.cshtml", Model);*@
@@ -554,47 +483,37 @@
 
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>*@
-
                     </div>
                 </div>
             </div>
         </div>
-
         <!-- Modal Open file USB new-->
         <div class="modal modal-xl fade" id="myModal5" style="background-color:#4f4b4b4d;" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-body" id="myModalBodyDiv5">
-
                     </div>
                 </div>
             </div>
         </div>
     </form>
     @*}*@
-
     <!-- Modal send mail worker -->
     <div class="modal modal-lg fade" id="myModal6" style="background-color:#4f4b4b4d;" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-
                 @*<div>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>*@
                 <div class="modal-body" id="myModalBodyDiv6">
-
                     @await Html.PartialAsync("SendMail_Woker.cshtml", Model);
                     @*Search Content Change to SendMail*@
-
                 </div>
             </div>
         </div>
     </div>
 
-
-
 </div>
-
 <script>
 
     $('.datepicker').datepicker({

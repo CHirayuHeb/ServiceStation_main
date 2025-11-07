@@ -8,7 +8,7 @@
     <div>
         <ul class="progressbar">
             <li class="@(@Model._ViewsvsServiceRequest.srStep >= 0 ? "active" : "")"><h6 style="font-size:13px;color:black" class="step-title">Issue</h6></li>
-            @if (Model._ViewsvsServiceRequest.srFrom == "F5" || Model._ViewsvsServiceRequest.srSubject.Contains("Print Color"))
+            @if (Model._ViewsvsServiceRequest.srFrom == "F5" || Model._ViewsvsServiceRequest.srSubject.Contains("Print Color") || Model._ViewsvsServiceRequest.srSubject.Contains("Admin"))
             {
                 <li class="@(@Model._ViewsvsServiceRequest.srStep >= 1 ? "active" : "")"><p class="step-title" style="font-size:12px;color:black">Waiting for approval DM Up of Dept.</p></li>
             }
