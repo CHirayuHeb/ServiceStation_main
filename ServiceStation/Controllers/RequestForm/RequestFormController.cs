@@ -17,6 +17,7 @@ using ServiceStation.Models.Table.HRMS;
 using ServiceStation.Models.Table.IT;
 using ServiceStation.Models.Table.LAMP;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Net.Mail;
 
 namespace ServiceStation.Controllers.RequestForm
 {
@@ -616,12 +617,51 @@ namespace ServiceStation.Controllers.RequestForm
                 email.Body = bodyBuilder.ToMessageBody();
 
                 // send email
-                var smtp = new SmtpClient();
-                //smtp.Connect("mail.csloxinfo.com");
-                smtp.Connect("203.146.237.138");
-                //smtp.Connect("10.200.128.12");
-                smtp.Send(email);
-                smtp.Disconnect(true);
+                //var smtp = new SmtpClient();
+                ////smtp.Connect("mail.csloxinfo.com");
+                //smtp.Connect("203.146.237.138");
+                ////smtp.Connect("10.200.128.12");
+                //smtp.Send(email);
+                //smtp.Disconnect(true);
+
+
+                var senderEmail = new MailAddress(fromEmailFrom.emEmail_M365, fromEmailFrom.emName_M365);
+                var receiverEmail = new MailAddress(fromEmailTO.emEmail_M365, fromEmailTO.emName_M365);
+
+
+                System.Net.Mime.ContentType mimeTypeS = new System.Net.Mime.ContentType("text/html");
+                AlternateView alternate = AlternateView.CreateAlternateViewFromString(EmailBody, mimeTypeS);
+                System.Net.Mail.SmtpClient smtp = new System.Net.Mail.SmtpClient("smtp.csloxinfo.com");
+                smtp.UseDefaultCredentials = false;
+                smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
+
+                using (MailMessage mess = new MailMessage(senderEmail, receiverEmail))
+                {
+                    mess.Subject = "Service Station Request==>  ส่งแจ้งรายละเอียด Notebook Spare​ ";
+                    //add CC
+                    if (@class._ViewsvsHistoryApproved.htCC != null)
+                    {
+                        string[] splitCC = @class._ViewsvsHistoryApproved.htCC.Split(',');
+                        foreach (var i in splitCC)
+                        {
+                            if (i != " " & i != "")
+                            {
+                                string ccEmail = _IT.rpEmails.Where(w => w.emName_M365 == i).Select(s => s.emEmail_M365).FirstOrDefault().ToString();
+                                //email.Cc.Add(MailboxAddress.Parse(ccEmail));
+                                //vCCemail = ccEmail + ",";
+                                mess.CC.Add(ccEmail);
+                            }
+                        }
+                    }
+
+
+
+                    mess.AlternateViews.Add(alternate);
+                    smtp.Send(mess);
+                }
+
+
+
 
                 return Json(new { c1 = config, c2 = msg, c3 = "" });
             }
@@ -1286,12 +1326,60 @@ namespace ServiceStation.Controllers.RequestForm
                 email.Body = bodyBuilder.ToMessageBody();
 
                 // send email
-                var smtp = new SmtpClient();
-                //smtp.Connect("mail.csloxinfo.com");
-                smtp.Connect("203.146.237.138");
-                //smtp.Connect("10.200.128.12");s
-                smtp.Send(email);
-                smtp.Disconnect(true);
+                //var smtp = new SmtpClient();
+                ////smtp.Connect("mail.csloxinfo.com");
+                //smtp.Connect("203.146.237.138");
+                ////smtp.Connect("10.200.128.12");s
+                //smtp.Send(email);
+                //smtp.Disconnect(true);
+
+                var senderEmail = new MailAddress(fromEmailFrom.emEmail_M365, fromEmailFrom.emName_M365);
+                var receiverEmail = new MailAddress(fromEmailTO.emEmail_M365, fromEmailTO.emName_M365);
+
+
+                System.Net.Mime.ContentType mimeTypeS = new System.Net.Mime.ContentType("text/html");
+                AlternateView alternate = AlternateView.CreateAlternateViewFromString(EmailBody, mimeTypeS);
+                System.Net.Mail.SmtpClient smtp = new System.Net.Mail.SmtpClient("smtp.csloxinfo.com");
+                smtp.UseDefaultCredentials = false;
+                smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
+
+
+                using (MailMessage mess = new MailMessage(senderEmail, receiverEmail))
+                {
+                    mess.Subject =  "Service Station Request==> " + v_subject;
+                    //add CC
+                    if (@class._ViewsvsHistoryApproved.htCC != null)
+                    {
+                        ViewrpEmail fromEmailCC = new ViewrpEmail();
+                        string[] splitCC = @class._ViewsvsHistoryApproved.htCC.Split(',');
+                        foreach (var i in splitCC)
+                        {
+                            if (i != " " & i != "")
+                            {
+                                var v_cc = "";
+                                try
+                                {
+                                    fromEmailCC = _IT.rpEmails.Where(w => w.emName_M365 == i).FirstOrDefault();
+                                    //MailboxAddress FromMailcc = new MailboxAddress(fromEmailCC.emName_M365, fromEmailCC.emEmail_M365);
+                                    //email.Cc.Add(FromMailcc);
+                                    //vCCemail += fromEmailCC.emEmail_M365.ToString() + ",";
+                                    mess.CC.Add(fromEmailCC.emEmail_M365);
+                                }
+                                catch (Exception e)
+                                {
+                                    v_cc = e.Message;
+                                }
+
+                            }
+                        }
+                    }
+
+                    mess.AlternateViews.Add(alternate);
+                    smtp.Send(mess);
+                }
+
+
+
 
 
                 //insert into HistoryApproved
