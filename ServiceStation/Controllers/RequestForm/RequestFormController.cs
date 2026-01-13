@@ -1121,11 +1121,11 @@ namespace ServiceStation.Controllers.RequestForm
                     List<ViewAccPOSMAST> _ViewAccPOSMAST = _HRMS.AccPOSMAST.Where(x => int.Parse(x.POS_HCM_CODE) < int.Parse(v_POS_HCM_CODE)).ToList();
                     string v_chk = _ViewAccPOSMAST.Where(x => x.POS_CODE == _ViewAccEMPLOYEE.POS_CODE).Select(x => x.POS_CODE).FirstOrDefault();
 
-                    //if (v_chk == null || v_chk == "" )
-                    //{
-                    //    config = "E";
-                    //    msg = "Please send approval to CS Up of Dept.!!!";
-                    //}
+                    if (v_chk == null || v_chk == "")
+                    {
+                        config = "E";
+                        msg = "Please send approval to CS Up of Dept.!!!";
+                    }
 
                 }
                 catch (Exception ex)
