@@ -65,6 +65,10 @@ namespace ServiceStation.Controllers.RequestForm
             @class._ListViewsvsHistoryApproved = new List<ViewsvsHistoryApproved>();
             @class._ViewsvsGeneral = new ViewsvsGeneral();
 
+
+            @class._ViewsvsRegisterUSB = new ViewsvsRegisterUSB();
+            @class._ViewsvsRegisterUSB_New = new List<ViewsvsRegisterUSB_New>();
+            @class._ViewsvsRegisterUSB_Cancel = new List<ViewsvsRegisterUSB_Cancel>();
             if (vForm == "F4")
             {
                 //ViewsvsMastUSB
@@ -147,7 +151,7 @@ namespace ServiceStation.Controllers.RequestForm
                     @class._ViewsvsGeneral = _IT.svsGeneral.Where(x => x.gnNo == int.Parse(vSrNo)).FirstOrDefault();
                     ViewBag.gnType = @class._ViewsvsGeneral.gnType;
 
-                    
+
                 }
 
                 //F2
@@ -169,8 +173,10 @@ namespace ServiceStation.Controllers.RequestForm
 
 
                 //USB
+                //@class._ViewsvsRegisterUSB = new ViewsvsRegisterUSB();
                 if (vForm == "F4")
                 {
+
                     @class._ViewsvsRegisterUSB = _IT.svsRegisterUSB.Where(x => x.ubNo == int.Parse(vSrNo)).FirstOrDefault();
 
                     @class._ViewsvsRegisterUSB_Cancel = _IT.svsRegisterUSB_Cancel.Where(x => x.cuNo == int.Parse(vSrNo)).ToList();
@@ -214,7 +220,7 @@ namespace ServiceStation.Controllers.RequestForm
 
 
                     }
-                
+
 
 
 
@@ -1115,11 +1121,11 @@ namespace ServiceStation.Controllers.RequestForm
                     List<ViewAccPOSMAST> _ViewAccPOSMAST = _HRMS.AccPOSMAST.Where(x => int.Parse(x.POS_HCM_CODE) < int.Parse(v_POS_HCM_CODE)).ToList();
                     string v_chk = _ViewAccPOSMAST.Where(x => x.POS_CODE == _ViewAccEMPLOYEE.POS_CODE).Select(x => x.POS_CODE).FirstOrDefault();
 
-                    if (v_chk == null || v_chk == "")
-                    {
-                        config = "E";
-                        msg = "Please send approval to CS Up of Dept.!!!";
-                    }
+                    //if (v_chk == null || v_chk == "" )
+                    //{
+                    //    config = "E";
+                    //    msg = "Please send approval to CS Up of Dept.!!!";
+                    //}
 
                 }
                 catch (Exception ex)
@@ -1346,7 +1352,7 @@ namespace ServiceStation.Controllers.RequestForm
 
                 using (MailMessage mess = new MailMessage(senderEmail, receiverEmail))
                 {
-                    mess.Subject =  "Service Station Request==> " + v_subject;
+                    mess.Subject = "Service Station Request==> " + v_subject;
                     //add CC
                     if (@class._ViewsvsHistoryApproved.htCC != null)
                     {
@@ -2118,7 +2124,7 @@ namespace ServiceStation.Controllers.RequestForm
                                 _svsRegisterUSB_New.nuIssueBy = IssueBy;
                                 _svsRegisterUSB_New.nuUpdateBy = UpdateBy;
                                 _IT.svsRegisterUSB_New.AddAsync(_svsRegisterUSB_New);
-                              
+
                             }
                             _IT.SaveChanges();
                             vmsg = "Insert success";
@@ -2155,7 +2161,7 @@ namespace ServiceStation.Controllers.RequestForm
                                 _svsRegisterUSB_New.nuIssueBy = IssueBy;
                                 _svsRegisterUSB_New.nuUpdateBy = UpdateBy;
                                 _IT.svsRegisterUSB_New.AddAsync(_svsRegisterUSB_New);
-                                
+
                             }
                             _IT.SaveChanges();
                             //for (int i = 0; i < @class._ViewsvsRegisterUSB_Cancel.Count; i++)

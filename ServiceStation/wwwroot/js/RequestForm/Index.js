@@ -59,7 +59,7 @@ $('.Addcancel').click(function () {
     var htmls = "";
     var rowi = rowCount - 1;
     htmls = "";
-    htmls += "<tr align='Center' style='vertical-align: top;'>";
+    htmls += "<tr align='Center' style='vertical-align: top;' class='tbpurple'> ";
     htmls += "<td>";
     htmls += rowCount;
     htmls += "</td>";

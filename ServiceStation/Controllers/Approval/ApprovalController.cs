@@ -55,7 +55,10 @@ namespace ServiceStation.Controllers.Approval
             //@classs._ListsvsServiceRequest = _IT.svsServiceRequest.Where(x => x.srApproveEmpcode == EmpCode && x.srStep < 5).OrderByDescending(x => x.srStep).ThenBy(x => x.srRequestDate).ToList();
            // @classs._ListsvsServiceRequest = _IT.svsServiceRequest.Where(x => ((x.srApproveEmpcode == EmpCode && x.srStep != 5) || x.srOperatorEmpcode == EmpCode)).OrderByDescending(x => x.srStep).ThenBy(x => x.srRequestDate).ToList();
             //@classs._ListsvsServiceRequest = _IT.svsServiceRequest.Where(x => ((x.srApproveEmpcode == EmpCode) || x.srOperatorEmpcode == EmpCode)).OrderBy(x => x.srStep).ThenBy(x => x.srRequestDate).ToList();
-            @classs._ListsvsServiceRequest = _IT.svsServiceRequest.Where(x => ((x.srApproveEmpcode == EmpCode) || x.srOperatorEmpcode == EmpCode) && x.srStep < 5 && x.srStep>0).OrderBy(x => x.srStep).ThenBy(x => x.srRequestDate).ToList();
+            //@classs._ListsvsServiceRequest = _IT.svsServiceRequest.Where(x => ((x.srApproveEmpcode == EmpCode) || x.srOperatorEmpcode == EmpCode) && x.srStep < 5 && x.srStep>0).OrderBy(x => x.srStep).ThenBy(x => x.srRequestDate).ToList();
+            @classs._ListsvsServiceRequest = _IT.svsServiceRequest.Where(x => x.srApproveEmpcode == EmpCode && x.srStep < 5 && x.srStep > 0).OrderBy(x => x.srStep).ThenBy(x => x.srRequestDate).ToList();
+
+
             if (@classs._ViewSearchMyReq != null)
             {
 
@@ -129,7 +132,7 @@ namespace ServiceStation.Controllers.Approval
             ViewBag.vbformStatus = formStatus;
 
            // @classs._ListsvsServiceRequest = _IT.svsServiceRequest.Where(x => ((x.srApproveEmpcode == EmpCode) || x.srOperatorEmpcode == EmpCode)).OrderByDescending(x => x.srStep).ThenBy(x => x.srRequestDate).ToList();
-            @classs._ListsvsServiceRequest = _IT.svsServiceRequest.Where(x => ((x.srApproveEmpcode == EmpCode) || x.srOperatorEmpcode == EmpCode) && x.srStep<5 && x.srStep > 0).OrderBy(x => x.srStep).ThenBy(x => x.srRequestDate).ToList();
+            @classs._ListsvsServiceRequest = _IT.svsServiceRequest.Where(x => x.srApproveEmpcode == EmpCode && x.srStep<5 && x.srStep > 0).OrderBy(x => x.srStep).ThenBy(x => x.srRequestDate).ToList();
             if (@classs._ViewSearchMyReq.v_srNo != null)
             {
                 @classs._ListsvsServiceRequest = @classs._ListsvsServiceRequest.Where(x => x.srServiceNo.Contains(@classs._ViewSearchMyReq.v_srNo)).ToList();
