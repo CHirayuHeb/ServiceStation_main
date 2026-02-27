@@ -1066,6 +1066,7 @@ namespace ServiceStation.Controllers.RequestForm
             {
                 config = "P";
                 msg = chkPermis[1];
+                return Json(new { c1 = config, c2 = msg });
             }
 
             //check vpn step 1 cs up 13 / 01 / 2024 if ((vform == "F5" || vSrSubject.Contains("Print Color") || vSrSubject.Contains("Admin Access Request")) && i_Step == 1)
@@ -1078,7 +1079,8 @@ namespace ServiceStation.Controllers.RequestForm
                     string v_empcsup = _IT.rpEmails.Where(w => w.emName_M365 == @class._ViewsvsHistoryApproved.htTo).Select(x => x.emEmpcode).FirstOrDefault();
 
                     string _Divicheck = User.Claims.FirstOrDefault(s => s.Type == "Division")?.Value;
-                    if (_Divicheck.Contains("SL"))
+                    string _Depcheck = User.Claims.FirstOrDefault(s => s.Type == "Department")?.Value;
+                    if (_Divicheck.Contains("SL") || _Depcheck.Contains("DMP"))
                     {
                         //check case SL ddm
                         v_POS_HCM_CODE = _HRMS.AccPOSMAST.Where(x => x.POS_CODE == "DDM").Select(x => x.POS_HCM_CODE).FirstOrDefault();
@@ -1096,7 +1098,7 @@ namespace ServiceStation.Controllers.RequestForm
 
                     if (v_chk == null || v_chk == "")
                     {
-                        config = "W";
+                        config = "E";
                         msg = "Please send approval to DM Up of Dept.!!!";
                     }
 
@@ -1125,6 +1127,8 @@ namespace ServiceStation.Controllers.RequestForm
                     {
                         config = "E";
                         msg = "Please send approval to CS Up of Dept.!!!";
+                    
+                        return Json(new { c1 = config, c2 = msg });
                     }
 
                 }
@@ -1132,6 +1136,7 @@ namespace ServiceStation.Controllers.RequestForm
                 {
                     config = "E";
                     msg = "Please check email send to !!!!";
+                    return Json(new { c1 = config, c2 = msg });
                 }
             }
 
@@ -1425,15 +1430,15 @@ namespace ServiceStation.Controllers.RequestForm
 
                 return Json(new { c1 = config, c2 = msg, c3 = fsavefile10 });
             }
-            else if (config == "P")
-            {
-                config = "P";
-                msg = msg;
-                return Json(new { c1 = config, c2 = msg });
-            }
+            //else if (config == "P")
+            //{
+            //    config = "P";
+            //    msg = msg;
+            //    return Json(new { c1 = config, c2 = msg });
+            //}
             else
             {
-                config = "E";
+                //config = "E";
                 msg = msg;
                 return Json(new { c1 = config, c2 = msg });
             }

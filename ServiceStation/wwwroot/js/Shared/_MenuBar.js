@@ -1616,86 +1616,86 @@ function sendMailWorker(getID, action) {
                 console.log("sendMail worker");
                 //$("#myModal1").modal("show");
                 var htmls = "";
-                if (data.status == "hasHistory") {
-                    htmls = " <div class='panel panel-default property'>"
-                    // console.log(data.listHistory.length);
-                    $.each(data.listHistory, function (i, item) {
-                        //console.log('test' + item.htTo); console.log(data.listHistory[0].htTo);
-                        console.log("OK")
-                        htmls += "     <div class='panel-heading panel-heading-custom property' tabindex = '0' >"
-                        htmls += "         <h4 class='panel-title faq-title-range collapsed' data-bs-toggle='collapse' data-bs-target='#Ans" + item.htStep + "' aria-expanded='false' aria-controls='collapseExample'>"
-                        htmls += "             <label style='font-size: 13px;'>Step " + item.htStep + "</label> <label class='lbV'></label>"
-                        if (item.htStep == 0) {
+                //if (data.status == "hasHistory") {
+                //    htmls = " <div class='panel panel-default property'>"
+                //    // console.log(data.listHistory.length);
+                //    $.each(data.listHistory, function (i, item) {
+                //        //console.log('test' + item.htTo); console.log(data.listHistory[0].htTo);
+                //        console.log("OK")
+                //        htmls += "     <div class='panel-heading panel-heading-custom property' tabindex = '0' >"
+                //        htmls += "         <h4 class='panel-title faq-title-range collapsed' data-bs-toggle='collapse' data-bs-target='#Ans" + item.htStep + "' aria-expanded='false' aria-controls='collapseExample'>"
+                //        htmls += "             <label style='font-size: 13px;'>Step " + item.htStep + "</label> <label class='lbV'></label>"
+                //        if (item.htStep == 0) {
 
-                            htmls += " <label  style='color:red'>Disapprove</label>"
-                        }
-                        else if (item.htStep == 1) {
+                //            htmls += " <label  style='color:red'>Disapprove</label>"
+                //        }
+                //        else if (item.htStep == 1) {
 
-                            htmls += " <label  style='color:mediumpurple'>Waiting for approval of Dept.</label>"
-                        } else if (item.htStep == 2) {
+                //            htmls += " <label  style='color:mediumpurple'>Waiting for approval of Dept.</label>"
+                //        } else if (item.htStep == 2) {
 
-                            htmls += " <label  style='color:orange'>Waiting for approval by CS of IS</label>"
-                        }
-                        else if (item.htStep == 3) {
+                //            htmls += " <label  style='color:orange'>Waiting for approval by CS of IS</label>"
+                //        }
+                //        else if (item.htStep == 3) {
 
-                            htmls += " <label  style='color:blue'>Process</label>"
-                        }
-                        else if (item.htStep == 4) {
+                //            htmls += " <label  style='color:blue'>Process</label>"
+                //        }
+                //        else if (item.htStep == 4) {
 
-                            htmls += " <label  style='color:yellow'>Waiting for accept by CS of IS</label>"
-                        }
-                        else if (item.htStep == 5) {
+                //            htmls += " <label  style='color:yellow'>Waiting for accept by CS of IS</label>"
+                //        }
+                //        else if (item.htStep == 5) {
 
-                            htmls += " <label  style='color:Green'>Finish</label>"
-                        }
+                //            htmls += " <label  style='color:Green'>Finish</label>"
+                //        }
 
-                        htmls += "         </h4>"
-                        htmls += "     </div >"
-                        htmls += "     <div class='panel-collapse collapse' style = 'overflow: auto;' id = 'Ans" + item.htStep + "' > "
+                //        htmls += "         </h4>"
+                //        htmls += "     </div >"
+                //        htmls += "     <div class='panel-collapse collapse' style = 'overflow: auto;' id = 'Ans" + item.htStep + "' > "
 
-                        htmls += "         <div class='panel-body'>"
-                        htmls += "             <div style='font-size: x-small; clear: both; width: 100%; tetx-align: left; font-weight: bold;'>"
-                        htmls += "                 <label> " + item.htDate + " :: " + item.htTime + " น.</label>"
-                        htmls += "             </div>"
-                        htmls += "             <div style='font-size: x-small; float: left; width: 20%; tetx-align: left;'>"
-                        htmls += "                 <label>FROM : </label></br>"
-                        htmls += "                 <label>" + item.htFrom + "</label > "
-                        htmls += "             </div>"
-                        htmls += "             <div style='font-size: x-small; float: left; width: 20%; tetx-align: left;'>"
-                        htmls += "                 <label>TO : </label></br>"
-                        htmls += "                 <label>" + item.htTo + "</label>"
-                        htmls += "             </div>"
-                        htmls += "             <div style='font-size: x-small; float: left; width: 20%; tetx-align: left;'>"
-                        if (item.htCC == null) { item.htCC = "" }
-                        else { item.htCC = item.htCC }
-                        htmls += "                 <label>CC : </label>"
-                        htmls += "                 <label>" + item.htCC + "</label>"
-                        htmls += "             </div>"
-                        htmls += "             <div style='font-size: x-small; float: right; width: 20%; tetx-align: left;'>"
-                        if (item.htRemark == null) { item.htRemark = "" }
-                        else { item.htRemark = item.htRemark }
-                        htmls += "                 <label>Remark : </label>"
-                        htmls += "                 <label>" + item.htRemark + "</label>"
-                        htmls += "             </div>"
-                        htmls += "             <div style='font-size: x-small; float: right; width: 20%; tetx-align: left;'>"
-                        htmls += "                 <label>Status : </label>"
-                        if (item.htStatus == null) { item.htStatus = "" }
-                        else {
-                            item.htStatus = item.htStatus
-                            if (item.htStatus == "Finished") {
-                                htmls += "                 <label><span style='color: green;'>" + item.htStatus + "</span></label>"
-                            } else {
-                                htmls += "                 <label><span style='color: darkkhaki;'>" + item.htStatus + "</span></label>"
-                            }
-                        }
+                //        htmls += "         <div class='panel-body'>"
+                //        htmls += "             <div style='font-size: x-small; clear: both; width: 100%; tetx-align: left; font-weight: bold;'>"
+                //        htmls += "                 <label> " + item.htDate + " :: " + item.htTime + " น.</label>"
+                //        htmls += "             </div>"
+                //        htmls += "             <div style='font-size: x-small; float: left; width: 20%; tetx-align: left;'>"
+                //        htmls += "                 <label>FROM : </label></br>"
+                //        htmls += "                 <label>" + item.htFrom + "</label > "
+                //        htmls += "             </div>"
+                //        htmls += "             <div style='font-size: x-small; float: left; width: 20%; tetx-align: left;'>"
+                //        htmls += "                 <label>TO : </label></br>"
+                //        htmls += "                 <label>" + item.htTo + "</label>"
+                //        htmls += "             </div>"
+                //        htmls += "             <div style='font-size: x-small; float: left; width: 20%; tetx-align: left;'>"
+                //        if (item.htCC == null) { item.htCC = "" }
+                //        else { item.htCC = item.htCC }
+                //        htmls += "                 <label>CC : </label>"
+                //        htmls += "                 <label>" + item.htCC + "</label>"
+                //        htmls += "             </div>"
+                //        htmls += "             <div style='font-size: x-small; float: right; width: 20%; tetx-align: left;'>"
+                //        if (item.htRemark == null) { item.htRemark = "" }
+                //        else { item.htRemark = item.htRemark }
+                //        htmls += "                 <label>Remark : </label>"
+                //        htmls += "                 <label>" + item.htRemark + "</label>"
+                //        htmls += "             </div>"
+                //        htmls += "             <div style='font-size: x-small; float: right; width: 20%; tetx-align: left;'>"
+                //        htmls += "                 <label>Status : </label>"
+                //        if (item.htStatus == null) { item.htStatus = "" }
+                //        else {
+                //            item.htStatus = item.htStatus
+                //            if (item.htStatus == "Finished") {
+                //                htmls += "                 <label><span style='color: green;'>" + item.htStatus + "</span></label>"
+                //            } else {
+                //                htmls += "                 <label><span style='color: darkkhaki;'>" + item.htStatus + "</span></label>"
+                //            }
+                //        }
 
-                        htmls += "             </div>"
-                        htmls += "         </div>"
-                        htmls += "     </div>"
+                //        htmls += "             </div>"
+                //        htmls += "         </div>"
+                //        htmls += "     </div>"
 
-                    });
-                    htmls += "</div>"
-                }
+                //    });
+                //    htmls += "</div>"
+                //}
                 // var url = data.partial + mydata + "&vform=" + vform;
                 var url = data.partial + mydata;
                 // //var url = data.partial ;//+ "?class=" + mydata;
@@ -1703,7 +1703,7 @@ function sendMailWorker(getID, action) {
                 // //var url = String($(url).data(mydata));
                 $("#myModalBodyDiv1").load(url, function () {
                     document.getElementById("searchInputTO").value = data.nameIssue;
-                    $('#divHistory').html(htmls);
+                    //$('#divHistory').html(htmls);
                     $("#myModal1").modal("show");
 
                 })
