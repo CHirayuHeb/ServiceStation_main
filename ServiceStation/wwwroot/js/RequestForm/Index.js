@@ -22,11 +22,11 @@ $('.AddNew').click(function () {
 
     htmls += "</td>";
     htmls += "<td>";
-    htmls += "<input type='text' name='_ViewsvsRegisterUSB_New[" + rowi + "].nuEquipment' value='' class='form - control' />";
+    htmls += "<input type='text' name='_ViewsvsRegisterUSB_New[" + rowi + "].nuEquipment' value='' style='font-size:11px' class='form-control'  placeholder='กรุณากรอกข้อมูล' required />";
     //htmls += "<input type='text' class='cEquipment'  value='' style='width: 80px'>";
     htmls += "</td>";
     htmls += "<td>";
-    htmls += "<textarea id='w3review' name='_ViewsvsRegisterUSB_New[" + rowi + "].nuObjective'  class='cObject' value=''rows='3' cols='30' maxlength='100'></textarea>";
+    htmls += "<textarea id='w3review' name='_ViewsvsRegisterUSB_New[" + rowi + "].nuObjective'  class='cObject' value=''rows='3' cols='30' maxlength='100' style='font-size:11px'   placeholder='กรุณากรอกข้อมูล' required></textarea>";
     htmls += "</td>";
     htmls += "<td>";
     htmls += "<input type='text' class='cUser' name='_ViewsvsRegisterUSB_New[" + rowi + "].nuUserIncharge' value='' style='width: 80px'>";

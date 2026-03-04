@@ -48,235 +48,237 @@ namespace ServiceStation.Controllers.RequestForm
         public ActionResult Index(string id, string vtype, string vForm, string vTeam, string vSubject, string vSrNo)
         {
 
-            string _UserId = User.Claims.FirstOrDefault(s => s.Type == "UserId")?.Value;
-
-            ViewBag.vTeam = vTeam;
-            ViewBag.vForm = vForm;
-            ViewBag.vSubject = vSubject;
-            Class @class = new Class();
-            //if (vtype == "New")
-            //{ }
-            //string vid = "015142";
-
-            //list in page
-            //ViewBag.listAttachmentCOunt = "0";
-            //ViewBag.listAttachmentCOuntWorker = "0";
-
-            @class._ListViewsvsHistoryApproved = new List<ViewsvsHistoryApproved>();
-            @class._ViewsvsGeneral = new ViewsvsGeneral();
-
-
-            @class._ViewsvsRegisterUSB = new ViewsvsRegisterUSB();
-            @class._ViewsvsRegisterUSB_New = new List<ViewsvsRegisterUSB_New>();
-            @class._ViewsvsRegisterUSB_Cancel = new List<ViewsvsRegisterUSB_Cancel>();
-            if (vForm == "F4")
+            try
             {
-                //ViewsvsMastUSB
-                List<ViewsvsMastUSB> _ViewsvsMastUSB = _IT.svsMastUSB.ToList();
-                SelectList formMastUSB = new SelectList(_ViewsvsMastUSB.Select(s => s.muUSBName).Distinct());
-                ViewBag.formMastUSB = formMastUSB;
-            }
-            else if (vForm == "F6" || vForm == "F1")
-            {
+                string _UserId = User.Claims.FirstOrDefault(s => s.Type == "UserId")?.Value;
 
-                List<ViewProgramList> _ViewProgramList = _IT.ProgramList.Where(x => x.PdStatus == "USE" && x.pdseccode == "SDE" && x.pdWorking == null).OrderBy(x => x.PdPgm).ToList();
-                SelectList formPgm = new SelectList(_ViewProgramList.Select(s => s.PdPgm).Distinct());
-                ViewBag.formPgm = formPgm;
+                ViewBag.vTeam = vTeam;
+                ViewBag.vForm = vForm;
+                ViewBag.vSubject = vSubject;
+                Class @class = new Class();
 
 
-                //พนักงานภายในบริษัททั้งหมด  /  กำหนดผู้ใช้งาน  (พร้อมแนบรายชื่อผู้ใช้งาน)
-                List<string> _listTypeUser = new List<string>{
-                                                "พนักงานภายในบริษัททั้งหมด",
-                                                "กำหนดผู้ใช้งาน (พร้อมแนบรายชื่อผู้ใช้งาน)"};
-                SelectList _listofTypeUser = new SelectList(_listTypeUser);
-                ViewBag.listTypeUser = _listofTypeUser;
+                @class._ListViewsvsHistoryApproved = new List<ViewsvsHistoryApproved>();
+                @class._ViewsvsGeneral = new ViewsvsGeneral();
 
 
-                //string a = "";
-                //try
-                //{
-
-                //}
-                //catch (Exception e)
-                //{
-                //    a = e.Message;
-                //}
-
-                // var a = _IT.ProgramList.Where(x => x.PdStatus == "USE").FirstOrDefault();
-
-                //List<ViewProgramList> _ViewProgramList = _IT.ProgramList.Where(x => x.PdStatus == "USE").ToList();
-                //SelectList formPgm = new SelectList(_ViewProgramList.Select(s => s.PdPgm).Distinct());
-                //ViewBag.formPgm = formPgm;
-            }
-
-
-
-
-            ViewAccEMPLOYEE vAcc = new ViewAccEMPLOYEE();
-            if (vSrNo == null)
-            {
-                if (id != null)
-                {
-                    @class._ViewAccEMPLOYEE = _HRMS.AccEMPLOYEE.Where(x => x.EMP_CODE == id).FirstOrDefault();
-                    @class._ViewsvsServiceRequest = new ViewsvsServiceRequest();
-                    // @class._ViewsvsServiceRequest.srNo = ;
-                    @class._ViewsvsServiceRequest.srServiceNo = "";
-                    @class._ViewsvsServiceRequest.srRequestBy = @class._ViewAccEMPLOYEE.EMP_CODE;
-                    @class._ViewsvsServiceRequest.srRequestName = @class._ViewAccEMPLOYEE.NICKNAME;
-                    @class._ViewsvsServiceRequest.srIntercom = @class._ViewAccEMPLOYEE.INTERCOMNO;
-                    @class._ViewsvsServiceRequest.srSecCode = @class._ViewAccEMPLOYEE.SEC_CODE;
-                    @class._ViewsvsServiceRequest.srDeptCode = @class._ViewAccEMPLOYEE.DEPT_CODE;
-                    @class._ViewsvsServiceRequest.srRequestDate = DateTime.Now.ToString("yyyy/MM/dd");
-                    //_svsServiceRequest.srDesiredDate = @class._ViewAccEMPLOYEE.DEPT_CODE;
-                    @class._ViewsvsServiceRequest.srType = vTeam;
-                    @class._ViewsvsServiceRequest.srSubject = vSubject;
-                    @class._ViewsvsServiceRequest.srFrom = vForm;
-                    // @class._ViewsvsServiceRequest.srKosu = 12;
-
-                    // @class._ViewsvsGeneral = new ViewsvsGeneral();
-                    // @class._ViewsvsGeneral.gnDescription = "test";
-
-                    //@class._ViewsvsDataRestore = new ViewsvsDataRestore();
-                    //@class._ViewsvsDataRestore.drSys_PCLan = 1;
-                }
-            }
-            else
-            {
-                @class._ViewsvsServiceRequest = _IT.svsServiceRequest.Where(x => x.srNo == int.Parse(vSrNo)).FirstOrDefault();
-                @class._ViewAccEMPLOYEE = _HRMS.AccEMPLOYEE.Where(x => x.EMP_CODE == @class._ViewsvsServiceRequest.srRequestBy).FirstOrDefault();
-
-                //F1
-                if (vForm == "F1")
-                {
-                    @class._ViewsvsGeneral = _IT.svsGeneral.Where(x => x.gnNo == int.Parse(vSrNo)).FirstOrDefault();
-                    ViewBag.gnType = @class._ViewsvsGeneral.gnType;
-
-
-                }
-
-                //F2
-                if (vForm == "F2")
-                {
-                    @class._ViewsvsDataRestore = _IT.svsDataRestore.Where(x => x.drNo == int.Parse(vSrNo)).FirstOrDefault();
-
-                }
-                //F3
-                if (vForm == "F3")
-                {
-                    List<ViewsvsMastNotebookSpare> _ViewsvsMastNotebookSpare = _IT.svsMastNotebookSpare.OrderBy(x => x.mnPCName).ToList();
-                    SelectList formMastNotebook = new SelectList(_ViewsvsMastNotebookSpare.Select(s => s.mnPCName).Distinct());
-                    ViewBag.formMastNotebook = formMastNotebook;
-
-                    @class._ViewsvsNotebookSpare = _IT.svsNotebookSpare.Where(x => x.nsNo == int.Parse(vSrNo)).FirstOrDefault();
-
-                }
-
-
-                //USB
-                //@class._ViewsvsRegisterUSB = new ViewsvsRegisterUSB();
+                @class._ViewsvsRegisterUSB = new ViewsvsRegisterUSB();
+                @class._ViewsvsRegisterUSB_New = new List<ViewsvsRegisterUSB_New>();
+                @class._ViewsvsRegisterUSB_Cancel = new List<ViewsvsRegisterUSB_Cancel>();
                 if (vForm == "F4")
                 {
-
-                    @class._ViewsvsRegisterUSB = _IT.svsRegisterUSB.Where(x => x.ubNo == int.Parse(vSrNo)).FirstOrDefault();
-
-                    @class._ViewsvsRegisterUSB_Cancel = _IT.svsRegisterUSB_Cancel.Where(x => x.cuNo == int.Parse(vSrNo)).ToList();
-
-                    @class._ViewsvsRegisterUSB_New = _IT.svsRegisterUSB_New.Where(x => x.nuNo == int.Parse(vSrNo)).ToList();
-                    ViewBag.Obstatus = @class._ViewsvsRegisterUSB.ubStatusReq;
-
+                    //ViewsvsMastUSB
+                    List<ViewsvsMastUSB> _ViewsvsMastUSB = _IT.svsMastUSB.ToList();
+                    SelectList formMastUSB = new SelectList(_ViewsvsMastUSB.Select(s => s.muUSBName).Distinct());
+                    ViewBag.formMastUSB = formMastUSB;
                 }
-
-                //F5 VPN
-                if (vForm == "F5")
-                {
-                    @class._ViewsvsVPN = _IT.svsVPN.Where(x => x.vpnNo == int.Parse(vSrNo)).FirstOrDefault();
-                }
-
-                //F6 User Register Application
-                if (vForm == "F6")
+                else if (vForm == "F6" || vForm == "F1")
                 {
 
-                    @class._ViewsvsSDE_SystemRegister = _IT.svsSDE_SystemRegister.Where(x => x.sysNo == int.Parse(vSrNo)).ToList();
+                    List<ViewProgramList> _ViewProgramList = _IT.ProgramList.Where(x => x.PdStatus == "USE" && x.pdseccode == "SDE" && x.pdWorking == null).OrderBy(x => x.PdPgm).ToList();
+                    SelectList formPgm = new SelectList(_ViewProgramList.Select(s => s.PdPgm).Distinct());
+                    ViewBag.formPgm = formPgm;
 
 
+                    //พนักงานภายในบริษัททั้งหมด  /  กำหนดผู้ใช้งาน  (พร้อมแนบรายชื่อผู้ใช้งาน)
+                    List<string> _listTypeUser = new List<string>{
+                                                "พนักงานภายในบริษัททั้งหมด",
+                                                "กำหนดผู้ใช้งาน (พร้อมแนบรายชื่อผู้ใช้งาน)"};
+                    SelectList _listofTypeUser = new SelectList(_listTypeUser);
+                    ViewBag.listTypeUser = _listofTypeUser;
+
+
+                    //string a = "";
+                    //try
+                    //{
+
+                    //}
+                    //catch (Exception e)
+                    //{
+                    //    a = e.Message;
+                    //}
+
+                    // var a = _IT.ProgramList.Where(x => x.PdStatus == "USE").FirstOrDefault();
+
+                    //List<ViewProgramList> _ViewProgramList = _IT.ProgramList.Where(x => x.PdStatus == "USE").ToList();
+                    //SelectList formPgm = new SelectList(_ViewProgramList.Select(s => s.PdPgm).Distinct());
+                    //ViewBag.formPgm = formPgm;
                 }
 
-                if (vForm == "F7")
-                {
-                    @class._ViewsvsITMS_SystemRegister = _IT.svsITMS_SystemRegister.Where(x => x.itNo == int.Parse(vSrNo)).FirstOrDefault();
 
-                    if (@class._ViewsvsITMS_SystemRegister != null)
+
+
+                ViewAccEMPLOYEE vAcc = new ViewAccEMPLOYEE();
+                if (vSrNo == null)
+                {
+                    if (id != null)
                     {
-                        ViewAccEMPLOYEE _ViewAccEMPLOYEE = _HRMS.AccEMPLOYEE.Where(x => x.EMP_CODE == @class._ViewsvsITMS_SystemRegister.itEmpcode.Trim()).FirstOrDefault();
-                        // @class._ViewAccEMPLOYEE = _HRMS.AccEMPLOYEE.Where(x => x.EMP_CODE == @class._ViewsvsITMS_SystemRegister.itEmpcode).FirstOrDefault();
-                        if (_ViewAccEMPLOYEE != null)
+                        @class._ViewAccEMPLOYEE = _HRMS.AccEMPLOYEE.Where(x => x.EMP_CODE == id).FirstOrDefault();
+                        @class._ViewsvsServiceRequest = new ViewsvsServiceRequest();
+                        // @class._ViewsvsServiceRequest.srNo = ;
+                        @class._ViewsvsServiceRequest.srServiceNo = "";
+                        @class._ViewsvsServiceRequest.srRequestBy = @class._ViewAccEMPLOYEE.EMP_CODE;
+                        @class._ViewsvsServiceRequest.srRequestName = @class._ViewAccEMPLOYEE.NICKNAME;
+                        @class._ViewsvsServiceRequest.srIntercom = @class._ViewAccEMPLOYEE.INTERCOMNO;
+                        @class._ViewsvsServiceRequest.srSecCode = @class._ViewAccEMPLOYEE.SEC_CODE;
+                        @class._ViewsvsServiceRequest.srDeptCode = @class._ViewAccEMPLOYEE.DEPT_CODE;
+                        @class._ViewsvsServiceRequest.srRequestDate = DateTime.Now.ToString("yyyy/MM/dd");
+                        //_svsServiceRequest.srDesiredDate = @class._ViewAccEMPLOYEE.DEPT_CODE;
+                        @class._ViewsvsServiceRequest.srType = vTeam;
+                        @class._ViewsvsServiceRequest.srSubject = vSubject;
+                        @class._ViewsvsServiceRequest.srFrom = vForm;
+                        // @class._ViewsvsServiceRequest.srKosu = 12;
+
+                        // @class._ViewsvsGeneral = new ViewsvsGeneral();
+                        // @class._ViewsvsGeneral.gnDescription = "test";
+
+                        //@class._ViewsvsDataRestore = new ViewsvsDataRestore();
+                        //@class._ViewsvsDataRestore.drSys_PCLan = 1;
+                    }
+                }
+                else
+                {
+                    @class._ViewsvsServiceRequest = _IT.svsServiceRequest.Where(x => x.srNo == int.Parse(vSrNo)).FirstOrDefault();
+                    @class._ViewAccEMPLOYEE = _HRMS.AccEMPLOYEE.Where(x => x.EMP_CODE == @class._ViewsvsServiceRequest.srRequestBy).FirstOrDefault();
+
+                    //F1
+                    if (vForm == "F1")
+                    {
+                        @class._ViewsvsGeneral = _IT.svsGeneral.Where(x => x.gnNo == int.Parse(vSrNo)).FirstOrDefault();
+                        ViewBag.gnType = @class._ViewsvsGeneral.gnType;
+
+
+                    }
+
+                    //F2
+                    if (vForm == "F2")
+                    {
+                        @class._ViewsvsDataRestore = _IT.svsDataRestore.Where(x => x.drNo == int.Parse(vSrNo)).FirstOrDefault();
+
+                    }
+                    //F3
+                    if (vForm == "F3")
+                    {
+                        List<ViewsvsMastNotebookSpare> _ViewsvsMastNotebookSpare = _IT.svsMastNotebookSpare.OrderBy(x => x.mnPCName).ToList();
+                        SelectList formMastNotebook = new SelectList(_ViewsvsMastNotebookSpare.Select(s => s.mnPCName).Distinct());
+                        ViewBag.formMastNotebook = formMastNotebook;
+
+                        @class._ViewsvsNotebookSpare = _IT.svsNotebookSpare.Where(x => x.nsNo == int.Parse(vSrNo)).FirstOrDefault();
+
+                    }
+
+
+                    //USB
+                    //@class._ViewsvsRegisterUSB = new ViewsvsRegisterUSB();
+                    if (vForm == "F4")
+                    {
+
+                        @class._ViewsvsRegisterUSB = _IT.svsRegisterUSB.Where(x => x.ubNo == int.Parse(vSrNo)).FirstOrDefault();
+
+                        @class._ViewsvsRegisterUSB_Cancel = _IT.svsRegisterUSB_Cancel.Where(x => x.cuNo == int.Parse(vSrNo)).ToList();
+
+                        @class._ViewsvsRegisterUSB_New = _IT.svsRegisterUSB_New.Where(x => x.nuNo == int.Parse(vSrNo)).ToList();
+                        ViewBag.Obstatus = @class._ViewsvsRegisterUSB.ubStatusReq;
+
+                    }
+
+                    //F5 VPN
+                    if (vForm == "F5")
+                    {
+                        @class._ViewsvsVPN = _IT.svsVPN.Where(x => x.vpnNo == int.Parse(vSrNo)).FirstOrDefault();
+                    }
+
+                    //F6 User Register Application
+                    if (vForm == "F6")
+                    {
+
+                        @class._ViewsvsSDE_SystemRegister = _IT.svsSDE_SystemRegister.Where(x => x.sysNo == int.Parse(vSrNo)).ToList();
+
+
+                    }
+
+                    if (vForm == "F7")
+                    {
+                        @class._ViewsvsITMS_SystemRegister = _IT.svsITMS_SystemRegister.Where(x => x.itNo == int.Parse(vSrNo)).FirstOrDefault();
+
+                        if (@class._ViewsvsITMS_SystemRegister != null)
                         {
-                            ViewBag.Name = _ViewAccEMPLOYEE.EMP_TNAME;
-                            ViewBag.lname = _ViewAccEMPLOYEE.LAST_TNAME;
-                            ViewBag.Dep = _ViewAccEMPLOYEE.DEPT_CODE;
-                            ViewBag.Intercom = _ViewAccEMPLOYEE.INTERCOMNO;
+                            ViewAccEMPLOYEE _ViewAccEMPLOYEE = _HRMS.AccEMPLOYEE.Where(x => x.EMP_CODE == @class._ViewsvsITMS_SystemRegister.itEmpcode.Trim()).FirstOrDefault();
+                            // @class._ViewAccEMPLOYEE = _HRMS.AccEMPLOYEE.Where(x => x.EMP_CODE == @class._ViewsvsITMS_SystemRegister.itEmpcode).FirstOrDefault();
+                            if (_ViewAccEMPLOYEE != null)
+                            {
+                                ViewBag.Name = _ViewAccEMPLOYEE.EMP_TNAME;
+                                ViewBag.lname = _ViewAccEMPLOYEE.LAST_TNAME;
+                                ViewBag.Dep = _ViewAccEMPLOYEE.DEPT_CODE;
+                                ViewBag.Intercom = _ViewAccEMPLOYEE.INTERCOMNO;
+                            }
+
+
+
                         }
 
 
 
+
+
+                    }
+
+                    if (@class._ViewsvsServiceRequest.srStep > 2)
+                    {
+                        var _EmailCS = _IT.svsHistoryApproved.Where(x => x.htSrNo == @class._ViewsvsServiceRequest.srNo.ToString() && x.htStep == 3).Select(x => x.htFrom).FirstOrDefault();
+                        var _empcs = _IT.rpEmails.Where(x => x.emEmail_M365 == _EmailCS).Select(x => x.emEmpcode).FirstOrDefault();
+
+                        if (_empcs == _UserId && @class._ViewsvsServiceRequest.srStep < 4)
+                        {
+                            List<ViewsvsMastFlowApprove> _listStatus = _IT.svsMastFlowApprove.Where(x => x.mfStep == 3).OrderBy(x => x.mfDept).Distinct().ToList();
+                            SelectList formfStatus = new SelectList(_listStatus.Select(s => s.mfSubject).Distinct());
+                            ViewBag.vbformfStatus = formfStatus;
+                        }
+                        else
+                        {
+                            List<ViewsvsMastFlowApprove> _listStatus = _IT.svsMastFlowApprove.Where(x => x.mfStep == 3 && int.Parse(x.mfDept) != 1).OrderBy(x => x.mfDept).Distinct().ToList();
+                            SelectList formfStatus = new SelectList(_listStatus.Select(s => s.mfSubject).Distinct());
+                            ViewBag.vbformfStatus = formfStatus;
+                        }
+
+
+                        ViewBag._empcs = _empcs;
                     }
 
 
 
+
+
+                    List<ViewAttachment> _ViewAttachment = _IT.Attachment.Where(x => x.fnNo == vSrNo.ToString() && x.fnType != "Worker" && x.fnProgram == "ServiceStation").ToList();
+                    ViewBag.listAttachment = _ViewAttachment.ToList();
+                    ViewBag.listAttachmentCOunt = _ViewAttachment.Count();
+
+                    List<ViewAttachment> _ViewAttachmentWorker = _IT.Attachment.Where(x => x.fnNo == vSrNo.ToString() && x.fnType == "Worker" && x.fnProgram == "ServiceStation").ToList();
+                    ViewBag.listAttachmentWorker = _ViewAttachmentWorker.ToList();
+                    ViewBag.listAttachmentCOuntWorker = _ViewAttachmentWorker.Count();
+
+
+                    //add history 27/11/2024 14:53
+                    List<ViewsvsHistoryApproved> _listHistory = new List<ViewsvsHistoryApproved>();
+                    _listHistory = _IT.svsHistoryApproved.Where(x => x.htSrNo == vSrNo).ToList();
+                    _listHistory = _listHistory.OrderBy(x => x.htStep).ToList();
+                    ViewBag._listHistory = _listHistory.ToList();
+
+
+
+                    @class._ListViewsvsHistoryApproved = _IT.svsHistoryApproved.Where(x => x.htSrNo == vSrNo).ToList();
 
 
                 }
 
-                if (@class._ViewsvsServiceRequest.srStep > 2)
-                {
-                    var _EmailCS = _IT.svsHistoryApproved.Where(x => x.htSrNo == @class._ViewsvsServiceRequest.srNo.ToString() && x.htStep == 3).Select(x => x.htFrom).FirstOrDefault();
-                    var _empcs = _IT.rpEmails.Where(x => x.emEmail_M365 == _EmailCS).Select(x => x.emEmpcode).FirstOrDefault();
-
-                    if (_empcs == _UserId && @class._ViewsvsServiceRequest.srStep < 4)
-                    {
-                        List<ViewsvsMastFlowApprove> _listStatus = _IT.svsMastFlowApprove.Where(x => x.mfStep == 3).OrderBy(x => x.mfDept).Distinct().ToList();
-                        SelectList formfStatus = new SelectList(_listStatus.Select(s => s.mfSubject).Distinct());
-                        ViewBag.vbformfStatus = formfStatus;
-                    }
-                    else
-                    {
-                        List<ViewsvsMastFlowApprove> _listStatus = _IT.svsMastFlowApprove.Where(x => x.mfStep == 3 && int.Parse(x.mfDept) != 1).OrderBy(x => x.mfDept).Distinct().ToList();
-                        SelectList formfStatus = new SelectList(_listStatus.Select(s => s.mfSubject).Distinct());
-                        ViewBag.vbformfStatus = formfStatus;
-                    }
-
-
-                    ViewBag._empcs = _empcs;
-                }
-
-
-
-
-
-                List<ViewAttachment> _ViewAttachment = _IT.Attachment.Where(x => x.fnNo == vSrNo.ToString() && x.fnType != "Worker" && x.fnProgram == "ServiceStation").ToList();
-                ViewBag.listAttachment = _ViewAttachment.ToList();
-                ViewBag.listAttachmentCOunt = _ViewAttachment.Count();
-
-                List<ViewAttachment> _ViewAttachmentWorker = _IT.Attachment.Where(x => x.fnNo == vSrNo.ToString() && x.fnType == "Worker" && x.fnProgram == "ServiceStation").ToList();
-                ViewBag.listAttachmentWorker = _ViewAttachmentWorker.ToList();
-                ViewBag.listAttachmentCOuntWorker = _ViewAttachmentWorker.Count();
-
-
-                //add history 27/11/2024 14:53
-                List<ViewsvsHistoryApproved> _listHistory = new List<ViewsvsHistoryApproved>();
-                _listHistory = _IT.svsHistoryApproved.Where(x => x.htSrNo == vSrNo).ToList();
-                _listHistory = _listHistory.OrderBy(x => x.htStep).ToList();
-                ViewBag._listHistory = _listHistory.ToList();
-
-
-
-                @class._ListViewsvsHistoryApproved = _IT.svsHistoryApproved.Where(x => x.htSrNo == vSrNo).ToList();
-
-
+                //return RedirectToAction("Index", "RequestForm", new { @class = @class });
+                return View(@class);
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction("Index", "FakePage");
             }
 
-            //return RedirectToAction("Index", "RequestForm", new { @class = @class });
-            return View(@class);
 
         }
 
@@ -1022,343 +1024,190 @@ namespace ServiceStation.Controllers.RequestForm
             string[] fsavefile9;
             string fsavefile10 = "";
 
-
-            string vCCemail = "";
             string config = "S";
             string msg = "Send Mail already ";
-            int i_Step = @class._ViewsvsServiceRequest.srStep;
-            // files._items.count
-            string vSrSubject = @class._ViewsvsServiceRequest.srSubject;
-
-            chkPermis = chkPermission(@class);
-            if (chkPermis[0] == "Yes")
+            try
             {
-                if (@class._ViewsvsHistoryApproved.htTo != null || (@class._ViewsvsHistoryApproved.htTo == null && @class._ViewsvsHistoryApproved.htStatus == "Disapprove") || (@class._ViewsvsHistoryApproved.htTo == null && @class._ViewsvsHistoryApproved.htStatus == "Cancel"))
-                {
-                    if (@class._ViewsvsHistoryApproved.htStatus == "Approve")
-                    {
-                        i_Step = i_Step + 1;
-                        config = "S";
+                string vCCemail = "";
+                int i_Step = @class._ViewsvsServiceRequest.srStep;
+                // files._items.count
+                string vSrSubject = @class._ViewsvsServiceRequest.srSubject;
 
-                    }
-                    else if (@class._ViewsvsHistoryApproved.htStatus == "Disapprove" || @class._ViewsvsHistoryApproved.htStatus == "Cancel")
+                chkPermis = chkPermission(@class);
+                if (chkPermis[0] == "Yes")
+                {
+                    if (@class._ViewsvsHistoryApproved.htTo != null || (@class._ViewsvsHistoryApproved.htTo == null && @class._ViewsvsHistoryApproved.htStatus == "Disapprove") || (@class._ViewsvsHistoryApproved.htTo == null && @class._ViewsvsHistoryApproved.htStatus == "Cancel"))
                     {
-                        i_Step = 0;
-                        var v_Issue = _IT.rpEmails.Where(x => x.emEmpcode == @class._ViewsvsServiceRequest.srRequestBy).Select(x => x.emName_M365).First(); // m365
-                        @class._ViewsvsHistoryApproved.htTo = v_Issue;
-                        config = "S";
+                        if (@class._ViewsvsHistoryApproved.htStatus == "Approve")
+                        {
+                            i_Step = i_Step + 1;
+                            config = "S";
+
+                        }
+                        else if (@class._ViewsvsHistoryApproved.htStatus == "Disapprove" || @class._ViewsvsHistoryApproved.htStatus == "Cancel")
+                        {
+                            i_Step = 0;
+                            var v_Issue = _IT.rpEmails.Where(x => x.emEmpcode == @class._ViewsvsServiceRequest.srRequestBy).Select(x => x.emName_M365).First(); // m365
+                            @class._ViewsvsHistoryApproved.htTo = v_Issue;
+                            config = "S";
+
+                        }
+                        else
+                        {
+                            config = "E";
+                            msg = "Please input Status";
+                            return Json(new { c1 = config, c2 = msg });
+                        }
 
                     }
                     else
                     {
                         config = "E";
-                        msg = "Please input Status";
+                        msg = "Please input e-mail.";
+                        return Json(new { c1 = config, c2 = msg });
                     }
-
                 }
-                else
+                else //No
                 {
-                    config = "E";
-                    msg = "Please input e-mail.";
+                    config = "P";
+                    msg = chkPermis[1];
+                    return Json(new { c1 = config, c2 = msg });
                 }
-            }
-            else //No
-            {
-                config = "P";
-                msg = chkPermis[1];
-                return Json(new { c1 = config, c2 = msg });
-            }
 
-            //check vpn step 1 cs up 13 / 01 / 2024 if ((vform == "F5" || vSrSubject.Contains("Print Color") || vSrSubject.Contains("Admin Access Request")) && i_Step == 1)
-            if ((vform == "F5" || vSrSubject.Contains("Print Color") || vSrSubject.Contains("Admin Access Request")) && i_Step == 1)
-            {
-                //check emp positon
-                try
+                //check vpn step 1 cs up 13 / 01 / 2024 if ((vform == "F5" || vSrSubject.Contains("Print Color") || vSrSubject.Contains("Admin Access Request")) && i_Step == 1)
+                if ((vform == "F5" || vSrSubject.Contains("Print Color") || vSrSubject.Contains("Admin Access Request")) && i_Step == 1)
                 {
-                    string v_POS_HCM_CODE = "";
-                    string v_empcsup = _IT.rpEmails.Where(w => w.emName_M365 == @class._ViewsvsHistoryApproved.htTo).Select(x => x.emEmpcode).FirstOrDefault();
-
-                    string _Divicheck = User.Claims.FirstOrDefault(s => s.Type == "Division")?.Value;
-                    string _Depcheck = User.Claims.FirstOrDefault(s => s.Type == "Department")?.Value;
-                    if (_Divicheck.Contains("SL") || _Depcheck.Contains("DMP"))
+                    //check emp positon
+                    try
                     {
-                        //check case SL ddm
-                        v_POS_HCM_CODE = _HRMS.AccPOSMAST.Where(x => x.POS_CODE == "DDM").Select(x => x.POS_HCM_CODE).FirstOrDefault();
+                        string v_POS_HCM_CODE = "1111"; //default value case null
+                        string v_empcsup = _IT.rpEmails.Where(w => w.emName_M365 == @class._ViewsvsHistoryApproved.htTo).Select(x => x.emEmpcode).FirstOrDefault();
+
+                        string _Divicheck = User.Claims.FirstOrDefault(s => s.Type == "Division")?.Value;
+                        string _Depcheck = User.Claims.FirstOrDefault(s => s.Type == "Department")?.Value;
+                        if (_Divicheck.Contains("SL") || _Depcheck.Contains("DMP"))
+                        {
+                            //check case SL ddm
+                            v_POS_HCM_CODE = _HRMS.AccPOSMAST.Where(x => x.POS_CODE == "DDM").Select(x => x.POS_HCM_CODE).FirstOrDefault() ?? "1111";
+                        }
+                        else
+                        {
+                            //normal case
+                            v_POS_HCM_CODE = _HRMS.AccPOSMAST.Where(x => x.POS_CODE == "DM").Select(x => x.POS_HCM_CODE).FirstOrDefault() ?? "1111";
+                        }
+
+
+                        ViewAccEMPLOYEE _ViewAccEMPLOYEE = _HRMS.AccEMPLOYEE.Where(x => x.EMP_CODE == v_empcsup).FirstOrDefault();
+                        List<ViewAccPOSMAST> _ViewAccPOSMAST = _HRMS.AccPOSMAST.Where(x => int.Parse(x.POS_HCM_CODE) <= int.Parse(v_POS_HCM_CODE)).ToList();
+                        string v_chk = _ViewAccPOSMAST.Where(x => x.POS_CODE == _ViewAccEMPLOYEE.POS_CODE).Select(x => x.POS_CODE).FirstOrDefault();
+
+                        if (v_chk == null || v_chk == "")
+                        {
+                            config = "E";
+                            msg = "Please send approval to DM Up of Dept.!!!";
+                            return Json(new { c1 = config, c2 = msg });
+                        }
+
                     }
-                    else
-                    {
-                        //normal case
-                        v_POS_HCM_CODE = _HRMS.AccPOSMAST.Where(x => x.POS_CODE == "DM").Select(x => x.POS_HCM_CODE).FirstOrDefault();
-                    }
-
-
-                    ViewAccEMPLOYEE _ViewAccEMPLOYEE = _HRMS.AccEMPLOYEE.Where(x => x.EMP_CODE == v_empcsup).FirstOrDefault();
-                    List<ViewAccPOSMAST> _ViewAccPOSMAST = _HRMS.AccPOSMAST.Where(x => int.Parse(x.POS_HCM_CODE) <= int.Parse(v_POS_HCM_CODE)).ToList();
-                    string v_chk = _ViewAccPOSMAST.Where(x => x.POS_CODE == _ViewAccEMPLOYEE.POS_CODE).Select(x => x.POS_CODE).FirstOrDefault();
-
-                    if (v_chk == null || v_chk == "")
-                    {
-                        config = "E";
-                        msg = "Please send approval to DM Up of Dept.!!!";
-                    }
-
-                }
-                catch (Exception ex)
-                {
-                    config = "E";
-                    msg = "Please check email send to !!!!";
-                }
-
-            }
-            //check emp positon CS up 07/02/2025  chirayu add
-            else if (i_Step == 1)
-            {
-                try
-                {
-                    string v_POS_HCM_CODE = "";
-                    string v_empcsup = _IT.rpEmails.Where(w => w.emName_M365 == @class._ViewsvsHistoryApproved.htTo).Select(x => x.emEmpcode).FirstOrDefault();
-                    string _Divicheck = User.Claims.FirstOrDefault(s => s.Type == "Division")?.Value;
-                    v_POS_HCM_CODE = _HRMS.AccPOSMAST.Where(x => x.POS_CODE == "GL").Select(x => x.POS_HCM_CODE).FirstOrDefault();
-                    ViewAccEMPLOYEE _ViewAccEMPLOYEE = _HRMS.AccEMPLOYEE.Where(x => x.EMP_CODE == v_empcsup).FirstOrDefault();
-                    List<ViewAccPOSMAST> _ViewAccPOSMAST = _HRMS.AccPOSMAST.Where(x => int.Parse(x.POS_HCM_CODE) < int.Parse(v_POS_HCM_CODE)).ToList();
-                    string v_chk = _ViewAccPOSMAST.Where(x => x.POS_CODE == _ViewAccEMPLOYEE.POS_CODE).Select(x => x.POS_CODE).FirstOrDefault();
-
-                    if (v_chk == null || v_chk == "")
+                    catch (Exception ex)
                     {
                         config = "E";
-                        msg = "Please send approval to CS Up of Dept.!!!";
-                    
+                        msg = "Please check Email send to !!!!";
                         return Json(new { c1 = config, c2 = msg });
                     }
 
                 }
-                catch (Exception ex)
+                //check emp positon CS up 07/02/2025  chirayu add
+                else if (i_Step == 1)
                 {
-                    config = "E";
-                    msg = "Please check email send to !!!!";
-                    return Json(new { c1 = config, c2 = msg });
-                }
-            }
-
-
-
-            if (config == "S")
-            {
-                //check status Transfer
-                if (@class._ViewsvsServiceRequest.srStatus != null)
-                {
-                    if (@class._ViewsvsServiceRequest.srStatus == "Transfer")
+                    try
                     {
-                        i_Step = i_Step - 1;
+                        string v_POS_HCM_CODE = "";
+                        string v_empcsup = _IT.rpEmails.Where(w => w.emName_M365 == @class._ViewsvsHistoryApproved.htTo).Select(x => x.emEmpcode).FirstOrDefault();
+                        string _Divicheck = User.Claims.FirstOrDefault(s => s.Type == "Division")?.Value;
+                        v_POS_HCM_CODE = _HRMS.AccPOSMAST.Where(x => x.POS_CODE == "GL").Select(x => x.POS_HCM_CODE).FirstOrDefault();
+                        ViewAccEMPLOYEE _ViewAccEMPLOYEE = _HRMS.AccEMPLOYEE.Where(x => x.EMP_CODE == v_empcsup).FirstOrDefault();
+                        List<ViewAccPOSMAST> _ViewAccPOSMAST = _HRMS.AccPOSMAST.Where(x => int.Parse(x.POS_HCM_CODE) < int.Parse(v_POS_HCM_CODE)).ToList();
+                        string v_chk = _ViewAccPOSMAST.Where(x => x.POS_CODE == _ViewAccEMPLOYEE.POS_CODE).Select(x => x.POS_CODE).FirstOrDefault();
+
+                        if (v_chk == null || v_chk == "")
+                        {
+                            config = "E";
+                            msg = "Please send approval to CS Up of Dept.!!!";
+                            return Json(new { c1 = config, c2 = msg });
+                        }
+
+                    }
+                    catch (Exception ex)
+                    {
+                        config = "E";
+                        msg = "Please check Email send to !!!!";
+                        return Json(new { c1 = config, c2 = msg });
                     }
                 }
 
-                @class._ViewsvsServiceRequest.srServiceNo = vSR;
-                getSrNo = Save(@class, i_Step);  //save main
-                getSForm = SaveForm(@class, vform, getSrNo[0]); //save form
 
-                if (@class._ViewsvsServiceRequest.srStatus != null && @class._ViewsvsServiceRequest.srStatus != "") //save form worker
+
+                if (config == "S")
                 {
-                    getWForm = SaveFormWorker(@class, vform, getSrNo[0]);
-                }
-
-                fsavefileUser = save_file(@class, files, getSrNo[0], ""); // save file
-                fsavefileWorker = save_file(@class, filesw, getSrNo[0], "Worker"); // save file
-
-
-
-                //subject check
-                var v_subject = "";
-                if (@class._ViewsvsServiceRequest.srStatus != null)
-                {
-                    if (@class._ViewsvsServiceRequest.srStatus == "Transfer")
+                    //check status Transfer
+                    if (@class._ViewsvsServiceRequest.srStatus != null)
                     {
-                        v_subject = _IT.svsMastFlowApprove.Where(x => x.mfStep == i_Step && x.mfDept == "1").Select(x => x.mfSubject).FirstOrDefault();
+                        if (@class._ViewsvsServiceRequest.srStatus == "Transfer")
+                        {
+                            i_Step = i_Step - 1;
+                        }
                     }
-                    else if (@class._ViewsvsServiceRequest.srStatus == "Cancel")
+
+                    @class._ViewsvsServiceRequest.srServiceNo = vSR;
+                    getSrNo = Save(@class, i_Step);  //save main
+                    getSForm = SaveForm(@class, vform, getSrNo[0]); //save form
+
+                    if (@class._ViewsvsServiceRequest.srStatus != null && @class._ViewsvsServiceRequest.srStatus != "") //save form worker
                     {
-                        v_subject = _IT.svsMastFlowApprove.Where(x => x.mfStep == 3 && x.mfDept == "3").Select(x => x.mfSubject).FirstOrDefault();
+                        getWForm = SaveFormWorker(@class, vform, getSrNo[0]);
+                    }
+
+                    fsavefileUser = save_file(@class, files, getSrNo[0], ""); // save file
+                    fsavefileWorker = save_file(@class, filesw, getSrNo[0], "Worker"); // save file
+
+
+
+                    //subject check
+                    var v_subject = "";
+                    if (@class._ViewsvsServiceRequest.srStatus != null)
+                    {
+                        if (@class._ViewsvsServiceRequest.srStatus == "Transfer")
+                        {
+                            v_subject = _IT.svsMastFlowApprove.Where(x => x.mfStep == i_Step && x.mfDept == "1").Select(x => x.mfSubject).FirstOrDefault();
+                        }
+                        else if (@class._ViewsvsServiceRequest.srStatus == "Cancel")
+                        {
+                            v_subject = _IT.svsMastFlowApprove.Where(x => x.mfStep == 3 && x.mfDept == "3").Select(x => x.mfSubject).FirstOrDefault();
+                        }
+                        else
+                        {
+                            v_subject = i_Step == 0 ? "Disapprove" : _IT.svsMastFlowApprove.Where(x => x.mfStep == i_Step).Select(x => x.mfSubject).FirstOrDefault();
+                        }
                     }
                     else
                     {
                         v_subject = i_Step == 0 ? "Disapprove" : _IT.svsMastFlowApprove.Where(x => x.mfStep == i_Step).Select(x => x.mfSubject).FirstOrDefault();
+
                     }
-                }
-                else
-                {
-                    v_subject = i_Step == 0 ? "Disapprove" : _IT.svsMastFlowApprove.Where(x => x.mfStep == i_Step).Select(x => x.mfSubject).FirstOrDefault();
 
-                }
+                    var email = new MimeMessage();
+                    ViewrpEmail fromEmailFrom = _IT.rpEmails.Where(w => w.emName_M365 == @class._ViewsvsHistoryApproved.htFrom).FirstOrDefault();
+                    ViewrpEmail fromEmailTO = _IT.rpEmails.Where(w => w.emName_M365 == @class._ViewsvsHistoryApproved.htTo).FirstOrDefault();
 
-                var email = new MimeMessage();
-                ViewrpEmail fromEmailFrom = _IT.rpEmails.Where(w => w.emName_M365 == @class._ViewsvsHistoryApproved.htFrom).FirstOrDefault();
-                ViewrpEmail fromEmailTO = _IT.rpEmails.Where(w => w.emName_M365 == @class._ViewsvsHistoryApproved.htTo).FirstOrDefault();
-
-                MailboxAddress FromMailFrom = new MailboxAddress(fromEmailFrom.emName_M365, fromEmailFrom.emEmail_M365);
-                MailboxAddress FromMailTO = new MailboxAddress(fromEmailTO.emName_M365, fromEmailTO.emEmail_M365);
-                email.Subject = "Service Station Request==> " + v_subject; /*( " + _ViewlrBuiltDrawing.bdDocumentType + " ) " + _ViewlrHistoryApprove.htStatus*/;
-                //email.From.Add(MailboxAddress.Parse(_ViewlrHistoryApprove.htFrom));
-                email.From.Add(FromMailFrom);
-                email.To.Add(FromMailTO);
+                    MailboxAddress FromMailFrom = new MailboxAddress(fromEmailFrom.emName_M365, fromEmailFrom.emEmail_M365);
+                    MailboxAddress FromMailTO = new MailboxAddress(fromEmailTO.emName_M365, fromEmailTO.emEmail_M365);
+                    email.Subject = "Service Station Request==> " + v_subject; /*( " + _ViewlrBuiltDrawing.bdDocumentType + " ) " + _ViewlrHistoryApprove.htStatus*/;
+                    //email.From.Add(MailboxAddress.Parse(_ViewlrHistoryApprove.htFrom));
+                    email.From.Add(FromMailFrom);
+                    email.To.Add(FromMailTO);
 
 
-                if (@class._ViewsvsHistoryApproved.htCC != null)
-                {
-                    ViewrpEmail fromEmailCC = new ViewrpEmail();
-                    string[] splitCC = @class._ViewsvsHistoryApproved.htCC.Split(',');
-                    foreach (var i in splitCC)
-                    {
-                        if (i != " " & i != "")
-                        {
-                            var v_cc = "";
-                            try
-                            {
-                                fromEmailCC = _IT.rpEmails.Where(w => w.emName_M365 == i).FirstOrDefault();
-                                MailboxAddress FromMailcc = new MailboxAddress(fromEmailCC.emName_M365, fromEmailCC.emEmail_M365);
-                                email.Cc.Add(FromMailcc);
-                                vCCemail += fromEmailCC.emEmail_M365.ToString() + ",";
-                            }
-                            catch (Exception e)
-                            {
-                                v_cc = e.Message;
-                            }
-
-
-
-                        }
-                    }
-                }
-
-
-
-                //try
-                //{
-                ViewsvsHistoryApproved _svsHistoryApproved = new ViewsvsHistoryApproved();
-                _svsHistoryApproved.htSrNo = getSrNo[0].ToString();
-                _svsHistoryApproved.htStep = i_Step;
-                _svsHistoryApproved.htStatus = @class._ViewsvsHistoryApproved.htStatus;
-                _svsHistoryApproved.htFrom = fromEmailFrom.emEmail_M365;
-                _svsHistoryApproved.htTo = fromEmailTO.emEmail_M365;
-                _svsHistoryApproved.htCC = vCCemail;
-                _svsHistoryApproved.htDate = DateTime.Now.ToString("yyyy/MM/dd");
-                _svsHistoryApproved.htTime = DateTime.Now.ToString("HH:mm:ss");
-                _svsHistoryApproved.htRemark = @class._ViewsvsHistoryApproved.htRemark;
-                _svsHistoryApproved.htCCDept = "";
-
-                _IT.svsHistoryApproved.AddAsync(_svsHistoryApproved);
-                _IT.SaveChanges();
-
-
-
-
-                if (vform == "F4")
-                {
-                    //remove
-                    var _DataAttachment = _IT.Attachment.Where(c => c.fnNo == getSrNo[0].ToString());
-                    _IT.Attachment.RemoveRange(_DataAttachment);
-                    _IT.SaveChanges();
-
-                    if (files0.Count > 0)
-                    {
-                        fsavefile0 = save_file_F4(@class, getSrNo[0], files0, 1);
-                        fsavefile10 = fsavefile10 + "F0" + fsavefile0[0];
-                    }
-                    if (files1.Count > 0)
-                    {
-                        fsavefile1 = save_file_F4(@class, getSrNo[0], files1, 2);
-                        fsavefile10 = fsavefile10 + "F1" + fsavefile1[0];
-                    }
-                    if (files2.Count > 0)
-                    {
-                        fsavefile2 = save_file_F4(@class, getSrNo[0], files2, 3);
-                        fsavefile10 = fsavefile10 + "F2" + fsavefile2[0];
-                    }
-                    if (files3.Count > 0)
-                    {
-                        fsavefile3 = save_file_F4(@class, getSrNo[0], files3, 4);
-                        fsavefile10 = fsavefile10 + "F3" + fsavefile3[0];
-                    }
-                    if (files4.Count > 0)
-                    {
-                        fsavefile4 = save_file_F4(@class, getSrNo[0], files4, 5);
-                        fsavefile10 = fsavefile10 + "F4" + fsavefile4[0];
-                    }
-                    if (files5.Count > 0)
-                    {
-                        fsavefile5 = save_file_F4(@class, getSrNo[0], files5, 6);
-                        fsavefile10 = fsavefile10 + "F5" + fsavefile5[0];
-                    }
-                    if (files6.Count > 0) { fsavefile6 = save_file_F4(@class, getSrNo[0], files6, 7); }
-                    if (files7.Count > 0) { fsavefile7 = save_file_F4(@class, getSrNo[0], files7, 8); }
-                    if (files8.Count > 0) { fsavefile8 = save_file_F4(@class, getSrNo[0], files8, 9); }
-                    if (files9.Count > 0) { fsavefile9 = save_file_F4(@class, getSrNo[0], files9, 10); }
-                    //if (files10.Count > 0) { fsavefile10 = save_file_F4(@class, getSrNo[0], files10, 11); }
-
-                    //fsavefile10 = "F1" + fsavefile0[0] + "F2" + fsavefile1 + "F3" + fsavefile2 + "F4" + fsavefile3 + "F5" + fsavefile4;
-
-                    // fsavefile = save_fileF4(@class, getSrNo[0], files0, files1, files2, files3, files4, files5, files6, files7, files8, files9, files10); // save file
-                }
-
-
-
-
-
-
-                // v_subject = i_Step == 0 ? "Disapprove" : _IT.svsMastFlowApprove.Where(x => x.mfStep == i_Step).Select(x => x.mfSubject).FirstOrDefault();
-
-
-
-
-
-
-
-
-
-                var varifyUrl = "http://thsweb/MVCPublish/ServiceStation/Login/index?vSrNo=" + getSrNo[0].ToString();
-                var bodyBuilder = new BodyBuilder();
-                //var image = bodyBuilder.LinkedResources.Add(@"E:\01_My Document\02_Project\_2023\1. PartTransferUnbalance\PartTransferUnbalance\wwwroot\images\btn\OK.png");
-                string vIssue = HttpContext.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name)?.Value;
-                string vIssueName = HttpContext.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Actor)?.Value;
-                string EmailBody = $"<div>" +
-                    $"<B>Service Station </B> <br>" +
-                    $"<B>Service No : </B> " + @class._ViewsvsServiceRequest.srServiceNo + "<br>" +
-                    $"<B>Request By : </B> " + @class._ViewsvsServiceRequest.srRequestBy + " : " + @class._ViewsvsServiceRequest.srRequestName + "<br>" +
-                    $"<B>Subject : </B>" + @class._ViewsvsServiceRequest.srSubject + "<br>" +
-                    $"<B>Status : </B> " + v_subject + "<br> " +
-                    $"<B> หมายเหตุ : </B> " + @class._ViewsvsHistoryApproved.htRemark + "<br> " +
-                    $"คลิ๊กลิงค์เพื่อเปิดเอกสาร <a href='" + varifyUrl + "'>More Detail" +
-                    //$"<img src = 'http://thsweb/MVCPublish/LR_Service_Request/images/btn/mail1.png' alt = 'HTML tutorial' style = 'width: 42px; height: 42px;'>" +
-                    $"</a>" +
-                    $"</div>";
-
-                // bodyBuilder.Attachments.Add(@"E:\01_My Document\02_Project\_2023\1. PartTransferUnbalance\PartTransferUnbalance\dev_rfc.log");
-
-                bodyBuilder.HtmlBody = string.Format(EmailBody);
-                email.Body = bodyBuilder.ToMessageBody();
-
-                // send email
-                //var smtp = new SmtpClient();
-                ////smtp.Connect("mail.csloxinfo.com");
-                //smtp.Connect("203.146.237.138");
-                ////smtp.Connect("10.200.128.12");s
-                //smtp.Send(email);
-                //smtp.Disconnect(true);
-
-                var senderEmail = new MailAddress(fromEmailFrom.emEmail_M365, fromEmailFrom.emName_M365);
-                var receiverEmail = new MailAddress(fromEmailTO.emEmail_M365, fromEmailTO.emName_M365);
-
-
-                System.Net.Mime.ContentType mimeTypeS = new System.Net.Mime.ContentType("text/html");
-                AlternateView alternate = AlternateView.CreateAlternateViewFromString(EmailBody, mimeTypeS);
-                System.Net.Mail.SmtpClient smtp = new System.Net.Mail.SmtpClient("smtp.csloxinfo.com");
-                smtp.UseDefaultCredentials = false;
-                smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
-
-
-                using (MailMessage mess = new MailMessage(senderEmail, receiverEmail))
-                {
-                    mess.Subject = "Service Station Request==> " + v_subject;
-                    //add CC
                     if (@class._ViewsvsHistoryApproved.htCC != null)
                     {
                         ViewrpEmail fromEmailCC = new ViewrpEmail();
@@ -1371,77 +1220,185 @@ namespace ServiceStation.Controllers.RequestForm
                                 try
                                 {
                                     fromEmailCC = _IT.rpEmails.Where(w => w.emName_M365 == i).FirstOrDefault();
-                                    //MailboxAddress FromMailcc = new MailboxAddress(fromEmailCC.emName_M365, fromEmailCC.emEmail_M365);
-                                    //email.Cc.Add(FromMailcc);
-                                    //vCCemail += fromEmailCC.emEmail_M365.ToString() + ",";
-                                    mess.CC.Add(fromEmailCC.emEmail_M365);
+                                    MailboxAddress FromMailcc = new MailboxAddress(fromEmailCC.emName_M365, fromEmailCC.emEmail_M365);
+                                    email.Cc.Add(FromMailcc);
+                                    vCCemail += fromEmailCC.emEmail_M365.ToString() + ",";
                                 }
                                 catch (Exception e)
                                 {
                                     v_cc = e.Message;
                                 }
 
+
+
                             }
                         }
                     }
 
-                    mess.AlternateViews.Add(alternate);
-                    smtp.Send(mess);
+
+
+                    //try
+                    //{
+                    ViewsvsHistoryApproved _svsHistoryApproved = new ViewsvsHistoryApproved();
+                    _svsHistoryApproved.htSrNo = getSrNo[0].ToString();
+                    _svsHistoryApproved.htStep = i_Step;
+                    _svsHistoryApproved.htStatus = @class._ViewsvsHistoryApproved.htStatus;
+                    _svsHistoryApproved.htFrom = fromEmailFrom.emEmail_M365;
+                    _svsHistoryApproved.htTo = fromEmailTO.emEmail_M365;
+                    _svsHistoryApproved.htCC = vCCemail;
+                    _svsHistoryApproved.htDate = DateTime.Now.ToString("yyyy/MM/dd");
+                    _svsHistoryApproved.htTime = DateTime.Now.ToString("HH:mm:ss");
+                    _svsHistoryApproved.htRemark = @class._ViewsvsHistoryApproved.htRemark;
+                    _svsHistoryApproved.htCCDept = "";
+
+                    _IT.svsHistoryApproved.AddAsync(_svsHistoryApproved);
+                    _IT.SaveChanges();
+
+
+
+
+                    if (vform == "F4")
+                    {
+                        //remove
+                        var _DataAttachment = _IT.Attachment.Where(c => c.fnNo == getSrNo[0].ToString());
+                        _IT.Attachment.RemoveRange(_DataAttachment);
+                        _IT.SaveChanges();
+
+                        if (files0.Count > 0)
+                        {
+                            fsavefile0 = save_file_F4(@class, getSrNo[0], files0, 1);
+                            fsavefile10 = fsavefile10 + "F0" + fsavefile0[0];
+                        }
+                        if (files1.Count > 0)
+                        {
+                            fsavefile1 = save_file_F4(@class, getSrNo[0], files1, 2);
+                            fsavefile10 = fsavefile10 + "F1" + fsavefile1[0];
+                        }
+                        if (files2.Count > 0)
+                        {
+                            fsavefile2 = save_file_F4(@class, getSrNo[0], files2, 3);
+                            fsavefile10 = fsavefile10 + "F2" + fsavefile2[0];
+                        }
+                        if (files3.Count > 0)
+                        {
+                            fsavefile3 = save_file_F4(@class, getSrNo[0], files3, 4);
+                            fsavefile10 = fsavefile10 + "F3" + fsavefile3[0];
+                        }
+                        if (files4.Count > 0)
+                        {
+                            fsavefile4 = save_file_F4(@class, getSrNo[0], files4, 5);
+                            fsavefile10 = fsavefile10 + "F4" + fsavefile4[0];
+                        }
+                        if (files5.Count > 0)
+                        {
+                            fsavefile5 = save_file_F4(@class, getSrNo[0], files5, 6);
+                            fsavefile10 = fsavefile10 + "F5" + fsavefile5[0];
+                        }
+                        if (files6.Count > 0) { fsavefile6 = save_file_F4(@class, getSrNo[0], files6, 7); }
+                        if (files7.Count > 0) { fsavefile7 = save_file_F4(@class, getSrNo[0], files7, 8); }
+                        if (files8.Count > 0) { fsavefile8 = save_file_F4(@class, getSrNo[0], files8, 9); }
+                        if (files9.Count > 0) { fsavefile9 = save_file_F4(@class, getSrNo[0], files9, 10); }
+                        //if (files10.Count > 0) { fsavefile10 = save_file_F4(@class, getSrNo[0], files10, 11); }
+
+                        //fsavefile10 = "F1" + fsavefile0[0] + "F2" + fsavefile1 + "F3" + fsavefile2 + "F4" + fsavefile3 + "F5" + fsavefile4;
+
+                        // fsavefile = save_fileF4(@class, getSrNo[0], files0, files1, files2, files3, files4, files5, files6, files7, files8, files9, files10); // save file
+                    }
+
+                    var varifyUrl = "http://thsweb/MVCPublish/ServiceStation/Login/index?vSrNo=" + getSrNo[0].ToString();
+                    var bodyBuilder = new BodyBuilder();
+                    //var image = bodyBuilder.LinkedResources.Add(@"E:\01_My Document\02_Project\_2023\1. PartTransferUnbalance\PartTransferUnbalance\wwwroot\images\btn\OK.png");
+                    string vIssue = HttpContext.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name)?.Value;
+                    string vIssueName = HttpContext.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Actor)?.Value;
+                    string EmailBody = $"<div>" +
+                        $"<B>Service Station </B> <br>" +
+                        $"<B>Service No : </B> " + @class._ViewsvsServiceRequest.srServiceNo + "<br>" +
+                        $"<B>Request By : </B> " + @class._ViewsvsServiceRequest.srRequestBy + " : " + @class._ViewsvsServiceRequest.srRequestName + "<br>" +
+                        $"<B>Subject : </B>" + @class._ViewsvsServiceRequest.srSubject + "<br>" +
+                        $"<B>Status : </B> " + v_subject + "<br> " +
+                        $"<B> หมายเหตุ : </B> " + @class._ViewsvsHistoryApproved.htRemark + "<br> " +
+                        $"คลิ๊กลิงค์เพื่อเปิดเอกสาร <a href='" + varifyUrl + "'>More Detail" +
+                        //$"<img src = 'http://thsweb/MVCPublish/LR_Service_Request/images/btn/mail1.png' alt = 'HTML tutorial' style = 'width: 42px; height: 42px;'>" +
+                        $"</a>" +
+                        $"</div>";
+
+                    // bodyBuilder.Attachments.Add(@"E:\01_My Document\02_Project\_2023\1. PartTransferUnbalance\PartTransferUnbalance\dev_rfc.log");
+
+                    bodyBuilder.HtmlBody = string.Format(EmailBody);
+                    email.Body = bodyBuilder.ToMessageBody();
+
+                    // send email
+                    //var smtp = new SmtpClient();
+                    ////smtp.Connect("mail.csloxinfo.com");
+                    //smtp.Connect("203.146.237.138");
+                    ////smtp.Connect("10.200.128.12");s
+                    //smtp.Send(email);
+                    //smtp.Disconnect(true);
+
+                    var senderEmail = new MailAddress(fromEmailFrom.emEmail_M365, fromEmailFrom.emName_M365);
+                    var receiverEmail = new MailAddress(fromEmailTO.emEmail_M365, fromEmailTO.emName_M365);
+
+
+                    System.Net.Mime.ContentType mimeTypeS = new System.Net.Mime.ContentType("text/html");
+                    AlternateView alternate = AlternateView.CreateAlternateViewFromString(EmailBody, mimeTypeS);
+                    System.Net.Mail.SmtpClient smtp = new System.Net.Mail.SmtpClient("smtp.csloxinfo.com");
+                    smtp.UseDefaultCredentials = false;
+                    smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
+
+
+                    using (MailMessage mess = new MailMessage(senderEmail, receiverEmail))
+                    {
+                        mess.Subject = "Service Station Request==> " + v_subject;
+                        //add CC
+                        if (@class._ViewsvsHistoryApproved.htCC != null)
+                        {
+                            ViewrpEmail fromEmailCC = new ViewrpEmail();
+                            string[] splitCC = @class._ViewsvsHistoryApproved.htCC.Split(',');
+                            foreach (var i in splitCC)
+                            {
+                                if (i != " " & i != "")
+                                {
+                                    var v_cc = "";
+                                    try
+                                    {
+                                        fromEmailCC = _IT.rpEmails.Where(w => w.emName_M365 == i).FirstOrDefault();
+                                        //MailboxAddress FromMailcc = new MailboxAddress(fromEmailCC.emName_M365, fromEmailCC.emEmail_M365);
+                                        //email.Cc.Add(FromMailcc);
+                                        //vCCemail += fromEmailCC.emEmail_M365.ToString() + ",";
+                                        mess.CC.Add(fromEmailCC.emEmail_M365);
+                                    }
+                                    catch (Exception e)
+                                    {
+                                        v_cc = e.Message;
+                                    }
+
+                                }
+                            }
+                        }
+
+                        mess.AlternateViews.Add(alternate);
+                        smtp.Send(mess);
+                    }
+
+
+                    return Json(new { c1 = config, c2 = msg, c3 = fsavefile10 });
+                }
+
+                else
+                {
+                    return Json(new { c1 = config, c2 = msg });
                 }
 
 
-
-
-
-                //insert into HistoryApproved
-
-                ////try
-                ////{
-                //ViewsvsHistoryApproved _svsHistoryApproved = new ViewsvsHistoryApproved();
-                //_svsHistoryApproved.htSrNo = getSrNo[0].ToString();
-                //_svsHistoryApproved.htStep = i_Step;
-                //_svsHistoryApproved.htStatus = @class._ViewsvsHistoryApproved.htStatus;
-                //_svsHistoryApproved.htFrom = fromEmailFrom.emEmail_M365;
-                //_svsHistoryApproved.htTo = fromEmailTO.emEmail_M365;
-                //_svsHistoryApproved.htCC = vCCemail;
-                //_svsHistoryApproved.htDate = DateTime.Now.ToString("yyyy/MM/dd");
-                //_svsHistoryApproved.htTime = DateTime.Now.ToString("HH:mm:ss");
-                //_svsHistoryApproved.htRemark = @class._ViewsvsHistoryApproved.htRemark;
-                //_svsHistoryApproved.htCCDept = "";
-
-                //_IT.svsHistoryApproved.AddAsync(_svsHistoryApproved);
-                //_IT.SaveChanges();
-
-
-                //int a = _IT.svsHistoryApproved.Where(x => x.htStep == i_Step && x.htNo == int.Parse(getSrNo[0].ToString())).Count();
-                ////}
-                ////catch (Exception e)
-                ////{
-                ////    msg = "fail" + e.Message;
-                ////}
-
-
-
-
-
-
-
-
-
-                return Json(new { c1 = config, c2 = msg, c3 = fsavefile10 });
             }
-            //else if (config == "P")
-            //{
-            //    config = "P";
-            //    msg = msg;
-            //    return Json(new { c1 = config, c2 = msg });
-            //}
-            else
+            catch (Exception ex)
             {
-                //config = "E";
-                msg = msg;
+                config = "E";
+                msg = ex.Message;
                 return Json(new { c1 = config, c2 = msg });
             }
+
+
 
 
             //getSForm
@@ -2120,18 +2077,18 @@ namespace ServiceStation.Controllers.RequestForm
                                 _svsRegisterUSB_New.nuType = @class._ViewsvsRegisterUSB_New[i].nuType;
                                 _svsRegisterUSB_New.nuEquipment = @class._ViewsvsRegisterUSB_New[i].nuEquipment;
                                 _svsRegisterUSB_New.nuObjective = @class._ViewsvsRegisterUSB_New[i].nuObjective;
-                                _svsRegisterUSB_New.nuCodeIncharge = @class._ViewsvsRegisterUSB_New[i].nuCodeIncharge;
-                                _svsRegisterUSB_New.nuUserIncharge = @class._ViewsvsRegisterUSB_New[i].nuUserIncharge;
-                                _svsRegisterUSB_New.nuIntercomNo = @class._ViewsvsRegisterUSB_New[i].nuIntercomNo;
-                                _svsRegisterUSB_New.nuImage = @class._ViewsvsRegisterUSB_New[i].nuImage;
-                                _svsRegisterUSB_New.nuHardwareID = @class._ViewsvsRegisterUSB_New[i].nuHardwareID;
-                                _svsRegisterUSB_New.nuITCode = @class._ViewsvsRegisterUSB_New[i].nuITCode;
+                                _svsRegisterUSB_New.nuCodeIncharge = @class._ViewsvsRegisterUSB_New[i].nuCodeIncharge is null ? "" : @class._ViewsvsRegisterUSB_New[i].nuCodeIncharge;
+                                _svsRegisterUSB_New.nuUserIncharge = @class._ViewsvsRegisterUSB_New[i].nuUserIncharge is null ? "" : @class._ViewsvsRegisterUSB_New[i].nuUserIncharge;
+                                _svsRegisterUSB_New.nuIntercomNo = @class._ViewsvsRegisterUSB_New[i].nuIntercomNo is null ? "" : @class._ViewsvsRegisterUSB_New[i].nuIntercomNo;
+                                _svsRegisterUSB_New.nuImage = @class._ViewsvsRegisterUSB_New[i].nuImage is null ? "" : @class._ViewsvsRegisterUSB_New[i].nuImage;
+                                _svsRegisterUSB_New.nuHardwareID = @class._ViewsvsRegisterUSB_New[i].nuHardwareID is null ? "" : @class._ViewsvsRegisterUSB_New[i].nuHardwareID;
+                                _svsRegisterUSB_New.nuITCode = @class._ViewsvsRegisterUSB_New[i].nuITCode is null ? "" : @class._ViewsvsRegisterUSB_New[i].nuITCode;
                                 _svsRegisterUSB_New.nuIssueBy = IssueBy;
                                 _svsRegisterUSB_New.nuUpdateBy = UpdateBy;
                                 _IT.svsRegisterUSB_New.AddAsync(_svsRegisterUSB_New);
-
+                                _IT.SaveChanges();
                             }
-                            _IT.SaveChanges();
+                           
                             vmsg = "Insert success";
                             dbContextTransaction.Commit();
 
@@ -2159,10 +2116,10 @@ namespace ServiceStation.Controllers.RequestForm
                                 _svsRegisterUSB_New.nuObjective = @class._ViewsvsRegisterUSB_New[i].nuObjective;
                                 _svsRegisterUSB_New.nuCodeIncharge = @class._ViewsvsRegisterUSB_New[i].nuCodeIncharge;
                                 _svsRegisterUSB_New.nuUserIncharge = @class._ViewsvsRegisterUSB_New[i].nuUserIncharge;
-                                _svsRegisterUSB_New.nuIntercomNo = @class._ViewsvsRegisterUSB_New[i].nuIntercomNo;
-                                _svsRegisterUSB_New.nuImage = @class._ViewsvsRegisterUSB_New[i].nuImage;
-                                _svsRegisterUSB_New.nuHardwareID = @class._ViewsvsRegisterUSB_New[i].nuHardwareID;
-                                _svsRegisterUSB_New.nuITCode = @class._ViewsvsRegisterUSB_New[i].nuITCode;
+                                _svsRegisterUSB_New.nuIntercomNo = @class._ViewsvsRegisterUSB_New[i].nuIntercomNo is null ? "" : @class._ViewsvsRegisterUSB_New[i].nuIntercomNo;
+                                _svsRegisterUSB_New.nuImage = @class._ViewsvsRegisterUSB_New[i].nuImage is null ? "" : @class._ViewsvsRegisterUSB_New[i].nuImage;
+                                _svsRegisterUSB_New.nuHardwareID = @class._ViewsvsRegisterUSB_New[i].nuHardwareID is null ? "" : @class._ViewsvsRegisterUSB_New[i].nuHardwareID;
+                                _svsRegisterUSB_New.nuITCode = @class._ViewsvsRegisterUSB_New[i].nuITCode is null ? "" : @class._ViewsvsRegisterUSB_New[i].nuITCode;
                                 _svsRegisterUSB_New.nuIssueBy = IssueBy;
                                 _svsRegisterUSB_New.nuUpdateBy = UpdateBy;
                                 _IT.svsRegisterUSB_New.AddAsync(_svsRegisterUSB_New);

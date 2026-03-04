@@ -2819,5 +2819,14 @@ function capture(vSRNo) {
     });
 
 }
+function showImageModal(fileUrl) {
 
+    // ใส่รูป
+    document.getElementById("modalImage").src = fileUrl;
 
+    // ใส่ลิงก์ดาวน์โหลด
+    document.getElementById("downloadBtn").href = fileUrl;
+
+    var myModal = new bootstrap.Modal(document.getElementById('imageModal'));
+    myModal.show();
+}
