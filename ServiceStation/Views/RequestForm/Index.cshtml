@@ -95,7 +95,7 @@
                     </div>
 
                 </div>
-              
+
 
                 <table class="center" id="Toptable" border="1" style="color:black;">
                     <tr align="left" height="20">
@@ -138,12 +138,7 @@
                         <td id="tbottom">วันที่ขอ</td>
                         <td id="insertdata" class="text-gray">
                             <input type="text" id="i_SDate" class="input-with-image text-gray form-control disabled" asp-for="_ViewsvsServiceRequest.srRequestDate" style="width:80%" readonly>
-                            @*<input type="text" class="datepicker form-control"  id="frmDate"></input>*@
-                            @*@Html.TextBoxFor(model => model._ViewsvsServiceRequest.srRequestDate, new { @class = "form-control", @readonly = "true" })*@
-                            @*<input class="datepicker form-control" id="i_SDate" type="text" style="width:70%; height:30px;text-align:left;font-size:12px" asp-for="_ViewsvsServiceRequest.srRequestDate" readonly />*@
-                            @*<input class="form-control" type="text" id="i_SDate" autocomplete="off" style="width:70%;height:30px;text-align:left;font-size:14px" readonly />*@
-                            @*<input class="datepicker form-control" id="i_chagestart" type="text" autocomplete="off" style="width:100%;text-align:center;font-size:10px" readonly />*@
-                        </td>
+                           </td>
                         <td id="tbottom">วันที่ต้องการ</td>
                         <td id="insertdata" class="text-gray">
                             <div style="@( (@_UserId == @Model._ViewsvsServiceRequest.srRequestBy|| @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode) &&  @Model._ViewsvsServiceRequest.srStep != 4  ? "" : "pointer-events: none;")">
@@ -169,7 +164,7 @@
                     </tr>
                 </table>
                 <div class="mt-3 bgwhitesmoke">
-                    @if (@ViewBag.vForm == "F1")
+                    @if (@Model._ViewsvsServiceRequest.srFrom == "F1")
                     {
                         //New and Revise
                         @if (@Model._ViewsvsServiceRequest.srSubject.IndexOf("Revise") > -1)
@@ -181,34 +176,34 @@
                             @await Html.PartialAsync("_PartialGenaral.cshtml", Model)
                         }
                     }
-                    else if (@ViewBag.vForm == "F2")
+                    else if (@Model._ViewsvsServiceRequest.srFrom == "F2")
                     {
                         @await Html.PartialAsync("_PartialRestoreData.cshtml", Model)
                     }
-                    else if (@ViewBag.vForm == "F3")
+                    else if (@Model._ViewsvsServiceRequest.srFrom == "F3")
                     {
                         @await Html.PartialAsync("_PartialBorrowSpare.cshtml", Model)
                     }
-                    else if (@ViewBag.vForm == "F4")
+                    else if (@Model._ViewsvsServiceRequest.srFrom == "F4")
                     {
                         @await Html.PartialAsync("_PartialRegisterUsb.cshtml", Model)
                     }
 
-                    else if (@ViewBag.vForm == "F5")
+                    else if (@Model._ViewsvsServiceRequest.srFrom == "F5")
                     {
                         @await Html.PartialAsync("_PartialVpnOTP.cshtml", Model)
                     }
-                    else if (@ViewBag.vForm == "F6")
+                    else if (@Model._ViewsvsServiceRequest.srFrom == "F6")
                     {
                         @await Html.PartialAsync("_PartialRegisterProgram.cshtml", Model)
                     }
-                    else if (@ViewBag.vForm == "F7")
+                    else if (@Model._ViewsvsServiceRequest.srFrom == "F7")
                     {
                         @await Html.PartialAsync("_PartialITMSSystemRegister.cshtml", Model)
 
                     }
                     @*chirayu add 06/02/2025*@
-                    else if (@ViewBag.vForm == "F8")
+                    else if (@Model._ViewsvsServiceRequest.srFrom == "F8")
                     {
                         @await Html.PartialAsync("_PartialNewReviseProgram.cshtml", Model)
                     }
@@ -261,7 +256,8 @@
                     <div class="modal-body" id="myModalBodyDiv2">
                         <div class="modal-header" style="margin-top:1px">
                             <h5 class="modal-title">
-                                <span style="font-weight: bold; font-size: 16px;">เอกสาร​ทั้งหมดของผู้ร้องขอ @ViewBag.listAttachmentCOunt ไฟล์</span>
+                                @*<span style="font-weight: bold; font-size: 16px;">เอกสาร​ทั้งหมดของผู้ร้องขอ @ViewBag.listAttachmentCOunt ไฟล์</span>*@
+                                <span style="font-weight: bold; font-size: 16px;">เอกสาร​ทั้งหมดของผู้ร้องขอ @(Model._ListViewAttachmentUser?.Count() ?? 0) ไฟล์</span>
                             </h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
@@ -288,11 +284,11 @@
                                                 <td style="width:50px">Delete</td>
                                             </tr>
 
-                                            @if (@ViewBag.listAttachment != null)
+                                            @if (Model._ListViewAttachmentUser != null)
                                             {
 
                                                 var row = 0;
-                                                @foreach (var item in @ViewBag.listAttachment)
+                                                @foreach (var item in Model._ListViewAttachmentUser)
                                                 {
                                                     <tr>
                                                         <td> <label>@(row += 1)</label></td>
@@ -302,22 +298,21 @@
                                                             </a>
                                                         </td>
                                                         <td style="text-align:center">
+                                                            <input type="button" style="font-size:14px;@(@_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode && @Model._ViewsvsServiceRequest.srStep != 5 ? "": "display:none")" value="&#x274C" onclick="DeleteFileUser('@item.fnNo','@item.fnFilename','@Url.Action("DeteleDataFile","RequestForm")')">
 
-                                                            @if (@_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode && @Model._ViewsvsServiceRequest.srStep != 5)
-                                                            {
-                                                                <input type="button" style="font-size:14px" value="&#x274C" onclick="DeleteFileUser('@item.fnNo','@item.fnFilename','@Url.Action("DeteleDataFile","RequestForm")')">
-                                                            }
-                                                            else
-                                                            {
-                                                                <input type="button" style="font-size:14px" value="&#x274C" disabled>
-                                                            }
-                                                            @*<input type="button" style="@(@_UserId == @Model._ViewsvsServiceRequest.srRequestBy|| @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode ? "font-size:14px" : "pointer-events: none; font-size:14px")" value="&#x274C" onclick="DeleteFileUser('@item.fnNo','@item.fnFilename','@Url.Action("DeteleDataFile","RequestForm")')">*@
-                                                            @*<input type="button" style="font-size:14px" value="&#x274C" onclick="DeleteFileUser('@item.fnNo','@item.fnFilename','@Url.Action("DeteleDataFile","RequestForm")')">*@
+                                                            @*@if (@_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode && @Model._ViewsvsServiceRequest.srStep != 5)
+                                                                {
+                                                                    <input type="button" style="font-size:14px;@(@_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode && @Model._ViewsvsServiceRequest.srStep != 5 ?"display:none":)" value="&#x274C" onclick="DeleteFileUser('@item.fnNo','@item.fnFilename','@Url.Action("DeteleDataFile","RequestForm")')">
+                                                                }
+                                                                else
+                                                                {
+                                                                    <input type="button" style="font-size:14px;" value="&#x274C" disabled>
+                                                                }*@
                                                         </td>
                                                     </tr>
 
 
-                                                    @*<input type="button" value="&#x274C">*@
+
 
                                                 }
 
@@ -343,7 +338,7 @@
                     <div class="modal-body" id="myModalBodyDiv3">
                         <div class="modal-header" style="margin-top:1px">
                             <h5 class="modal-title">
-                                <span style="font-weight: bold; font-size: 16px;">เอกสาร​ทั้งหมดของผู้ปฏิบัติงาน @ViewBag.listAttachmentCOuntWorker  ไฟล์</span>
+                                <span style="font-weight: bold; font-size: 16px;">เอกสาร​ทั้งหมดของผู้ปฏิบัติงาน   @(Model._ListViewAttachmentWorker?.Count() ?? 0) ไฟล์</span>
                             </h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
@@ -370,10 +365,10 @@
                                                 <td style="width:50px">Delete</td>
                                             </tr>
 
-                                            @if (@ViewBag.listAttachmentWorker != null)
+                                            @if (Model._ListViewAttachmentWorker != null)
                                             {
                                                 var row = 0;
-                                                @foreach (var item in @ViewBag.listAttachmentWorker)
+                                                @foreach (var item in Model._ListViewAttachmentWorker)
                                                 {
                                                     <tr>
                                                         <td> <label>@(row += 1)</label></td>
@@ -383,27 +378,21 @@
                                                             </a>
                                                         </td>
                                                         <td>
+                                                            <input type="button" style="font-size:14px;@(!string.IsNullOrEmpty(Model._ViewsvsServiceRequest.srApproveEmpcode) && Model._ViewsvsServiceRequest.srStep != 5 ? "" : "display:none")" value="&#x274C" onclick="DeleteFileUser('@item.fnNo','@item.fnFilename','@Url.Action("DeteleDataFile","RequestForm")')">
+
                                                             @*<input type="button" style="@(@_UserId == @Model._ViewsvsServiceRequest.srRequestBy|| @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode ? "font-size:14px" : "pointer-events: none; font-size:14px")" value="&#x274C" onclick="DeleteFileUser('@item.fnNo','@item.fnFilename','@Url.Action("DeteleDataFile","RequestForm")')">*@
-                                                            @if (@_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode && @Model._ViewsvsServiceRequest.srStep != 5)
-                                                            {
-                                                                <input type="button" style="font-size:14px" value="&#x274C" onclick="DeleteFileUser('@item.fnNo','@item.fnFilename','@Url.Action("DeteleDataFile","RequestForm")')">
-                                                            }
-                                                            else
-                                                            {
-                                                                <input type="button" style="font-size:14px" value="&#x274C" disabled>
-                                                            }
+                                                            @*@if (@_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode && @Model._ViewsvsServiceRequest.srStep != 5)
+                                                                {
+                                                                    <input type="button" style="font-size:14px;@(!string.IsNullOrEmpty(Model._ViewsvsServiceRequest.srApproveEmpcode) && Model._ViewsvsServiceRequest.srStep != 5 ? "" : "display:none")" value="&#x274C" onclick="DeleteFileUser('@item.fnNo','@item.fnFilename','@Url.Action("DeteleDataFile","RequestForm")')">
+                                                                }
+                                                                else
+                                                                {
+                                                                    <input type="button" style="font-size:14px;display:none" value="&#x274C" disabled>
+                                                                }*@
 
                                                             @*<input type="button" style="font-size:14px" value="&#x274C" onclick="DeleteFileUser('@item.fnNo','@item.fnFilename','@Url.Action("DeteleDataFile","RequestForm")')">*@
                                                         </td>
                                                     </tr>
-
-                                                    @*<a href="@Url.Action("openFile", "RequestForm", new { pathFile = @item.fnFilename })" class="btn-image" target="_blank" style="padding-left:5px;text-decoration:auto;">
-                                                            <span>
-                                                                <img id="btnOpenfile" src="~/images/open-folder.png" class="btn-image" style="cursor: pointer; height:30px;width:30px">
-                                                            </span>
-                                                            Open file
-                                                        </a>*@
-
                                                 }
                                             }
                                         </table>

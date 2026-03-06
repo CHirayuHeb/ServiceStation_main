@@ -120,8 +120,8 @@
             <tr align="Center" style="vertical-align: top;">
                 <td style="@(@_UserId == @Model._ViewsvsServiceRequest.srRequestBy|| @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode ? "" : "pointer-events: none;")">
                     @{RowNo++;}@RowNo
-                    <input type="text" asp-for="_ViewsvsRegisterUSB_New[i].nuNo" style="display:none;font-size" />
-                    <input type="text" asp-for="_ViewsvsRegisterUSB_New[i].nuNewNo" style="display:none" />
+                    <input type="text" asp-for="_ViewsvsRegisterUSB_New[i].nuNo" style="display:none;" />
+                    <input type="text" asp-for="_ViewsvsRegisterUSB_New[i].nuNewNo" style="display:none;" />
                 </td>
                 <td style="@(@_UserId == @Model._ViewsvsServiceRequest.srRequestBy|| @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode ? "" : "pointer-events: none;")">
                     @Html.DropDownListFor(m => m._ViewsvsRegisterUSB_New[i].nuType, (SelectList)ViewBag.formMastUSB, "กรุณาเลือก", new { id = "txtF4NewMastUsb", autocomplete = "off", required = "required", @style = "width:100px;height:30px;font-size:10px" })

@@ -162,6 +162,20 @@ function GoNewRequest(getID, getEvent, action, vForm, vTeam, vSubject, vSrNo) {
     GoSideMenu(url);
 
 }
+function GoNewReq(mmSecCode, msSubNo) {
+   // let vId = getID;
+    let url = "RequestForm?mmSecCode=" + mmSecCode + "&msSubNo=" + msSubNo ;
+    GoSideMenu(url);
+
+}
+
+function GoNewReqsrNo(vSrNo) {
+    // let vId = getID;
+    let url = "RequestForm?vSrNo=" + vSrNo;
+    GoSideMenu(url);
+
+}
+
 function GoAccEmpdata(getID, getEvent, controller) {
     let vId = getID;
 
@@ -1890,7 +1904,8 @@ function DeleteFileUser(id, vname, action) {
                     })
                         .then((result) => {
                             //GoSideMenu("Home");
-                            GoNewRequest(getID, getEvent, vaction, vForm, vTeam, vSubject, vSrNo)
+                            //GoNewRequest(getID, getEvent, vaction, vForm, vTeam, vSubject, vSrNo)
+                            GoNewReqsrNo(vSrNo);
                         });
 
 
@@ -2271,7 +2286,8 @@ function savesubmit(action) {
                         console.log("config.c3" + config.c3);
                         // GoSideMenu("Home");
 
-                        GoNewRequest(getID, getEvent, vaction, vForm, vTeam, vSubject, vSrNo)
+                        //GoNewRequest(getID, getEvent, vaction, vForm, vTeam, vSubject, vSrNo)
+                        GoNewReqsrNo(vSrNo);
                     }
                 });
             }

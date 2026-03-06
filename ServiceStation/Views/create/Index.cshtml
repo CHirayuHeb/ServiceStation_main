@@ -39,7 +39,14 @@
                     {
                         @if (@Model._ListsvsMastServiceSub[j].msSecCode.ToString() == @Model._ListsvsMastServiceMain[i].mmNo.ToString())
                         {
-                            <button type="button" class="button  " onclick="GoNewRequest('@_UserId','New','@Url.Action("Index","RequestForm")','@Model._ListsvsMastServiceSub[j].msFrom','@Model._ListsvsMastServiceMain[i].mmSecCode','@Model._ListsvsMastServiceSub[j].msSubNameEN @Model._ListsvsMastServiceSub[j].msSubNameTH','')">
+                            @*<button type="button" class="button  " onclick="GoNewRequest('','New','@Url.Action("Index","RequestForm")','@Model._ListsvsMastServiceSub[j].msFrom','@Model._ListsvsMastServiceMain[i].mmSecCode','@Model._ListsvsMastServiceSub[j].msSubNameEN @Model._ListsvsMastServiceSub[j].msSubNameTH','')">
+                                @Model._ListsvsMastServiceSub[j].msSubNo @Model._ListsvsMastServiceSub[j].msSubNameEN
+                                @if (@Model._ListsvsMastServiceSub[j].msKosu != null)
+                                {
+                                    <span class="text-red" style="font-weight:800">*Kosu</span>
+                                }
+                            </button>*@
+                            <button type="button" class="button  " onclick="GoNewReq('@Model._ListsvsMastServiceMain[i].mmSecCode','@Model._ListsvsMastServiceSub[j].msSubNo')">
                                 @Model._ListsvsMastServiceSub[j].msSubNo @Model._ListsvsMastServiceSub[j].msSubNameEN
                                 @if (@Model._ListsvsMastServiceSub[j].msKosu != null)
                                 {
@@ -49,12 +56,12 @@
 
 
                             @*<button type="button" class="button  " onclick="GoNewRequest('@_UserId','New','@Url.Action("Index","RequestForm")','@Model._ListsvsMastServiceSub[j].msFrom','@Model._ListsvsMastServiceMain[i].mmSecCode','@Model._ListsvsMastServiceSub[j].msSubNameEN @Model._ListsvsMastServiceSub[j].msSubNameTH')">
-                                @Model._ListsvsMastServiceSub[j].msSubNo @Model._ListsvsMastServiceSub[j].msSubNameEN
-                                @if (@Model._ListsvsMastServiceSub[j].msKosu != null)
-                                {
-                                    <span class="text-red" style="font-weight:800">*Kosu</span>
-                                }
-                            </button>*@
+                    @Model._ListsvsMastServiceSub[j].msSubNo @Model._ListsvsMastServiceSub[j].msSubNameEN
+                    @if (@Model._ListsvsMastServiceSub[j].msKosu != null)
+                    {
+                        <span class="text-red" style="font-weight:800">*Kosu</span>
+                    }
+                </button>*@
                         }
                     }
                 </div>

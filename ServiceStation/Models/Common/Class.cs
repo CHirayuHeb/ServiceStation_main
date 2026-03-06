@@ -83,6 +83,14 @@ namespace ServiceStation.Models.Common
         public List<ViewDetail> dataRequest { get; set; } //Give
         public ViewCodition _viewCondition { get; set; }
 
+
+
+
+        public List<ViewAttachment> _ListViewAttachmentWorker { get; set; }
+        public List<ViewAttachment> _ListViewAttachmentUser { get; set; }
+
+
+        public ViewAccEMPLOYEE _ViewAccUser { get; set; }
     }
 
     public class OTTimeStart

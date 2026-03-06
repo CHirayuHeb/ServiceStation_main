@@ -45,16 +45,38 @@ namespace ServiceStation.Controllers.RequestForm
 
         //[HttpPost]
         [Authorize("Checked")]
-        public ActionResult Index(string id, string vtype, string vForm, string vTeam, string vSubject, string vSrNo)
+        public ActionResult Index(string id, string vtype, string vForm, string vTeam, string vSubject, string vSrNo, string mmSecCode, string msSubNo)
         {
 
             try
             {
                 string _UserId = User.Claims.FirstOrDefault(s => s.Type == "UserId")?.Value;
+                //case new
+                //string mmSecCode,string msSubNo
+                if (mmSecCode != null && msSubNo != null)
+                {
+                    vSubject = _IT.svsMastServiceSub.Where(x => x.msSubNo == msSubNo).Select(x => (x.msSubNameEN ?? "") + " " + (x.msSubNameTH ?? "")).FirstOrDefault();
+                    vForm = _IT.svsMastServiceSub.Where(x => x.msSubNo == msSubNo).Select(x=>x.msFrom).FirstOrDefault();
+                    vTeam = mmSecCode;
 
-                ViewBag.vTeam = vTeam;
-                ViewBag.vForm = vForm;
-                ViewBag.vSubject = vSubject;
+                }
+
+                //edit
+                //srNo
+                if (vSrNo != null)
+                {
+                    var dtservice = _IT.svsServiceRequest.Where(x => x.srNo == int.Parse(vSrNo)).FirstOrDefault();
+                    vForm = dtservice?.srFrom ?? "";
+                    vTeam = dtservice?.srType ?? "";
+                    vSubject = dtservice?.srSubject ?? "";
+
+
+                }
+
+                
+                ViewBag.vTeam = vTeam; // mmSecCode !=  null ? mmSecCode : vTeam;
+                ViewBag.vForm = vForm; //vSrNo != null ? _IT.svsServiceRequest.Where(x => x.srNo == int.Parse(vSrNo)).Select(y => y.srFrom).FirstOrDefault() : vForm;
+                ViewBag.vSubject = vSubject; //  vSubject == null ? "" : vSubject;
                 Class @class = new Class();
 
 
@@ -78,108 +100,64 @@ namespace ServiceStation.Controllers.RequestForm
                     List<ViewProgramList> _ViewProgramList = _IT.ProgramList.Where(x => x.PdStatus == "USE" && x.pdseccode == "SDE" && x.pdWorking == null).OrderBy(x => x.PdPgm).ToList();
                     SelectList formPgm = new SelectList(_ViewProgramList.Select(s => s.PdPgm).Distinct());
                     ViewBag.formPgm = formPgm;
-
-
                     //พนักงานภายในบริษัททั้งหมด  /  กำหนดผู้ใช้งาน  (พร้อมแนบรายชื่อผู้ใช้งาน)
                     List<string> _listTypeUser = new List<string>{
                                                 "พนักงานภายในบริษัททั้งหมด",
                                                 "กำหนดผู้ใช้งาน (พร้อมแนบรายชื่อผู้ใช้งาน)"};
                     SelectList _listofTypeUser = new SelectList(_listTypeUser);
                     ViewBag.listTypeUser = _listofTypeUser;
-
-
-                    //string a = "";
-                    //try
-                    //{
-
-                    //}
-                    //catch (Exception e)
-                    //{
-                    //    a = e.Message;
-                    //}
-
-                    // var a = _IT.ProgramList.Where(x => x.PdStatus == "USE").FirstOrDefault();
-
-                    //List<ViewProgramList> _ViewProgramList = _IT.ProgramList.Where(x => x.PdStatus == "USE").ToList();
-                    //SelectList formPgm = new SelectList(_ViewProgramList.Select(s => s.PdPgm).Distinct());
-                    //ViewBag.formPgm = formPgm;
                 }
 
-
-
-
+                
                 ViewAccEMPLOYEE vAcc = new ViewAccEMPLOYEE();
+                @class._ViewsvsServiceRequest = new ViewsvsServiceRequest();
+              
                 if (vSrNo == null)
                 {
-                    if (id != null)
-                    {
-                        @class._ViewAccEMPLOYEE = _HRMS.AccEMPLOYEE.Where(x => x.EMP_CODE == id).FirstOrDefault();
-                        @class._ViewsvsServiceRequest = new ViewsvsServiceRequest();
-                        // @class._ViewsvsServiceRequest.srNo = ;
-                        @class._ViewsvsServiceRequest.srServiceNo = "";
-                        @class._ViewsvsServiceRequest.srRequestBy = @class._ViewAccEMPLOYEE.EMP_CODE;
-                        @class._ViewsvsServiceRequest.srRequestName = @class._ViewAccEMPLOYEE.NICKNAME;
-                        @class._ViewsvsServiceRequest.srIntercom = @class._ViewAccEMPLOYEE.INTERCOMNO;
-                        @class._ViewsvsServiceRequest.srSecCode = @class._ViewAccEMPLOYEE.SEC_CODE;
-                        @class._ViewsvsServiceRequest.srDeptCode = @class._ViewAccEMPLOYEE.DEPT_CODE;
-                        @class._ViewsvsServiceRequest.srRequestDate = DateTime.Now.ToString("yyyy/MM/dd");
-                        //_svsServiceRequest.srDesiredDate = @class._ViewAccEMPLOYEE.DEPT_CODE;
-                        @class._ViewsvsServiceRequest.srType = vTeam;
-                        @class._ViewsvsServiceRequest.srSubject = vSubject;
-                        @class._ViewsvsServiceRequest.srFrom = vForm;
-                        // @class._ViewsvsServiceRequest.srKosu = 12;
-
-                        // @class._ViewsvsGeneral = new ViewsvsGeneral();
-                        // @class._ViewsvsGeneral.gnDescription = "test";
-
-                        //@class._ViewsvsDataRestore = new ViewsvsDataRestore();
-                        //@class._ViewsvsDataRestore.drSys_PCLan = 1;
-                    }
+                    @class._ViewAccEMPLOYEE = _HRMS.AccEMPLOYEE.Where(x => x.EMP_CODE == _UserId).FirstOrDefault();
+                    @class._ViewsvsServiceRequest.srServiceNo = "";
+                    @class._ViewsvsServiceRequest.srRequestBy = @class._ViewAccEMPLOYEE.EMP_CODE;
+                    @class._ViewsvsServiceRequest.srRequestName = @class._ViewAccEMPLOYEE.NICKNAME;
+                    @class._ViewsvsServiceRequest.srIntercom = @class._ViewAccEMPLOYEE.INTERCOMNO;
+                    @class._ViewsvsServiceRequest.srSecCode = @class._ViewAccEMPLOYEE.SEC_CODE;
+                    @class._ViewsvsServiceRequest.srDeptCode = @class._ViewAccEMPLOYEE.DEPT_CODE;
+                    @class._ViewsvsServiceRequest.srRequestDate = DateTime.Now.ToString("yyyy/MM/dd");
+                    @class._ViewsvsServiceRequest.srType = vTeam;
+                    @class._ViewsvsServiceRequest.srSubject = vSubject;
+                    @class._ViewsvsServiceRequest.srFrom = vForm;
                 }
                 else
                 {
                     @class._ViewsvsServiceRequest = _IT.svsServiceRequest.Where(x => x.srNo == int.Parse(vSrNo)).FirstOrDefault();
                     @class._ViewAccEMPLOYEE = _HRMS.AccEMPLOYEE.Where(x => x.EMP_CODE == @class._ViewsvsServiceRequest.srRequestBy).FirstOrDefault();
 
-                    //F1
+                    //F1 General
                     if (vForm == "F1")
                     {
                         @class._ViewsvsGeneral = _IT.svsGeneral.Where(x => x.gnNo == int.Parse(vSrNo)).FirstOrDefault();
                         ViewBag.gnType = @class._ViewsvsGeneral.gnType;
-
-
                     }
 
-                    //F2
+                    //F2 Data Restore
                     if (vForm == "F2")
                     {
                         @class._ViewsvsDataRestore = _IT.svsDataRestore.Where(x => x.drNo == int.Parse(vSrNo)).FirstOrDefault();
-
                     }
-                    //F3
+                    //F3 Notebook Spare
                     if (vForm == "F3")
                     {
                         List<ViewsvsMastNotebookSpare> _ViewsvsMastNotebookSpare = _IT.svsMastNotebookSpare.OrderBy(x => x.mnPCName).ToList();
                         SelectList formMastNotebook = new SelectList(_ViewsvsMastNotebookSpare.Select(s => s.mnPCName).Distinct());
                         ViewBag.formMastNotebook = formMastNotebook;
-
                         @class._ViewsvsNotebookSpare = _IT.svsNotebookSpare.Where(x => x.nsNo == int.Parse(vSrNo)).FirstOrDefault();
-
                     }
-
-
                     //USB
-                    //@class._ViewsvsRegisterUSB = new ViewsvsRegisterUSB();
                     if (vForm == "F4")
                     {
-
                         @class._ViewsvsRegisterUSB = _IT.svsRegisterUSB.Where(x => x.ubNo == int.Parse(vSrNo)).FirstOrDefault();
-
                         @class._ViewsvsRegisterUSB_Cancel = _IT.svsRegisterUSB_Cancel.Where(x => x.cuNo == int.Parse(vSrNo)).ToList();
-
                         @class._ViewsvsRegisterUSB_New = _IT.svsRegisterUSB_New.Where(x => x.nuNo == int.Parse(vSrNo)).ToList();
                         ViewBag.Obstatus = @class._ViewsvsRegisterUSB.ubStatusReq;
-
                     }
 
                     //F5 VPN
@@ -191,12 +169,10 @@ namespace ServiceStation.Controllers.RequestForm
                     //F6 User Register Application
                     if (vForm == "F6")
                     {
-
                         @class._ViewsvsSDE_SystemRegister = _IT.svsSDE_SystemRegister.Where(x => x.sysNo == int.Parse(vSrNo)).ToList();
-
-
                     }
 
+                    @class._ViewAccUser = new ViewAccEMPLOYEE();
                     if (vForm == "F7")
                     {
                         @class._ViewsvsITMS_SystemRegister = _IT.svsITMS_SystemRegister.Where(x => x.itNo == int.Parse(vSrNo)).FirstOrDefault();
@@ -204,23 +180,14 @@ namespace ServiceStation.Controllers.RequestForm
                         if (@class._ViewsvsITMS_SystemRegister != null)
                         {
                             ViewAccEMPLOYEE _ViewAccEMPLOYEE = _HRMS.AccEMPLOYEE.Where(x => x.EMP_CODE == @class._ViewsvsITMS_SystemRegister.itEmpcode.Trim()).FirstOrDefault();
-                            // @class._ViewAccEMPLOYEE = _HRMS.AccEMPLOYEE.Where(x => x.EMP_CODE == @class._ViewsvsITMS_SystemRegister.itEmpcode).FirstOrDefault();
                             if (_ViewAccEMPLOYEE != null)
                             {
-                                ViewBag.Name = _ViewAccEMPLOYEE.EMP_TNAME;
-                                ViewBag.lname = _ViewAccEMPLOYEE.LAST_TNAME;
-                                ViewBag.Dep = _ViewAccEMPLOYEE.DEPT_CODE;
-                                ViewBag.Intercom = _ViewAccEMPLOYEE.INTERCOMNO;
+                                @class._ViewAccUser.EMP_TNAME = _ViewAccEMPLOYEE.EMP_TNAME;
+                                @class._ViewAccUser.LAST_TNAME = _ViewAccEMPLOYEE.LAST_TNAME;
+                                @class._ViewAccUser.DEPT_CODE = _ViewAccEMPLOYEE.DEPT_CODE;
+                                @class._ViewAccUser.INTERCOMNO = _ViewAccEMPLOYEE.INTERCOMNO;
                             }
-
-
-
                         }
-
-
-
-
-
                     }
 
                     if (@class._ViewsvsServiceRequest.srStep > 2)
@@ -240,32 +207,19 @@ namespace ServiceStation.Controllers.RequestForm
                             SelectList formfStatus = new SelectList(_listStatus.Select(s => s.mfSubject).Distinct());
                             ViewBag.vbformfStatus = formfStatus;
                         }
-
-
                         ViewBag._empcs = _empcs;
                     }
 
 
+                    @class._ListViewAttachmentUser = new List<ViewAttachment>();
+                    @class._ListViewAttachmentUser = _IT.Attachment.Where(x => x.fnNo == vSrNo.ToString() && x.fnType != "Worker" && x.fnProgram == "ServiceStation").ToList();
 
 
-
-                    List<ViewAttachment> _ViewAttachment = _IT.Attachment.Where(x => x.fnNo == vSrNo.ToString() && x.fnType != "Worker" && x.fnProgram == "ServiceStation").ToList();
-                    ViewBag.listAttachment = _ViewAttachment.ToList();
-                    ViewBag.listAttachmentCOunt = _ViewAttachment.Count();
-
-                    List<ViewAttachment> _ViewAttachmentWorker = _IT.Attachment.Where(x => x.fnNo == vSrNo.ToString() && x.fnType == "Worker" && x.fnProgram == "ServiceStation").ToList();
-                    ViewBag.listAttachmentWorker = _ViewAttachmentWorker.ToList();
-                    ViewBag.listAttachmentCOuntWorker = _ViewAttachmentWorker.Count();
+                    @class._ListViewAttachmentWorker = new List<ViewAttachment>();
+                    @class._ListViewAttachmentWorker = _IT.Attachment.Where(x => x.fnNo == vSrNo.ToString() && x.fnType == "Worker" && x.fnProgram == "ServiceStation").ToList();
 
 
-                    //add history 27/11/2024 14:53
-                    List<ViewsvsHistoryApproved> _listHistory = new List<ViewsvsHistoryApproved>();
-                    _listHistory = _IT.svsHistoryApproved.Where(x => x.htSrNo == vSrNo).ToList();
-                    _listHistory = _listHistory.OrderBy(x => x.htStep).ToList();
-                    ViewBag._listHistory = _listHistory.ToList();
-
-
-
+                    @class._ListViewsvsHistoryApproved = new List<ViewsvsHistoryApproved>();
                     @class._ListViewsvsHistoryApproved = _IT.svsHistoryApproved.Where(x => x.htSrNo == vSrNo).ToList();
 
 
@@ -2088,7 +2042,7 @@ namespace ServiceStation.Controllers.RequestForm
                                 _IT.svsRegisterUSB_New.AddAsync(_svsRegisterUSB_New);
                                 _IT.SaveChanges();
                             }
-                           
+
                             vmsg = "Insert success";
                             dbContextTransaction.Commit();
 

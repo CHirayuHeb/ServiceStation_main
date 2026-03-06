@@ -41,10 +41,10 @@ $('.AddNew').click(function () {
     htmls += "<input type='button' class='RemoveRow' value='&#x274C'>";
     htmls += "</td>";
     htmls += "<td>";
-    htmls += "<input type='text' class='cHardwareID' name='_ViewsvsRegisterUSB_New[" + rowi + "].nuHardwareID' value='' style='width: 80px' readonly>";
+    htmls += "<input type='text' class='cHardwareID' name='_ViewsvsRegisterUSB_New[" + rowi + "].nuHardwareID' value='' style='width: 80px;display:none' readonly>";
     htmls += "</td>";
     htmls += "<td>";
-    htmls += "<input type='text' class='cITCode' name='_ViewsvsRegisterUSB_New[" + rowi + "].nuITCode' value='' style='width: 80px' readonly>";
+    htmls += "<input type='text' class='cITCode' name='_ViewsvsRegisterUSB_New[" + rowi + "].nuITCode' value='' style='width: 80px;display:none' readonly>";
     htmls += "</td>";
     //htmls += "<td>";
     //htmls += "";

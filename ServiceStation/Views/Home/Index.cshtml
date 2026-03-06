@@ -58,20 +58,7 @@
                                 <div class="center fw-800" style="text-align:left;font-size:12px">Status Service</div>
                             </div>
                             <div class="col-25" style=" display: flex;align-items: center; ">
-                                @*@Html.DropDownListFor(m => m._ViewSearchData.v_StatusService, (SelectList)ViewBag.vbformStatus, "กรุณาเลือก", new { @class = "form-control", id = "ipStatus", autocomplete = "off", @style = "width:100%;font-size:13px" })*@
-
-                                @Html.DropDownListFor(
-    m => m._ViewSearchData.v_StatusService,
-    (IEnumerable<SelectListItem>)ViewBag.vbformStatus,
-    "กรุณาเลือก",
-    new { @class = "form-control", id = "ipStatus", autocomplete = "off", @style = "width:100%;font-size:12px" }
-)
-                                @*@Html.DropDownListFor(
-                                        m => m._ViewSearchData.v_StatusService,
-                                        (SelectList)ViewBag.vbformStatus1,
-                                        "กรุณาเลือก",
-                                        new { @class = "form-control", id = "ipStatus", autocomplete = "off", @style = "width:100%;font-size:12px" }
-                                    )*@
+                                @Html.DropDownListFor(m => m._ViewSearchData.v_StatusService,(IEnumerable<SelectListItem>)ViewBag.vbformStatus,"กรุณาเลือก",new { @class = "form-control", id = "ipStatus", autocomplete = "off", @style = "width:100%;font-size:12px" })
                             </div>
                             <div class="col-5 " style="">
                             </div>
@@ -219,7 +206,7 @@
                             </div>
                         </div>
                     </div>
-                  
+
                     <div class="table-container">
                         <table class="purple-table">
                             <tr>
@@ -285,7 +272,10 @@
                                         </td>
                                         <td>
                                             @*string id, string vtype, string vForm, string vTeam, string vSubject, string vSrNo*@
-                                            <a href="@Url.Action("Index", "RequestForm", new { id = @item.srNo,vtype ="Edit",vForm=@item.srFrom,vTeam=@item.srType,vSubject=@item.srSubject,vSrNo=@item.srNo })" target="_blank" style="font-size:22px;text-decoration: none;">
+                                            @*<a href="@Url.Action("Index", "RequestForm", new { id = @item.srRequestBy,vtype ="Edit",vForm=@item.srFrom,vTeam=@item.srType,vSubject=@item.srSubject,vSrNo=@item.srNo })" target="_blank" style="font-size:22px;text-decoration: none;">
+                                                &#x1F50E;
+                                            </a>*@
+                                            <a href="@Url.Action("Index", "RequestForm", new { vSrNo = @item.srNo})" target="_blank" style="font-size:22px;text-decoration: none;">
                                                 &#x1F50E;
                                             </a>
 
@@ -304,7 +294,7 @@
                                         </td>
                                     </tr>
                                     rowNumber++;
-                                    }
+                                }
                                 }
                                 </tr>
 

@@ -112,9 +112,12 @@
 
                                     </div>
                                     <div class="col-10">
-                                        <a href="@Url.Action("Index", "RequestForm", new { id = @item.srNo,vtype ="Edit",vForm=@item.srFrom,vTeam=@item.srType,vSubject=@item.srSubject,vSrNo=@item.srNo })" target="_blank" style="font-size:22px;text-decoration: none;">
-                                                &#x1F50E;
-                                            </a>
+                                        @*<a href="@Url.Action("Index", "RequestForm", new { id = @item.srNo,vtype ="Edit",vForm=@item.srFrom,vTeam=@item.srType,vSubject=@item.srSubject,vSrNo=@item.srNo })" target="_blank" style="font-size:22px;text-decoration: none;">
+                                            &#x1F50E;
+                                        </a>*@
+                                        <a href="@Url.Action("Index", "RequestForm", new { vSrNo = @item.srNo})" target="_blank" style="font-size:22px;text-decoration: none;">
+                                            &#x1F50E;
+                                        </a>
                                         @*<input type="button" style="font-size:18px" value="&#x1F50E;" onclick="GoNewRequest('@item.srRequestBy','Edit','@Url.Action("Index", "RequestForm")','@item.srFrom','@item.srType','@item.srSubject','@item.srNo')">*@
                                         <input type="button" style="font-size:18px" value="&#x1F5D1" onclick="DeleteData('@item.srNo','@Url.Action("DeteleData","RequestForm")')" disabled>
                                     </div>

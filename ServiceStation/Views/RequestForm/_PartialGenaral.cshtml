@@ -33,10 +33,14 @@
                 <input name="files" type="file" id="files" multiple="" class="button " style="width:300px;margin-right:20px;@(@_UserId == @Model._ViewsvsServiceRequest.srRequestBy|| @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode ? "" : "pointer-events: none;")">
                 <button type="button" class="button notification" style="width:140px; height:28px;background-color:#7286D3" data-bs-dismiss="modal" id="btnfile">
                     <img src="~/images/open-folder.png" style="width:25px;height:25px;padding-right:5px;margin-right:8px">
-                    เปิดไฟล์แนบ @ViewBag.listAttachmentCOunt ไฟล์
-                    @if (@ViewBag.listAttachmentCOunt > 0)
+                    @{
+                        var fileCount = Model._ListViewAttachmentUser?.Count() ?? 0;
+                    }
+
+                    เปิดไฟล์แนบ @fileCount ไฟล์
+                    @if (@fileCount > 0)
                     {
-                    <span class="badge">@ViewBag.listAttachmentCOunt</span>
+                        <span class="badge">@fileCount</span>
                     }
                     @*<span class="badge">0</span>*@
                 </button>

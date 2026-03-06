@@ -10,7 +10,6 @@
 
 }
 <link href="~/css/RequestForm/site.css" rel="stylesheet" />
-
 <div>
     <label>ข้อมูลผู้ขอใช้ระบบ<span style="color:red">*</span></label>
 </div>
@@ -25,7 +24,6 @@
             @Html.RadioButtonFor(m => m._ViewsvsITMS_SystemRegister.itObjective, "Cancel ", new { @class = "", id = "txtF7txtF7itObjectiveCancel", name = "txtF7itObjective" }) <label>ยกเลิก</label><br>
         </td>
     </tr>
-
     <tr align="left" height="20">
         <td id="tbottom" style="vertical-align:top">ข้อมูลผู้ร้องขอ</td>
         <td>
@@ -45,59 +43,52 @@
                             ค้นหาข้อมูล
                         </button>
                     </td>
-
                 </tr>
                 <tr class="Vtd">
                     <td class="Vtd">ชื่อผู้ร้องขอ</td>
                     <td colspan="2" class="Vtd">
-                        <label id="txtF7ITMSFname">@ViewBag.Name</label>
-                        <input type="text" class="form-control" style="width:200px;height:28px;display:none" id="txtF7ITMSFname"  value="@ViewBag.Name" readonly />
+                        <label id="txtF7ITMSFname">@(@Model._ViewAccUser?.EMP_TNAME ?? "")</label>
+                        <input type="text" class="form-control" style="width:200px;height:28px;display:none" id="txtF7ITMSFname" value="@ViewBag.Name" readonly />
                     </td>
                 </tr>
                 <tr class="Vtd">
                     <td class="Vtd">นามสกุล</td>
                     <td colspan="2" class="Vtd">
-                        <label id="txtF7ITMSLName">@ViewBag.lname</label>
+                        <label id="txtF7ITMSLName">@(@Model._ViewAccUser?.LAST_TNAME ?? "")</label>
                         @*<input type="text" class="form-control" style="width:200px;height:28px" id="txtF7ITMSLName" required readonly />*@
                     </td>
                 </tr>
                 <tr class="Vtd">
                     <td class="Vtd">แผนก</td>
                     <td colspan="2" class="Vtd">
-                        <label id="txtF7ITMSDept">@ViewBag.Dep</label>
+                        <label id="txtF7ITMSDept">@(@Model._ViewAccUser?.DEPT_CODE ?? "")</label>
                         @*<input type="text" class="form-control" style="width:200px;height:28px" id="txtF7ITMSDept" required readonly />*@
                     </td>
                 </tr>
                 <tr class="Vtd">
                     <td class="Vtd">Intercom</td>
                     <td colspan="2" class="Vtd">
-                        <label id="txtF7ITMSIntercom">@ViewBag.Intercom</label>
+                        <label id="txtF7ITMSIntercom">@(@Model._ViewAccUser?.INTERCOMNO ?? "")</label>
                         @*<input type="text" class="form-control" style="width:200px;height:28px" id="txtF7ITMSDept" required readonly />*@
                     </td>
                 </tr>
             </table>
 
-
         </td>
     </tr>
-
     <tr align="left" height="20">
         <td id="tbottom" style="vertical-align:top">
-
             @*@Html.CheckBoxFor(m => m._ViewsvsITMS_SystemRegister.IsChecked)*@
             @Html.CheckBoxFor(model => model._ViewsvsITMS_SystemRegister.itPcLan, new{
            @id = "txtF7itMPcLan",
            @onclick = "CheckF7('Pclan')",
        })
 
-
             ขอใช้งานระบบ PC-Lan
         </td>
         <td>
             @Html.RadioButtonFor(m => m._ViewsvsITMS_SystemRegister.itPcLan_Type, "THAI ", new { @class = "", id = "txtF7itPcLan_TypeThai", name = "txtF7PcLan_Type", disabled = "disabled" }) <label>THAI</label><br>
-
             @Html.RadioButtonFor(m => m._ViewsvsITMS_SystemRegister.itPcLan_Type, "JAPAN ", new { @class = "", id = "txtF7itPcLan_TypeJapan", name = "txtF7PcLan_Type", disabled = "disabled" }) <label>JAPAN</label><br>
-
 
         </td>
     </tr>
@@ -111,7 +102,6 @@
         </td>
         <td>
             @Html.RadioButtonFor(m => m._ViewsvsITMS_SystemRegister.itMail_Type, "LOTUSNOTES", new { @class = "", id = "txtF7itMail_TypeLOTUSNOTES", name = "txtF7itMail_Type", disabled = "disabled" }) <label>LOTUS NOTES​</label><br>
-
             @Html.RadioButtonFor(m => m._ViewsvsITMS_SystemRegister.itMail_Type, "OUTLOOK", new { @class = "", id = "txtF7itMail_TypeOUTLOOK", name = "txtF7itMail_Type", disabled = "disabled" }) <label>OUTLOOK</label><br>
         </td>
     </tr>
@@ -130,15 +120,12 @@
             @Html.CheckBoxFor(model => model._ViewsvsITMS_SystemRegister.itInternet_choice4, new { @id = "txtF7itObjectiveDirectConcernOnThejob", disabled = "disabled" }) <label>4.Direct concern on the job เกี่ยวกับงานโดยตรง</label><br>
             @Html.CheckBoxFor(model => model._ViewsvsITMS_SystemRegister.itInternet_choice5, new { @id = "txtF7itObjectiveOutsideCommunicationByE", disabled = "disabled" })  <label>5.Outside communication by E-Mail ติดต่อ E-Mail ภายนอก​</label><br>
             @Html.CheckBoxFor(model => model._ViewsvsITMS_SystemRegister.itInternet_choice6, new { @id = "txtF7itObjectiveGeneralInformationT9", disabled = "disabled" }) <label>6.General Information ค้นคว้าทั่วไป (เฉพาะ T9)</label><br>
-
             @*@Html.RadioButtonFor(m => m._ViewsvsITMS_SystemRegister.itInternet_choice1, "TemporaryUser", new { @class = "", id = "txtF7itObjectiveTemporaryUser", name = "txtF7itInternet", disabled = "disabled" }) <label>1.Temporary User ขอใช้งานทั่วไป</label><br>
                 @Html.RadioButtonFor(m => m._ViewsvsITMS_SystemRegister.itInternet_choice2, "GeneralInformation", new { @class = "", id = "txtF7itObjectiveGeneralInformation", name = "txtF7itInternet", disabled = "disabled" }) <label>2.General Information ค้นคว้าทั่วไป</label><br>
                 @Html.RadioButtonFor(m => m._ViewsvsITMS_SystemRegister.itInternet_choice3, "ResearchfortheJob", new { @class = "", id = "txtF7itObjectiveResearchfortheJob", name = "txtF7itInternet", disabled = "disabled" }) <label>3.Research for the Job ค้นคว้าเกี่ยวกับงาน​</label><br>
                 @Html.RadioButtonFor(m => m._ViewsvsITMS_SystemRegister.itInternet_choice4, "DirectConcernOnThejob ", new { @class = "", id = "txtF7itObjectiveDirectConcernOnThejob", name = "txtF7itInternet", disabled = "disabled" }) <label>4.Direct concern on the job กี่ยวกับงานโดยตรง</label><br>
                 @Html.RadioButtonFor(m => m._ViewsvsITMS_SystemRegister.itInternet_choice5, "OutsideCommunicationByE-Mail", new { @class = "", id = "txtF7itObjectiveOutsideCommunicationByE", name = "txtF7itInternet", disabled = "disabled" }) <label>5.Outside communication by E-Mail ติดต่อ E-Mail ภายนอก​</label><br>
                 @Html.RadioButtonFor(m => m._ViewsvsITMS_SystemRegister.itInternet_choice6, "GeneralInformationT9", new { @class = "", id = "txtF7itObjectiveGeneralInformationT9", name = "txtF7itInternet", disabled = "disabled" }) <label>6.General Information ค้นคว้าทั่วไป (เฉพาะ T9)</label><br>*@
-
         </td>
     </tr>
 </table>
-

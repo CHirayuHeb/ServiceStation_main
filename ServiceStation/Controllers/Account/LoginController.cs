@@ -113,7 +113,8 @@ namespace ServiceStation.Controllers.Account
 
                             if (_svsServiceRequest != null)
                             {
-                                return RedirectToAction("Index", "RequestForm", new { id = _svsServiceRequest.srNo, vtype = "Edit", vForm = _svsServiceRequest.srFrom, vTeam = _svsServiceRequest.srType, vSubject = _svsServiceRequest.srSubject, vSrNo = _svsServiceRequest.srNo });
+                                //return RedirectToAction("Index", "RequestForm", new { id = _svsServiceRequest.srNo, vtype = "Edit", vForm = _svsServiceRequest.srFrom, vTeam = _svsServiceRequest.srType, vSubject = _svsServiceRequest.srSubject, vSrNo = _svsServiceRequest.srNo });
+                                return RedirectToAction("Index", "RequestForm", new { vSrNo = _svsServiceRequest.srNo });
                             }
                             else
                             {
@@ -205,7 +206,8 @@ namespace ServiceStation.Controllers.Account
 
                         if (_svsServiceRequest != null)
                         {
-                            return RedirectToAction("Index", "RequestForm", new { id = _svsServiceRequest.srNo, vtype = "Edit", vForm = _svsServiceRequest.srFrom, vTeam = _svsServiceRequest.srType, vSubject = _svsServiceRequest.srSubject, vSrNo = _svsServiceRequest.srNo });
+                            //return RedirectToAction("Index", "RequestForm", new { id = _svsServiceRequest.srNo, vtype = "Edit", vForm = _svsServiceRequest.srFrom, vTeam = _svsServiceRequest.srType, vSubject = _svsServiceRequest.srSubject, vSrNo = _svsServiceRequest.srNo });
+                            return RedirectToAction("Index", "RequestForm", new { vSrNo = _svsServiceRequest.srNo });
                         }
                         else
                         {
