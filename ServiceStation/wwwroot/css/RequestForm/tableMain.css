@@ -4,8 +4,8 @@
     overflow-x: auto;
     margin: 20px auto;
     /*background-color: #fff;*/
-    padding:5px;
-    margin-top:2px;
+    padding: 5px;
+    margin-top: 2px;
 }
 
 /* ตารางเต็มความกว้าง container */
@@ -44,6 +44,59 @@
         transition: 0.2s;
     }
 
-    /* โค้งมุมแถวสุดท้าย */
-    .purple-table tr:last-child td:first-child {
+/* โค้งมุมแถวสุดท้าย */
+/*.purple-table tr:last-child td:first-child {
         border-
+    }*/
+
+
+
+.table-container {
+    width: 100%;
+    /*max-height: 500px;*/
+    overflow-y: auto;
+    /*border: 1px solid #ccc;*/
+}
+
+
+.summarys {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 10px;
+    border-collapse: collapse;
+    width: 100%;
+    overflow-y: auto;
+    /*table-layout: fixed; /* ทำให้การจัดเรียงตารางเป็นแบบตายตัว */
+}
+
+    .summarys td, .summarys th {
+        border: 1px solid #E5E0FF;
+        /*padding-left: 8px;
+        padding-right: 8px;
+        padding-top: 4px;
+        padding-bottom: 4px;*/
+        padding: 4px;
+    }
+
+    .summarys tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    .summarys tr:hover {
+        background-color: #ddd;
+    }
+
+    .summarys th {
+        padding-top: 8px;
+        padding-bottom: 8px;
+        text-align: center;
+        background-color: #E5E0FF;
+        color: black;
+        vertical-align: baseline;
+    }
+
+    .summarys thead th {
+        position: sticky;
+        top: 0;
+        /*background-color: #007bff;
+        color: white;*/
+    }

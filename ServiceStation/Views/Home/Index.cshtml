@@ -58,7 +58,7 @@
                                 <div class="center fw-800" style="text-align:left;font-size:12px">Status Service</div>
                             </div>
                             <div class="col-25" style=" display: flex;align-items: center; ">
-                                @Html.DropDownListFor(m => m._ViewSearchData.v_StatusService,(IEnumerable<SelectListItem>)ViewBag.vbformStatus,"กรุณาเลือก",new { @class = "form-control", id = "ipStatus", autocomplete = "off", @style = "width:100%;font-size:12px" })
+                                @Html.DropDownListFor(m => m._ViewSearchData.v_StatusService, (IEnumerable<SelectListItem>)ViewBag.vbformStatus, "กรุณาเลือก", new { @class = "form-control", id = "ipStatus", autocomplete = "off", @style = "width:100%;font-size:12px" })
                             </div>
                             <div class="col-5 " style="">
                             </div>
@@ -144,105 +144,119 @@
                     <div class="grid-item fw-800 row" style="text-align:left;padding-left:10px;">
                         <div class="col-50">
                             <span style="font-size:14px">
-                                จำนวน
+                                จำนวนทั้งหมด
                                 <span style="color:royalblue">
                                     <span style="color:royalblue">
                                         @*@Model._ListsvsServiceRequest.Count()*@
-                                        @ViewBag.Listcount
+                                        @ViewBag.TotalCount
                                     </span>
                                 </span>
                                 แถว
                             </span>
                         </div>
                         <div class="col-50">
-                            <div class="pagination" style="text-align:right;padding-right: 10px;margin-top:2px;">
+
+                        </div>
+                    </div>
+                    <div class="row center table-container" style="align-items: center;max-height: 500px; ">
+                        <div class="pagination-container" style="text-align:right; margin-top:5px;margin-bottom:15px;">
+                            <div class="btn-group">
+                                @* ปุ่ม Previous *@
                                 @if (ViewBag.CurrentPage > 1)
                                 {
-                                    <a href="@Url.Action("Index", new { page = 1,
-                            v_serviceNo =  @ViewBag.v_serviceNo,
-                            v_NameReq = @ViewBag.v_NameReq,
-                            v_Dept = @ViewBag.v_Dept,
-                            v_serviceType = @ViewBag.v_serviceType,
-                            v_DateRequestFrom = @ViewBag.v_DateRequestFrom,
-                            v_DateRequestTo = @ViewBag.v_DateRequestTo,
-                            v_TargetDateFrom = @ViewBag.v_TargetDateFrom,
-                            v_TargetDateTo = @ViewBag.v_TargetDateTo,
-                            v_Operator = @ViewBag.v_Operator,
-                            v_ApproveBy = @ViewBag.v_ApproveBy,
-                            v_StatusService = @ViewBag.v_StatusService
-                                })" class="first">«</a>
-
+                                    <button type="submit" name="page" value="@(ViewBag.CurrentPage - 1)" form="formSearch" class="btn btn-outline-primary btn-sm">Prev</button>
                                 }
-                                @for (int i = ViewBag.StartPage; i <= ViewBag.EndPage; i++)
+
+                                @{
+                                    int currentPage = ViewBag.CurrentPage;
+                                    int totalPages = ViewBag.TotalPages;
+
+                                    // Logic คำนวณหน้ากลาง 3 หน้า
+                                    int startPage = Math.Max(1, currentPage - 1);
+                                    int endPage = Math.Min(totalPages, startPage + 2);
+
+                                    if (endPage - startPage < 2)
+                                    {
+                                        startPage = Math.Max(1, endPage - 2);
+                                    }
+                                }
+
+                                @* หน้าแรก *@
+                                @if (startPage > 1)
                                 {
-                                    <a href="@Url.Action("Index", new { page = i,
-                            v_serviceNo =  @ViewBag.v_serviceNo,
-                            v_NameReq = @ViewBag.v_NameReq,
-                            v_Dept = @ViewBag.v_Dept,
-                            v_serviceType = @ViewBag.v_serviceType,
-                            v_DateRequestFrom = @ViewBag.v_DateRequestFrom,
-                            v_DateRequestTo = @ViewBag.v_DateRequestTo,
-                            v_TargetDateFrom = @ViewBag.v_TargetDateFrom,
-                            v_TargetDateTo = @ViewBag.v_TargetDateTo,
-                            v_Operator = @ViewBag.v_Operator,
-                            v_ApproveBy = @ViewBag.v_ApproveBy,
-                            v_StatusService = @ViewBag.v_StatusService })" class="@(i == @ViewBag.CurrentPage ? "active" : "")">@i</a>
-                        }
+                                    <button type="submit" name="page" value="1" form="formSearch" class="btn btn-outline-primary btn-sm">1</button>
+                                    if (startPage > 2)
+                                    {
+                                        <span class="btn btn-sm disabled">...</span>
+                                    }
+                                }
+
+                                @* วนลูปหน้ากลาง (3 หน้า) *@
+                                @for (int i = startPage; i <= endPage; i++)
+                                {
+                                    <button type="submit" name="page" value="@i" form="formSearch"
+                                            class="btn btn-sm @(i == currentPage ? "btn-primary active" : "btn-outline-primary")"
+                                            style="margin: 0 2px;">
+                                        @i
+                                    </button>
+                                }
+
+                                @* หน้าสุดท้าย *@
+                                @if (endPage < totalPages)
+                                {
+                                    if (endPage < totalPages - 1)
+                                    {
+                                        <span class="btn btn-sm disabled">...</span>
+                                    }
+                                    <button type="submit" name="page" value="@totalPages" form="formSearch" class="btn btn-outline-primary btn-sm">@totalPages</button>
+                                }
+                                @* ปุ่ม Next *@
                                 @if (ViewBag.CurrentPage < ViewBag.TotalPages)
                                 {
-                                    <a href="@Url.Action("Index", new { page = ViewBag.TotalPages,
-                            v_serviceNo =  @ViewBag.v_serviceNo,
-                            v_NameReq = @ViewBag.v_NameReq,
-                            v_Dept = @ViewBag.v_Dept,
-                            v_serviceType = @ViewBag.v_serviceType,
-                            v_DateRequestFrom = @ViewBag.v_DateRequestFrom,
-                            v_DateRequestTo = @ViewBag.v_DateRequestTo,
-                            v_TargetDateFrom = @ViewBag.v_TargetDateFrom,
-                            v_TargetDateTo = @ViewBag.v_TargetDateTo,
-                            v_Operator = @ViewBag.v_Operator,
-                            v_ApproveBy = @ViewBag.v_ApproveBy,
-                            v_StatusService = @ViewBag.v_StatusService })" class="last">»</a>
+                                    <button type="submit" name="page" value="@(ViewBag.CurrentPage + 1)" form="formSearch" class="btn btn-outline-primary btn-sm">Next</button>
                                 }
                             </div>
                         </div>
-                    </div>
+                        <table class="summarys">
+                            <thead>
+                                <tr>
+                                    <th width="5%">No.</th>
+                                    <th>Service No.</th>
+                                    <th>Service Type</th>
+                                    <th>Name Request</th>
+                                    <th>Intercom</th>
+                                    <th>Dept.</th>
+                                    <th>Date/Time Request</th>
+                                    <th>Operator</th>
+                                    <th>Target Date</th>
+                                    @*<th>step</th>*@
+                                    <th width="13%">Status</th>
+                                    <th>Wait Approve By</th>
+                                    <th>View</th>
+                                    <th>DEL</th>
+                                </tr>
+                            </thead>
 
-                    <div class="table-container">
-                        <table class="purple-table">
-                            <tr>
-                                <th width="5%">No.</th>
-                                <th>Service No.</th>
-                                <th width="10%">Service Type</th>
-                                <th>Name Request</th>
-                                <th>Intercom</th>
-                                <th>Dept.</th>
-                                <th>Date/Time Request</th>
-                                <th>Operator</th>
-                                <th>Target Date</th>
-                                <th width="10%">Status</th>
-                                <th>Wait Approve By</th>
-                                <th>View</th>
-                                <th>DELETE</th>
-                            </tr>
-                            <tr>
-                                @if (Model._ListsvsServiceRequest != null)
+
+                            @*// <tr>*@
+                            @{
+                                // ดึงค่าเลขหน้าและขนาดต่อหน้ามาคำนวณ
+
+                                int pageSize = 20; // ต้องตรงกับใน Controller
+                                int currentPage1 = ViewBag.CurrentPage ?? 1;
+                                int rowNumber = (currentPage1 - 1) * pageSize;
+                            }
+
+                            @if (Model._ListsvsServiceRequest != null)
+                            {
+                                @foreach (var item in @Model._ListsvsServiceRequest)
                                 {
-                                    var row = 0;
-
-                                    int pageSize = 20; // หรือจำนวนที่คุณใช้แสดงต่อหน้า
-                                    int startRow = ((int)ViewBag.CurrentPage - 1) * pageSize;
-                                    int rowNumber = 1;
-
-
-                                    @foreach (var item in @Model._ListsvsServiceRequest)
-                                    {
+                                    rowNumber++; // เพิ่มค่าทีละ 1 ในทุกๆ รอบที่วน loop
                                     <tr align="Center">
                                         @*<td>@(row += 1)</td>*@
-                                        <td>@(startRow + rowNumber)</td>
+                                        <td>@rowNumber</td>
                                         <td class="center">
-
                                             <p style="font-size:10px;">@item.srServiceNo</p>
-
                                         </td>
                                         <td>@item.srSubject</td>
                                         <td>@item.srRequestName</td>
@@ -261,50 +275,45 @@
                                         <td>
                                             @item.srDesiredDate
                                         </td>
+                                        @*<td>
+                                                @(@item.srStep += 1)
+
+                                            </td>*@
                                         <td>
-                                            @item.srStatus
+                                            @*<span style="font-weight:600;"></span>*@
+                                            <span style="@(item.srStep ==5 ?"color:green;font-weight:600;font-size:11px;":"color:#0056b3;" )  ">
+                                                @(Model?._ListViewsvsMastFlowApprove?.FirstOrDefault(x => x.mfStep == item.srStep)?.mfSubject ?? "")
+                                            </span>
                                         </td>
                                         <td>
-                                            @if (@item.srStep < 5)
-                                            {
-                                                @item.srApproveEmpcode <span> </span> @item.srApproveName
-                                            }
+                                            <span style="@(item.srStep < 5 ? "" :"display:none" )"> @item.srApproveEmpcode  @item.srApproveName</span>
                                         </td>
                                         <td>
-                                            @*string id, string vtype, string vForm, string vTeam, string vSubject, string vSrNo*@
-                                            @*<a href="@Url.Action("Index", "RequestForm", new { id = @item.srRequestBy,vtype ="Edit",vForm=@item.srFrom,vTeam=@item.srType,vSubject=@item.srSubject,vSrNo=@item.srNo })" target="_blank" style="font-size:22px;text-decoration: none;">
-                                                &#x1F50E;
-                                            </a>*@
+
                                             <a href="@Url.Action("Index", "RequestForm", new { vSrNo = @item.srNo})" target="_blank" style="font-size:22px;text-decoration: none;">
                                                 &#x1F50E;
                                             </a>
 
-                                            @*<input type="button" style="font-size:18px" value="&#x1F50E;" onclick="GoNewRequest('@item.srRequestBy','Edit','@Url.Action("Index", "RequestForm")','@item.srFrom','@item.srType','@item.srSubject','@item.srNo')">*@
                                         </td>
                                         <td>
-                                            @if (_EmpCode == @item.srRequestBy && @item.srStep < 2)
-                                            {
-                                                <input type="button" style="font-size:14px" value="&#x274C" onclick="DeleteData('@item.srNo','@Url.Action("DeteleData","RequestForm")')">
-                                            }
-                                            else
-                                            {
-                                                <input type="button" style="font-size:14px" value="&#x274C" disabled />
-                                            }
+
+                                            <input type="button" style="font-size:14px; @(_EmpCode == @item.srRequestBy && @item.srStep < 2 ? "":"display:none")" value="&#x274C" onclick="DeleteData('@item.srNo','@Url.Action("DeteleData","RequestForm")')">
+
 
                                         </td>
                                     </tr>
-                                    rowNumber++;
-                                }
-                                }
-                                </tr>
 
-                            </table>
-                        </div>
+                                }
+                            }
+                            @*</tr>*@
+
+                        </table>
                     </div>
+
                 </div>
+            </div>
+        }
 
-
-            }
-        @*</form>*@
     </div>
 </div>
+

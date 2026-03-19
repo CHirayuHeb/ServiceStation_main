@@ -30,6 +30,8 @@ namespace ServiceStation.Models.Common
   
      
         public ViewsvsMastFlowApprove _ViewsvsMastFlowApprove { get; set; }
+        public List<ViewsvsMastFlowApprove> _ListViewsvsMastFlowApprove { get; set; }
+
         public ViewsvsHistoryApproved _ViewsvsHistoryApproved { get; set; }
         public List<ViewsvsHistoryApproved> _ListViewsvsHistoryApproved { get; set; }
 
