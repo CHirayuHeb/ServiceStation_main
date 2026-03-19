@@ -55,14 +55,14 @@
             <td id="tbottom">ที่อยู่ของไฟล์ที่ต้องการกู้ข้อมูล</td>
             <td id="insertdata">
                 @*<input class="form-control" type="text" autocomplete="off" style="width:100%; height:30px;text-align:left;font-size:14px" asp-for="_ViewsvsDataRestore.drGroupUser" id="txtF2GroupUser" maxlength="255" />*@
-                @Html.TextAreaFor(model => model._ViewsvsDataRestore.drGroupUser, new { @class = "form-control", style = "font-size:12px;", @cols = 40, @rows = 2, @id = "txtF2GroupUser", maxlength = "255" })
-
+                @*@Html.TextAreaFor(model => model._ViewsvsDataRestore.drGroupUser, new { @class = "form-control", style = "font-size:12px;field-sizing: content;min-height:50px", @cols = 40, @id = "txtF2GroupUser", maxlength = "255" })*@
+                @Html.TextAreaFor(model => model._ViewsvsDataRestore.drGroupUser,new { @class = "form-control",style = "font-size:12px; width:100%; word-wrap:break-word;  overflow-wrap:break-word; min-height:50px;", @cols = 40, @rows = 1, @id = "txtF2GroupUser",maxlength = "255"})
             </td>
         </tr>
         <tr align="left" height="20">
             <td id="tbottom">ชื่อไฟล์</td>
             <td id="insertdata">
-                @Html.TextAreaFor(model => model._ViewsvsDataRestore.drKeepFile, new { @class = "form-control", style = "font-size:12px;", @cols = 40, @rows = 3, @id = "txtF2KeepFile" , maxlength = "255" })
+                @Html.TextAreaFor(model => model._ViewsvsDataRestore.drKeepFile, new { @class = "form-control", style = "font-size:12px; width:100%; word-wrap:break-word;  overflow-wrap:break-word; min-height:50px;", @cols = 40, @rows = 3, @id = "txtF2KeepFile" , maxlength = "255" })
                 @*<input class="form-control" type="text" autocomplete="off" style="width:70%; height:30px;text-align:left;font-size:14px" asp-for="_ViewsvsDataRestore.drKeepFile" id="txtF2KeepFile" />*@
             </td>
             @*<tr align="left" height="20">
