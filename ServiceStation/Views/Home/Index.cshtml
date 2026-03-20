@@ -155,68 +155,68 @@
                             </span>
                         </div>
                         <div class="col-50">
+                            <div class="pagination-container" style="text-align:right; margin-top:0px;margin-bottom:0px;">
+                                <div class="btn-group">
+                                    @* ปุ่ม Previous *@
+                                    @if (ViewBag.CurrentPage > 1)
+                                    {
+                                        <button type="submit" name="page" value="@(ViewBag.CurrentPage - 1)" form="formSearch" class="btn btn-outline-primary btn-sm">Prev</button>
+                                    }
 
+                                    @{
+                                        int currentPage = ViewBag.CurrentPage;
+                                        int totalPages = ViewBag.TotalPages;
+
+                                        // Logic คำนวณหน้ากลาง 3 หน้า
+                                        int startPage = Math.Max(1, currentPage - 1);
+                                        int endPage = Math.Min(totalPages, startPage + 2);
+
+                                        if (endPage - startPage < 2)
+                                        {
+                                            startPage = Math.Max(1, endPage - 2);
+                                        }
+                                    }
+
+                                    @* หน้าแรก *@
+                                    @if (startPage > 1)
+                                    {
+                                        <button type="submit" name="page" value="1" form="formSearch" class="btn btn-outline-primary btn-sm">1</button>
+                                        if (startPage > 2)
+                                        {
+                                            <span class="btn btn-sm disabled">...</span>
+                                        }
+                                    }
+
+                                    @* วนลูปหน้ากลาง (3 หน้า) *@
+                                    @for (int i = startPage; i <= endPage; i++)
+                                    {
+                                        <button type="submit" name="page" value="@i" form="formSearch"
+                                                class="btn btn-sm @(i == currentPage ? "btn-primary active" : "btn-outline-primary")"
+                                                style="margin: 0 2px;">
+                                            @i
+                                        </button>
+                                    }
+
+                                    @* หน้าสุดท้าย *@
+                                    @if (endPage < totalPages)
+                                    {
+                                        if (endPage < totalPages - 1)
+                                        {
+                                            <span class="btn btn-sm disabled">...</span>
+                                        }
+                                        <button type="submit" name="page" value="@totalPages" form="formSearch" class="btn btn-outline-primary btn-sm">@totalPages</button>
+                                    }
+                                    @* ปุ่ม Next *@
+                                    @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+                                    {
+                                        <button type="submit" name="page" value="@(ViewBag.CurrentPage + 1)" form="formSearch" class="btn btn-outline-primary btn-sm">Next</button>
+                                    }
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="row center table-container" style="align-items: center;max-height: 500px; ">
-                        <div class="pagination-container" style="text-align:right; margin-top:5px;margin-bottom:15px;">
-                            <div class="btn-group">
-                                @* ปุ่ม Previous *@
-                                @if (ViewBag.CurrentPage > 1)
-                                {
-                                    <button type="submit" name="page" value="@(ViewBag.CurrentPage - 1)" form="formSearch" class="btn btn-outline-primary btn-sm">Prev</button>
-                                }
-
-                                @{
-                                    int currentPage = ViewBag.CurrentPage;
-                                    int totalPages = ViewBag.TotalPages;
-
-                                    // Logic คำนวณหน้ากลาง 3 หน้า
-                                    int startPage = Math.Max(1, currentPage - 1);
-                                    int endPage = Math.Min(totalPages, startPage + 2);
-
-                                    if (endPage - startPage < 2)
-                                    {
-                                        startPage = Math.Max(1, endPage - 2);
-                                    }
-                                }
-
-                                @* หน้าแรก *@
-                                @if (startPage > 1)
-                                {
-                                    <button type="submit" name="page" value="1" form="formSearch" class="btn btn-outline-primary btn-sm">1</button>
-                                    if (startPage > 2)
-                                    {
-                                        <span class="btn btn-sm disabled">...</span>
-                                    }
-                                }
-
-                                @* วนลูปหน้ากลาง (3 หน้า) *@
-                                @for (int i = startPage; i <= endPage; i++)
-                                {
-                                    <button type="submit" name="page" value="@i" form="formSearch"
-                                            class="btn btn-sm @(i == currentPage ? "btn-primary active" : "btn-outline-primary")"
-                                            style="margin: 0 2px;">
-                                        @i
-                                    </button>
-                                }
-
-                                @* หน้าสุดท้าย *@
-                                @if (endPage < totalPages)
-                                {
-                                    if (endPage < totalPages - 1)
-                                    {
-                                        <span class="btn btn-sm disabled">...</span>
-                                    }
-                                    <button type="submit" name="page" value="@totalPages" form="formSearch" class="btn btn-outline-primary btn-sm">@totalPages</button>
-                                }
-                                @* ปุ่ม Next *@
-                                @if (ViewBag.CurrentPage < ViewBag.TotalPages)
-                                {
-                                    <button type="submit" name="page" value="@(ViewBag.CurrentPage + 1)" form="formSearch" class="btn btn-outline-primary btn-sm">Next</button>
-                                }
-                            </div>
-                        </div>
+                      
                         <table class="summarys">
                             <thead>
                                 <tr>
