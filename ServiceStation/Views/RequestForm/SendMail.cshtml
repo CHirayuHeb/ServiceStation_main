@@ -1,16 +1,13 @@
 ﻿@using System.Security.Claims;
 @model ServiceStation.Models.Common.Class
-
 @{
     Layout = null;
 }
 @*New Request*@
 <div id="ResultSendMail">
-
     @*@Html.HiddenFor(m => m.htEmpCode, new { id = "docno" })
         @Html.HiddenFor(m => m.htStep, new { id = "step" })
         @Html.HiddenFor(m => m.htTo, new { id = "EmailTo" })*@
-
     <div class="modal-header" style="margin-top:1px">
         <h5 class="modal-title">
             @*<input asp-for="htStep" type="text" class="
@@ -32,23 +29,18 @@
                     @ViewBag.vWststus
                 }
 
-
             </span>
             @*<input id="txtSendmailStatus" />*@
-
             <input id="txtvFSM" value="@ViewBag.vForm" style="display:none" />
             <input id="txtvFFSN" asp-for="_ViewsvsServiceRequest.srServiceNo" style="display:none" />
             <input id="txtvFSN" value="@ViewBag.SRno" style="display:none" />
             @*<input id="txtvFSssss" asp-for="_ViewsvsHistoryApproved.htStatus" style="display:none"  style="display:none" />*@
-
             @*<span style="font-weight: bold; font-size: 18px;"> @Html.DisplayFor(model => model.htStatus)</span>
                 input asp-for="htStatus" type="text" class="form-control" id="txthtStatus"  style="display:none" />*@
         </h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
     </div>
-
     <div class="p-2-modify" style="width: 100%; border: 1px grey; padding-top: 3px;font-size:10px">
-
         <div class="input-group ig-property">
             <span class="input-group-text w-25">From.</span>
             <input type="text" class="form-control" id="txtFrom" asp-for="_ViewsvsHistoryApproved.htFrom" readonly />
@@ -64,41 +56,24 @@
                 {
                     <span style="padding-left:5px">CS up.</span>
                 }
-
             </span>
             <input type="text" class="form-control" id="searchInputTO" asp-for="_ViewsvsHistoryApproved.htTo" required style="@(Model._ViewsvsServiceRequest.srStep ==1 ? "pointer-events: none;" : "")" />
-            @*@if (@ViewBag.step == 2)
-                {
-                    @Html.DropDownListFor(model => model.htTo, (SelectList)ViewBag.HrApprove, "--select email--", new { @class = "form-control", @style = "font-size:12px", id = "searchInputTO" })
-                }
-                else
-                {
-                    <input asp-for="htTo" type="text" class="form-control" id="searchInputTO" />
-                }*@
-
-
-            @*<input asp-for="htTo" type="text" class="form-control" id="searchInputTO" />*@
-
-
 
         </div>
         <div class="input-group ig-property">
             <span class="input-group-text w-25">CC.</span>
-            @*<input asp-for="htCC" class="form-control" id="searchInputCC" />*@
             <textarea class="form-control" id="searchInputCC" rows="4" cols="50" asp-for="_ViewsvsHistoryApproved.htCC" required></textarea>
         </div>
-        @*<div class="input-group ig-property">
-                <span class="input-group-text w-25">CC Dept.</span>
-               <input asp-for="htCC" class="form-control" id="searchInputCC" />
-                <textarea class="form-control" id="searchInputCCDept" rows="4" cols="50" asp-for="_ViewsvsHistoryApproved.htCCDept"></textarea>
-            </div>*@
+
         <div style="margin:5px">
-            <span style=" font-size: 14px;">วันที่ :  @ViewBag.vDate </span>
+            @*<span style=" font-size: 14px;">วันที่ :  @ViewBag.vDate </span>*@
+            <span style=" font-size: 14px;">
+                วันที่ :
+                @Html.DisplayFor(model => model._ViewsvsHistoryApproved.htDate, new { @class = "text-control", @style = "font-size:14px;" })
 
-
-
+                @Html.DisplayFor(model => model._ViewsvsHistoryApproved.htTime, new { @class = "text-control", @style = "font-size:14px;" })
+            </span>
         </div>
-
         <div class="d-flex justify-content-center" style="width: 100%; text-align: center; padding-top: 5px; padding-bottom: 5px;">
             <div class="p-1-modify" style="width: 100%; border: 1px grey;   ">
                 <div class="form-check form-check-inline">
@@ -111,7 +86,6 @@
                         @Html.RadioButtonFor(m => m._ViewsvsHistoryApproved.htStatus, "Approve", new { @class = "", id = "StatusApp", onclick = "CheckDis('Approve')", required = "required", @style = "height:20px;width:20px;" }) <label>Approve</label><br />
                     }
 
-
                 </div>
                 <div class="form-check form-check-inline">
                     @if (Model._ViewsvsServiceRequest.srStep == 0 || @ViewBag.vWststus == "Done" || @ViewBag.vWststus == "Cancel" || @ViewBag.vWststus == "Transfer")
@@ -122,30 +96,16 @@
                     {
                         @Html.RadioButtonFor(m => m._ViewsvsHistoryApproved.htStatus, "Disapprove", new { @class = "", id = "StatusApp", onclick = "CheckDis('Disapprove')", @style = "height:20px;width:20px;" }) <label>Disapprove</label><br />
                     }
-
                 </div>
-                @*<div class="form-check form-check-inline">
-                        @if (Model._ViewsvsServiceRequest.srStep == 2)
-                        {
-                            @Html.RadioButtonFor(m => m._ViewsvsHistoryApproved.htStatus, "Cancel", new { @class = "", id = "StatusApp", onclick = "CheckDis('Cancel')", @style = "height:20px;width:20px;" }) <label style="color:red">Cancel</label><br />
-                        }
-                        else
-                        {
-                            @Html.RadioButtonFor(m => m._ViewsvsHistoryApproved.htStatus, "Cancel", new { @class = "", id = "StatusApp", onclick = "CheckDis('Cancel')", @style = "height:20px;width:20px;display:none;" }) <label></label><br />
-                        }
 
-                    </div>*@
             </div>
         </div>
         <div class="input-group ig-property">
             <span class="input-group-text w-25">Remark</span>
-            @*<input asp-for="htCC" class="form-control" id="searchInputCC" />*@
             <textarea class="form-control" id="Remark" rows="2" cols="50" asp-for="_ViewsvsHistoryApproved.htRemark"></textarea>
         </div>
 
-
     </div>
-
 
     <div class=" panel-group ir fadeInUp animated wowload animated" style="visibility: visible; animation-name: fadeInUp; margin-bottom: 5px; display:none">
         <div class="panel panel-default property">
@@ -167,31 +127,17 @@
         </div>
     </div>
 
-
     <div class="modal-footer" style="width: 100%;">
-        @*<input type="submit" value="Send" class="btn btn-success" />*@
-        @*<a href="#" id="btnSubmit" style="width: 100px;" class="btn btn-success btn-block">
-            <span>Send</span>
-        </a>*@
-        @*<a href="#" id="btnSubmit" style="width: 100px;" class="btn btn-success btn-block">
-            <span>Send</span>
-        </a>*@
-        @if (@Model._ViewsvsServiceRequest.srStep < 5)
-        {
-            <button type="button" class="btn btn-success" data-bs-dismiss="modal" onclick="sendmailsubmit('@Url.Action("SendMail_post", "RequestForm", new { vform = @ViewBag.vForm,vSR= @ViewBag.SRno})')">Send mail</button>
-            @*<button type="button" class="btn btn-success" data-bs-dismiss="modal" onclick="sendmailsubmit('@Url.Action("SendMail_post", "RequestForm")')">Send mail</button>*@
-        }
 
-
+        @*@if (@Model._ViewsvsServiceRequest.srStep < 5)
+            {
+                <button type="button" style="@(@Model._ViewsvsServiceRequest.srStep < 5 ? "":"display:none;")" class="btn btn-success" data-bs-dismiss="modal" onclick="sendmailsubmit('@Url.Action("SendMail_post", "RequestForm", new { vform = @ViewBag.vForm,vSR= @ViewBag.SRno})')">Send mail</button>
+            }*@
+        <button type="button" style="@(@Model._ViewsvsServiceRequest.srStep < 5 ? "":"display:none;")" class="btn btn-success" data-bs-dismiss="modal" onclick="sendmailsubmit('@Url.Action("SendMail_post", "RequestForm", new { vform = @ViewBag.vForm,vSR= @ViewBag.SRno})')">Send mail</button>
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-
     </div>
 
-
-
 </div>
-
-
 
 <script type="text/javascript">
         $(function () {

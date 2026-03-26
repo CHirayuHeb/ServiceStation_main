@@ -45,10 +45,15 @@
             }
             @if (Model._ViewsvsServiceRequest.srStep <= 2)
             {
-                <button class="button btnOrange" style="width:130px;" onclick="sendMail($('#txtSRno').val(),'@Url.Action("History","RequestForm")')">
+                <button class="button btnOrange" style="width:130px;" onclick="sendMail($('#txtSRno').val(),'@Url.Action("SendMailDetail","RequestForm")')">
                     <img src="~/images/direct.png" style="width:30px;height:30px;padding-right:5px;margin-right:8px" />
                     ส่งคำร้อง
                 </button>
+
+                @*<button class="button btnOrange" style="width:130px;" onclick="sendMail($('#txtSRno').val(),'@Url.Action("History","RequestForm")')">
+                    <img src="~/images/direct.png" style="width:30px;height:30px;padding-right:5px;margin-right:8px" />
+                    ส่งคำร้อง
+                </button>*@
             }
             @if (Model._ViewsvsServiceRequest.srStep > 2)
             {
@@ -57,9 +62,9 @@
                     แจ้งสถานะ
                 </button>
                 @*<button class="button btnOrange" style="width:150px;" onclick="sendMailWorker($('#txtSRno').val(),'@Url.Action("SendMail","RequestForm")')">
-                        <img src="~/images/bell.png" style="width:38px;height:30px;padding-right:5px;margin-right:8px" />
-                        แจ้งสถานะ
-                    </button>*@
+                <img src="~/images/bell.png" style="width:38px;height:30px;padding-right:5px;margin-right:8px" />
+                แจ้งสถานะ
+            </button>*@
             }
         </div>
     </div>
@@ -238,12 +243,8 @@
         <div class="modal modal-lg fade" id="myModal1" style="background-color:#4f4b4b4d;" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    @*<div>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>*@
                     <div class="modal-body" id="myModalBodyDiv1">
-                        @*@await Html.PartialAsync("SendMail.cshtml", Model)*@
-                        @*Search Content Change to SendMail*@
+                   
                     </div>
                 </div>
             </div>

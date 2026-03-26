@@ -56,7 +56,7 @@ namespace ServiceStation.Controllers.RequestForm
                 if (mmSecCode != null && msSubNo != null)
                 {
                     vSubject = _IT.svsMastServiceSub.Where(x => x.msSubNo == msSubNo).Select(x => (x.msSubNameEN ?? "") + " " + (x.msSubNameTH ?? "")).FirstOrDefault();
-                    vForm = _IT.svsMastServiceSub.Where(x => x.msSubNo == msSubNo).Select(x=>x.msFrom).FirstOrDefault();
+                    vForm = _IT.svsMastServiceSub.Where(x => x.msSubNo == msSubNo).Select(x => x.msFrom).FirstOrDefault();
                     vTeam = mmSecCode;
 
                 }
@@ -73,7 +73,7 @@ namespace ServiceStation.Controllers.RequestForm
 
                 }
 
-                
+
                 ViewBag.vTeam = vTeam; // mmSecCode !=  null ? mmSecCode : vTeam;
                 ViewBag.vForm = vForm; //vSrNo != null ? _IT.svsServiceRequest.Where(x => x.srNo == int.Parse(vSrNo)).Select(y => y.srFrom).FirstOrDefault() : vForm;
                 ViewBag.vSubject = vSubject; //  vSubject == null ? "" : vSubject;
@@ -108,14 +108,14 @@ namespace ServiceStation.Controllers.RequestForm
                     ViewBag.listTypeUser = _listofTypeUser;
                 }
 
-                
+
                 ViewAccEMPLOYEE vAcc = new ViewAccEMPLOYEE();
                 @class._ViewsvsServiceRequest = new ViewsvsServiceRequest();
-              
+
                 if (vSrNo == null)
                 {
                     @class._ViewAccEMPLOYEE = _HRMS.AccEMPLOYEE.Where(x => x.EMP_CODE == _UserId).FirstOrDefault();
-                    @class._ViewsvsServiceRequest.srServiceNo = "";
+                    @class._ViewsvsServiceRequest.srServiceNo = "wait";
                     @class._ViewsvsServiceRequest.srRequestBy = @class._ViewAccEMPLOYEE.EMP_CODE;
                     @class._ViewsvsServiceRequest.srRequestName = @class._ViewAccEMPLOYEE.NICKNAME;
                     @class._ViewsvsServiceRequest.srIntercom = @class._ViewAccEMPLOYEE.INTERCOMNO;
@@ -658,10 +658,7 @@ namespace ServiceStation.Controllers.RequestForm
                 v_status = @classs._ViewsvsServiceRequest.srStatus;
                 //partialUrl = Url.Action("SendMailWorker", "RequestForm");
             }
-            else
-            {
-                // partialUrl = Url.Action("SendMail", "RequestForm", new { @class = @classs });
-            }
+
             List<ViewsvsHistoryApproved> _listHistory = new List<ViewsvsHistoryApproved>();
 
             partialUrl = Url.Action("SendMail", "RequestForm", new { @class = @classs });
@@ -705,9 +702,6 @@ namespace ServiceStation.Controllers.RequestForm
                 }
 
 
-
-
-
                 return Json(new { status = "hasHistory", listHistory = _listHistory, partial = partialUrl, NameIssue = NameIssue });
             }
 
@@ -716,29 +710,12 @@ namespace ServiceStation.Controllers.RequestForm
 
 
 
-        [Authorize("Checked")]
+        // [Authorize("Checked")]
         //[HttpPost]
         public ActionResult SendMail(Class @classs, string vform)
         {
             int docno = @classs._ViewsvsServiceRequest.srNo;
             var vSR = @classs._ViewsvsServiceRequest.srServiceNo != null ? @classs._ViewsvsServiceRequest.srServiceNo : "wait";
-            //F3 step working spare
-            //if (vform == "F3" && @classs._ViewsvsServiceRequest.srStep ==3)
-            //{
-            //    var v_empOperator = _IT.svsServiceRequest.Where(x => x.srNo == docno).Select(x => x.srApproveEmpcode).FirstOrDefault();
-            //    var v_emailFrom1 = _IT.rpEmails.Where(x => x.emEmpcode == v_empOperator).Select(p => p.emName_M365).FirstOrDefault();
-            //    @classs._ViewsvsHistoryApproved.htFrom = v_emailFrom1;
-
-            //    var vNicnameIssue = _IT.svsServiceRequest.Where(x => x.srNo == docno).Select(x => x.srRequestName).FirstOrDefault();
-            //    //var vNicnameIssue = _IT.svsMastServiceMain.Where(x => x.mmSecCode == @classs._ViewsvsServiceRequest.srType).Select(x => x.mmResponsible).FirstOrDefault();
-            //    var vEMPissue = _HRMS.AccEMPLOYEE.Where(x => x.NICKNAME == vNicnameIssue && x.QUIT_CODE == null).Select(x => x.EMP_CODE).FirstOrDefault();
-            //    @classs._ViewsvsHistoryApproved.htTo = _IT.rpEmails.Where(x => x.emEmpcode == vEMPissue).Select(x => x.emName_M365).FirstOrDefault();
-
-            //}
-            //else
-            //{
-
-            // var vSR = @classs._ViewsvsServiceRequest.srServiceNo != null ? @classs._ViewsvsServiceRequest.srServiceNo : "wait";
             @classs._ViewsvsHistoryApproved = new ViewsvsHistoryApproved();
             @classs._ViewsvsHistoryApproved.htTo = "";
 
@@ -751,11 +728,6 @@ namespace ServiceStation.Controllers.RequestForm
             @classs._ViewsvsHistoryApproved.htFrom = _IT.rpEmails.Where(x => x.emEmpcode == _UserId).Select(x => x.emName_M365).FirstOrDefault(); ;
 
 
-            //var v_emailFrom = _IT.rpEmails.Where(x => x.emEmpcode == vIssue).Select(p => p.emName_M365).FirstOrDefault(); //chg to m365
-            //@classs._ViewsvsHistoryApproved.htFrom = v_emailFrom;
-
-
-            //var v_Status = _IT.svsServiceRequest.Where(x => x.srNo == docno ).Select(x => x.srs).FirstOrDefault();
             int v_Step = _IT.svsServiceRequest.Where(x => x.srNo == docno).Select(x => x.srStep).FirstOrDefault();
 
             var v_From = _IT.svsHistoryApproved
@@ -792,12 +764,7 @@ namespace ServiceStation.Controllers.RequestForm
                     }
                     else
                     {
-                        //var max = v_srNo.
                         var max0 = _IT.svsServiceRequest.Where(x => x.srServiceNo != "wait").FirstOrDefault();
-                        //var max1 = _IT.svsServiceRequest.Where(x => x.srServiceNo != "wait") != null ? _IT.svsServiceRequest.Where(x => x.srServiceNo != "wait" && x.srServiceNo != null).OrderByDescending(p => p.srServiceNo.Substring(4, 5)).Select(p => p.srServiceNo.Substring(4, 5)).First() : null;
-                        //var max = _IT.svsServiceRequest.Where(x => x.srServiceNo != "wait" && x.srServiceNo !=null).OrderByDescending(p => p.srServiceNo.Substring(4, 5)).Select(p => p.srServiceNo.Substring(4, 5)).First();
-
-                        //var max = _IT.svsServiceRequest.Where(x=>x.srServiceNo != "wait").Select(p => p.srServiceNo.Substring(4, 5)).FirstOrDefault(); //_IT.svsServiceRequest.Where(x => x != null && x.srServiceNo != "wait").Select(p => p.srServiceNo.Substring(2, 4)).FirstOrDefault();
                         if (max0 != null)
                         {
                             var max = _IT.svsServiceRequest.Where(x => x.srServiceNo != "wait" && x.srServiceNo != null).OrderByDescending(p => p.srServiceNo.Substring(4, 5)).Select(p => p.srServiceNo.Substring(4, 5)).First();
@@ -813,19 +780,12 @@ namespace ServiceStation.Controllers.RequestForm
                     @classs._ViewsvsServiceRequest.srServiceNo = vSR;
 
                 }
-                //else if (vform == "F3" && @classs._ViewsvsServiceRequest.srStep == 3)
-                //{
 
-                //}
                 else if (@classs._ViewsvsServiceRequest.srStep == 3 && (@classs._ViewsvsServiceRequest.srStatus.Contains("Done") || @classs._ViewsvsServiceRequest.srStatus.Contains("Cancel")))
                 {
-
                     var vNicnameIssue = _IT.svsServiceRequest.Where(x => x.srNo == docno).Select(x => x.srRequestName).FirstOrDefault();
-                    //var vNicnameIssue = _IT.svsMastServiceMain.Where(x => x.mmSecCode == @classs._ViewsvsServiceRequest.srType).Select(x => x.mmResponsible).FirstOrDefault();
                     var vEMPissue = _HRMS.AccEMPLOYEE.Where(x => x.NICKNAME == vNicnameIssue && x.QUIT_CODE == null).Select(x => x.EMP_CODE).FirstOrDefault();
                     @classs._ViewsvsHistoryApproved.htTo = _IT.rpEmails.Where(x => x.emEmpcode == vEMPissue).Select(x => x.emName_M365).FirstOrDefault();
-
-
                 }
                 else if (@classs._ViewsvsServiceRequest.srStep == 3 && @classs._ViewsvsServiceRequest.srStatus.Contains("Transfer"))
                 {
@@ -843,6 +803,27 @@ namespace ServiceStation.Controllers.RequestForm
             ViewBag.vForm = vform != null ? vform : @classs._ViewsvsServiceRequest.srFrom;
             ViewBag.SRno = vSR;
             ViewBag.vDate = DateTime.Now.ToString("yyyy/MM/dd") + " " + DateTime.Now.ToString("HH:mm:ss");
+            return PartialView("SendMail", @classs);
+        }
+
+
+        public ActionResult SendMailDetail(Class @classs)
+        {
+            string _UserId = User.Claims.FirstOrDefault(s => s.Type == "UserId")?.Value;
+            @classs._ViewsvsHistoryApproved = new ViewsvsHistoryApproved();
+            @classs._ViewsvsHistoryApproved.htFrom = _IT.rpEmails.Where(x => x.emEmpcode == _UserId).Select(x => x.emName_M365).FirstOrDefault(); ;
+
+            if (@classs._ViewsvsServiceRequest.srStep == 1) // Waiting for approval CS Up of Dept.
+            {
+                var EMPCODE_CsIS = _IT.svsMastServiceMain.Where(x => x.mmSecCode == @classs._ViewsvsServiceRequest.srType).Select(x => x.mmEmpCode).First();
+                @classs._ViewsvsHistoryApproved.htTo = _IT.rpEmails.Where(x => x.emEmpcode == EMPCODE_CsIS).Select(x => x.emName_M365).FirstOrDefault(); ;
+            }
+
+            @classs._ViewsvsHistoryApproved.htStatus = "Approve";
+            @classs._ViewsvsHistoryApproved.htDate = DateTime.Now.ToString("yyyy/MM/dd");
+            @classs._ViewsvsHistoryApproved.htTime = DateTime.Now.ToString("HH:mm:ss");
+
+
             return PartialView("SendMail", @classs);
         }
 
@@ -1095,7 +1076,7 @@ namespace ServiceStation.Controllers.RequestForm
                     catch (Exception ex)
                     {
                         config = "E";
-                        msg = "Please check Email send to !!!!";
+                        msg = "Please check Email send to !!!!"+ ex.Message;
                         return Json(new { c1 = config, c2 = msg });
                     }
                 }
@@ -1113,7 +1094,11 @@ namespace ServiceStation.Controllers.RequestForm
                         }
                     }
 
-                    @class._ViewsvsServiceRequest.srServiceNo = vSR;
+                    //@class._ViewsvsServiceRequest.srServiceNo = vSR;
+                    @class._ViewsvsServiceRequest.srServiceNo = i_Step == 3 ? runSRNumber(@class._ViewsvsServiceRequest.srServiceNo) : @class._ViewsvsServiceRequest.srServiceNo;
+
+
+
                     getSrNo = Save(@class, i_Step);  //save main
                     getSForm = SaveForm(@class, vform, getSrNo[0]); //save form
 
@@ -1358,6 +1343,17 @@ namespace ServiceStation.Controllers.RequestForm
             //getSForm
 
         }
+
+        public string runSRNumber(string vSR)
+        {
+            if (vSR == "wait")
+            {
+                var max = _IT.svsServiceRequest.Where(x => x.srServiceNo != "wait" && x.srServiceNo != null).OrderByDescending(p => p.srServiceNo.Substring(4, 5)).Select(p => p.srServiceNo.Substring(4, 5)).First();
+                vSR = "SR" + DateTime.Now.ToString("yy") + String.Format("{0:D5}", (int.Parse(max) + 1));
+            }
+            return vSR;
+        }
+
 
 
         public JsonResult SavePageForm(Class @class, List<IFormFile> files, List<IFormFile> filesw, string vform, List<IFormFile> files0, List<IFormFile> files1, List<IFormFile> files2, List<IFormFile> files3, List<IFormFile> files4, List<IFormFile> files5, List<IFormFile> files6, List<IFormFile> files7, List<IFormFile> files8, List<IFormFile> files9, List<IFormFile> files10)

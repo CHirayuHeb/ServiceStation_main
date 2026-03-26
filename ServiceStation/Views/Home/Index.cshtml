@@ -155,7 +155,7 @@
                             </span>
                         </div>
                         <div class="col-50">
-                            <div class="pagination-container" style="text-align:right; margin-top:0px;margin-bottom:0px;">
+                            <div class="pagination-container" style="text-align:right; margin-top:0px;margin-bottom:0px;margin-right:20px">
                                 <div class="btn-group">
                                     @* ปุ่ม Previous *@
                                     @if (ViewBag.CurrentPage > 1)
@@ -221,7 +221,7 @@
                             <thead>
                                 <tr>
                                     <th width="5%">No.</th>
-                                    <th>Service No.</th>
+                                    <th width="80px">Service No.</th>
                                     <th>Service Type</th>
                                     <th>Name Request</th>
                                     <th>Intercom</th>
@@ -280,8 +280,8 @@
 
                                             </td>*@
                                         <td>
-                                            @*<span style="font-weight:600;"></span>*@
-                                            <span style="@(item.srStep ==5 ?"color:green;font-weight:600;font-size:11px;":"color:#0056b3;" )  ">
+                                            @*<span style="font-weight:600;color:#0056b3;"></span>*@
+                                            <span style="@(item.srStep ==5 ?"color:green;font-weight:700;font-size:12px;":"" )  ">
                                                 @(Model?._ListViewsvsMastFlowApprove?.FirstOrDefault(x => x.mfStep == item.srStep)?.mfSubject ?? "")
                                             </span>
                                         </td>

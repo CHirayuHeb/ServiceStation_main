@@ -38,19 +38,12 @@ namespace ServiceStation
 
             });
             services.AddHttpClient(); //appcenter
-
-
             services.AddMvc().AddControllersAsServices();
-            services.AddDbContext<HRMS>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("HRMS")));
-            services.AddDbContext<LAMP>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("LAMP")));
-            services.AddDbContext<IT>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("IT")));
-            services.AddDbContext<PrdInvBF_Prd>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("PrdInvBf_Prd")));
+            services.AddDbContext<HRMS>(options => options.UseSqlServer(Configuration.GetConnectionString("HRMS")));
+            services.AddDbContext<LAMP>(options => options.UseSqlServer(Configuration.GetConnectionString("LAMP")));
+            services.AddDbContext<IT>(options => options.UseSqlServer(Configuration.GetConnectionString("IT")));
+            services.AddDbContext<PrdInvBF_Prd>(options => options.UseSqlServer(Configuration.GetConnectionString("PrdInvBf_Prd")));
 
-            
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(x =>
                 {
@@ -94,24 +87,10 @@ namespace ServiceStation
                 });
             services.AddAuthentication(); //app center
 
-            //        services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-            //.AddCookie(options =>
-            //{
-            //    options.ExpireTimeSpan = TimeSpan.FromMinutes(15); // อายุของ session
-            //    options.SlidingExpiration = true; // ✅ เปิดให้ session ต่ออายุถ้ามีการใช้งาน
-            //    options.LoginPath = "/Login/Index"; //path login
-            //    options.AccessDeniedPath = "/ErrorCase/Index";
-            //});
-
 
             services.AddAuthorization(x =>
             {
                 x.AddPolicy("Checked", y => { y.RequireClaim(ClaimTypes.Country, "ServiceStation"); });
-                //x.AddPolicy("perUser", y => { y.RequireClaim(ClaimTypes.Role, GlobalVariable.perUser); });
-                //x.AddPolicy("perAdmin", y => { y.RequireClaim(ClaimTypes.Role, GlobalVariable.perAdmin); });
-                //x.AddPolicy("perHCM", y => { y.RequireClaim(ClaimTypes.Role, GlobalVariable.perHCM); });
-                //x.AddPolicy("perGeneral", y => { y.RequireClaim(ClaimTypes.Role, GlobalVariable.perUser, GlobalVariable.perAdmin, GlobalVariable.perHCM); });
-                //x.AddPolicy("perEmergency", y => { y.RequireClaim(ClaimTypes.Role, GlobalVariable.EmergencyPermission); });
             });
 
 

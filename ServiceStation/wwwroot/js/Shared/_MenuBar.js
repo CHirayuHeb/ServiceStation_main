@@ -852,8 +852,7 @@ function hideLoadingAndShowProcess() {
     //loadingProcesser.style.display = "none";
 }
 
-
-function sendMail(getID, action) {
+function sendMail1(getID, action) {
     //const formdata = new FormData(document.forms.item(0)).serialize();
     let vEdate = document.getElementById("i_EDate").value;
     let vform = document.getElementById("txtvForm").value;
@@ -879,11 +878,6 @@ function sendMail(getID, action) {
         //check new & revise program SDE
         if (vtxtSUbject.search("Revise") > -1) {
             console.log("typeuser : " + document.getElementById("ipF1typeuser").value);
-            //if (document.getElementById("ipF1typeuser").value == "") {
-            //    msg = "กำหนดผู้ใช้งานโปรแกรม";
-            //    document.getElementById("ipF1typeuser").focus();
-            //}
-
             if (document.getElementById("F1TypeNew").checked == false
                 && document.getElementById("F1TypeRevise").checked == false) {
                 msg = "ประเภทการร้องขอ";
@@ -1174,25 +1168,13 @@ function sendMail(getID, action) {
 
         let mydata = $("#formRequest").serialize();
 
-        //let mydata = new FormData(document.forms.item(0)).serialize();
-
-        //let formData = document.forms.namedItem("formRequest");
-        //let viewModel = new FormData(formData);
-        //$.each(formData, function (index, input) {
-        //    viewModel.append(input.name, input.value);
-        //});
-
         $.ajax({
             type: 'post',
             url: action,
-            data: mydata,//mydata,//{ getID: getID }, // mydata ,//
-            //contentType: "application/json; charset=utf-8",
-            //processData: false,
-            //contentType: false,
+            data: mydata,
             success: function (data) {
 
-                console.log("fsendMail");
-                //$("#myModal1").modal("show");
+
                 var htmls = "";
                 //if (data.status == "hasHistory") {
                 //    htmls = " <div class='panel panel-default property'>"
@@ -1307,8 +1289,252 @@ function sendMail(getID, action) {
 
 
 }
+function sendMail(getID, action) {
+    //const formdata = new FormData(document.forms.item(0)).serialize();
+    let vEdate = document.getElementById("i_EDate").value;
+    let vform = document.getElementById("txtvForm").value;
+    let msg = "";
+    let model = new Array();
+    var NewrList = {};   //F4
+
+    if (vform == "F1") { //genaral
+        let vtxtgDes = document.getElementById("txtgDes").value;
+        let vtxtgkosu = document.getElementById("txtgkosu").value;
+
+        //new & revise program SDE
+        let vtxtSUbject = document.getElementById("txtSUbject").value;
+        //F1TypeNew
+        //F1TypeRevise
+        if (vtxtgDes == "") {
+            msg = "กรุณากรอกรายละเอียด !!!";
+        }
+        else if (vtxtgkosu == "0") {
+            msg = "กรุณากรอก Kosu !!!";
+        }
+
+        //check new & revise program SDE
+        if (vtxtSUbject.search("Revise") > -1) {
+            console.log("typeuser : " + document.getElementById("ipF1typeuser").value);
+            if (document.getElementById("F1TypeNew").checked == false
+                && document.getElementById("F1TypeRevise").checked == false) {
+                msg = "ประเภทการร้องขอ";
+            }
+            else if (document.getElementById("F1TypeRevise").checked == true) {
+                //let n_program = document.getElementById("ipF1pgm").value;
+                if (document.getElementById("ipF1pgm").value == "") {
+                    msg = "กรุณาเลือกโปรแกรมที่ต้องการแก้ไข";
+                }
+
+            }
+        }
+
+    }
+    else if (vform == "F2") { //data restore
+        if (document.getElementById("txtF2DateRestore").value == "") {
+            msg = "กรุณากรอกวันที่กู้ข้อมูลคืน !!!";
+        } else if (document.getElementById("txtF2SystemCase1").checked == false && document.getElementById("txtF2SystemCase2").checked == false) {
+            msg = "กรุณาเลือกสาเหตุที่ขอกู้ข้อมูล !!!";
+        }
+        else if (document.getElementById("SystemPCLan").checked == false &&
+            document.getElementById("SystemServer").checked == false &&
+            document.getElementById("SystemDB").checked == false &&
+            document.getElementById("SystemOther").checked == false) {
+            msg = "กรุณาเลือก อยู่ในระบบ !!!";
+        }
+        else if (document.getElementById("txtF2GroupUser").value == "") {
+            msg = "กรุณากรอก Path ที่ต้องการนำไปไฟล์เก็บไว้ !!!";
+
+        }
+        else if (document.getElementById("txtF2KeepFile").value == "") {
+            msg = "กรุณากรอก ชื่อไฟล์ ที่หาย!!!";
+        }
+
+    }
+    else if (vform == "F3")//F3 Borrow notebook
+    {
+        if (document.getElementById("txtF3WaitOrderNew").checked == false &&
+            document.getElementById("txtF3ExternalTraining").checked == false &&
+            document.getElementById("txtF3MeetAbroad").checked == false &&
+            document.getElementById("txtF3MeetCustomer").checked == false &&
+            document.getElementById("txtF3Other").checked == false) {
+            msg = "กรุณาเลือก วัตถุประสงค์ !!!";
+        }
+        else if (document.getElementById("txtF3Description").value == "") {
+            msg = "กรุณากรอก รายละเอียด(เพิ่มเติม)!!!";
+        }
+        else if (document.getElementById("txtF3BorrowStratDate").value == "") {
+            msg = "กรุณากรอก Start(วันที่ยืม)!!!";
+        }
+        else if (document.getElementById("txtF3BorrowEndDate").value == "") {
+            msg = "กรุณากรอก End Date(วันที่คืน)!!!";
+        }
+    }
+    else if (vform == "F4") {
+        if (document.getElementById("F4ubStatusReqNew").checked == false &&
+            document.getElementById("F4ubStatusReqCancel").checked == false) {
+            msg = "กรุณาเลือก Objective Request !!!!";
+
+        }
+    }
+    else if (vform == "F5") {//vpn
+
+        if (document.getElementById("txtF5vpnPCName").value == "") {
+            msg = "กรุณากรอก หมายเลขเครื่อง !!!";
+        }
+        else if (document.getElementById("txtF5vpnStatusUse1").checked == false &&
+            document.getElementById("txtF5vpnStatusUse2").checked == false) {
+            msg = "กรุณาเลือกการใช้งาน เคยใช้งาน หรือ ไม่เคยใช้งาน !!!";
+        }
+        else if (document.getElementById("txtF5vpnEmpCode").value == "") {
+            msg = "กรุณากรอก รหัสพนักงาน !!!";
+        }
+        else if (document.getElementById("txtF5vpnEmpCode").value.length > 6) {
+            msg = "กรุณากรอก รหัสพนักงานไม่เกิน 6 หลัก !!!";
+        }
+        else if (document.getElementById("txtF5vpnWork").value == "") {
+            msg = "กรุณากรอก งานที่ได้รับมอบหมาย !!!";
+        }
+        //else if (document.getElementById("txtF5vpnRemark").value == "") {
+        //    msg = "กรุณากรอก หมายเหตุ!!!";
+        //}
+        else if (document.getElementById("txtF5vpnStartDate").value == "") {
+            msg = "กรุณากรอก วันที่เริ่มใช้ VPN!!!";
+        }
+        else if (document.getElementById("txtF5vpnEndDate").value == "") {
+            msg = "กรุณากรอก วันที่สิ้นสุด VPN!!!";
+        }
+
+    }
+    //else if (vform == "F6")//SDE User Register Application
+    //{
+      
+    //}
+    else if (vform == "F7")//ITMS System register
+    {
+        if (document.getElementById("txtF7txtF7itObjectiveNew").checked == false &&
+            document.getElementById("txtF7txtF7itObjectiveChange").checked == false &&
+            document.getElementById("txtF7txtF7itObjectiveCancel").checked == false) {
+            msg = "กรุณาเลือกวัตถุประสงค์ !!!";
+        }
+        else if (document.getElementById("txtF7ITMSitEmpcode").value == "") {
+            msg = "กรุณากรอกรหัสพนักงาน  !!!";
+        }
+        //else if(document.getElementById("txtF7ITMSFname").value == "") {
+        //    msg = "กรุณากดปุ่ม ค้นหาข้อมูล เพื่อแสดงข้อมูลพนักงาน!!!";
+        //}
+
+        if (document.getElementById("txtF7itMPcLan").checked == true) {
+            if (document.getElementById("txtF7itPcLan_TypeThai").checked == false &&
+                document.getElementById("txtF7itPcLan_TypeJapan").checked == false) {
+                msg = "กรุณาเลือกประเภทขอใช้งานระบบ PC-Lan!!!";
+            }
+            else {
+                if (document.getElementById("txtF7itPcLan_TypeThai").checked == true) {
+                    $('#txtF7itPcLan_TypeThai').removeAttr('disabled', 'disabled');
+                }
+                if (document.getElementById("txtF7itPcLan_TypeJapan").checked == true) {
+                    $('#txtF7itPcLan_TypeJapan').removeAttr('disabled', 'disabled');
+                }
+            }
+        }
+        if (document.getElementById("txtF7itMmail").checked == true) {
+            if (document.getElementById("txtF7itMail_TypeLOTUSNOTES").checked == false &&
+                document.getElementById("txtF7itMail_TypeOUTLOOK").checked == false) {
+                msg = "กรุณาเลือกประเภทขอใช้งานระบบ Mail!!!";
+            }
+            else {
+                if (document.getElementById("txtF7itMail_TypeLOTUSNOTES").checked == true) {
+                    $('#txtF7itMail_TypeLOTUSNOTES').removeAttr('disabled', 'disabled');
+                }
+                if (document.getElementById("txtF7itMail_TypeOUTLOOK").checked == true) {
+                    $('#txtF7itMail_TypeOUTLOOK').removeAttr('disabled', 'disabled');
+                }
+            }
+        }
+        if (document.getElementById("txtF7itMInternet").checked == true) {
+            if (document.getElementById("txtF7itObjectiveTemporaryUser").checked == false &&
+                document.getElementById("txtF7itObjectiveGeneralInformation").checked == false &&
+                document.getElementById("txtF7itObjectiveResearchfortheJob").checked == false &&
+                document.getElementById("txtF7itObjectiveDirectConcernOnThejob").checked == false &&
+                document.getElementById("txtF7itObjectiveOutsideCommunicationByE").checked == false &&
+                document.getElementById("txtF7itObjectiveGeneralInformationT9").checked == false) {
+                msg = "กรุณาเลือกประเภทขอใช้งาน Internet !!!";
+            }
+            else {
+                if (document.getElementById("txtF7itObjectiveTemporaryUser").checked == true) {
+                    $('#txtF7itObjectiveTemporaryUser').removeAttr('disabled', 'disabled');
+                }
+                if (document.getElementById("txtF7itObjectiveGeneralInformation").checked == true) {
+                    $('#txtF7itObjectiveGeneralInformation').removeAttr('disabled', 'disabled');
+                }
+                if (document.getElementById("txtF7itObjectiveResearchfortheJob").checked == true) {
+                    $('#txtF7itObjectiveResearchfortheJob').removeAttr('disabled', 'disabled');
+                }
+                if (document.getElementById("txtF7itObjectiveDirectConcernOnThejob").checked == true) {
+                    $('#txtF7itObjectiveDirectConcernOnThejob').removeAttr('disabled', 'disabled');
+                }
+                if (document.getElementById("txtF7itObjectiveOutsideCommunicationByE").checked == true) {
+                    $('#txtF7itObjectiveOutsideCommunicationByE').removeAttr('disabled', 'disabled');
+                }
+                if (document.getElementById("txtF7itObjectiveGeneralInformationT9").checked == true) {
+                    $('#txtF7itObjectiveGeneralInformationT9').removeAttr('disabled', 'disabled');
+                }
+            }
+
+
+
+        }
+    }
+
+
+    if (msg != "") {
+        swal.fire({
+            title: 'แจ้งเตือน',
+            icon: 'warning',
+            text: msg,
+        })
+            .then((result) => { });
+    }
+    else if (vEdate != null && vEdate != "") {
+
+        let mydata = $("#formRequest").serialize();
+   
+        $.ajax({
+            type: 'post',
+            url: action,
+            data: mydata,
+            success: function (data) {
+                //var url = data.partial + mydata + "&vform=" + vform;
+                //console.log("url" + url);
+                //$("#myModalBodyDiv1").load(url, function () {
+                //    // $('#divHistory').html(htmls);
+                //    $("#myModal1").modal("show");
+                //})
+
+
+                $("#myModalBodyDiv1").html(data);
+                $("#myModal1").modal("show");
+
+            }
+        });
+    } else {
+        swal.fire({
+            title: 'แจ้งเตือน',
+            icon: 'warning',
+            text: "กรุณาเลือกวันที่ต้องการ !!!",
+
+        })
+            .then((result) => {
+                document.getElementById("i_EDate").value = "";
+
+            });
+
+    }
+
+
+}
 function sendmailF3Inform(getID, action) {
-    console.log("sssssss");
+   // console.log("sssssss");
     let vmsg = "";
     if (document.getElementById("txtF3MastNB").value == "") {
         vmsg = "กรุณากรอกชื่อเครื่อง  !!!";
