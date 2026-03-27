@@ -686,7 +686,6 @@ namespace ServiceStation.Controllers.RequestForm
                 else if (@classs._ViewsvsServiceRequest.srStep == 3 && @classs._ViewsvsServiceRequest.srStatus != "Transfer")
                 {
 
-
                     var _EmailCS = _IT.svsHistoryApproved.Where(x => x.htSrNo == @classs._ViewsvsServiceRequest.srNo.ToString() && x.htStep == 3).Select(x => x.htFrom).FirstOrDefault();
                     var _empcs = _IT.rpEmails.Where(x => x.emEmail_M365 == _EmailCS).Select(x => x.emEmpcode).FirstOrDefault();
                     NameIssue = _IT.rpEmails.Where(x => x.emEmpcode == _empcs).Select(x => x.emName_M365).FirstOrDefault();
@@ -807,9 +806,12 @@ namespace ServiceStation.Controllers.RequestForm
         }
 
 
+
+
         public ActionResult SendMailDetail(Class @classs)
         {
             string _UserId = User.Claims.FirstOrDefault(s => s.Type == "UserId")?.Value;
+            int vsrNo = @classs._ViewsvsServiceRequest.srNo;
             @classs._ViewsvsHistoryApproved = new ViewsvsHistoryApproved();
             @classs._ViewsvsHistoryApproved.htFrom = _IT.rpEmails.Where(x => x.emEmpcode == _UserId).Select(x => x.emName_M365).FirstOrDefault(); ;
 
@@ -818,12 +820,42 @@ namespace ServiceStation.Controllers.RequestForm
                 var EMPCODE_CsIS = _IT.svsMastServiceMain.Where(x => x.mmSecCode == @classs._ViewsvsServiceRequest.srType).Select(x => x.mmEmpCode).First();
                 @classs._ViewsvsHistoryApproved.htTo = _IT.rpEmails.Where(x => x.emEmpcode == EMPCODE_CsIS).Select(x => x.emName_M365).FirstOrDefault(); ;
             }
+            else if (@classs._ViewsvsServiceRequest.srStep == 3)
+            {
+                if (@classs._ViewsvsServiceRequest.srStatus.Contains("Transfer"))
+                {
+                    @classs._ViewsvsHistoryApproved.htTo = "";
+                }
+                else
+                {
+                    var vEmpCS = _IT.svsMastServiceMain.Where(x => x.mmSecCode == @classs._ViewsvsServiceRequest.srType).Select(x => x.mmEmpCode).FirstOrDefault();
+                    @classs._ViewsvsHistoryApproved.htTo = _IT.rpEmails.Where(x => x.emEmpcode == vEmpCS).Select(x => x.emName_M365).FirstOrDefault();
+                }
+
+            }
+            else if (@classs._ViewsvsServiceRequest.srStep == 4)
+            {
+                var vEmpRQ = @classs._ViewsvsServiceRequest.srRequestBy;
+                @classs._ViewsvsHistoryApproved.htTo = _IT.rpEmails.Where(x => x.emEmpcode == vEmpRQ).Select(x => x.emName_M365).FirstOrDefault();
+
+            }
+
+
+
 
             @classs._ViewsvsHistoryApproved.htStatus = "Approve";
+            @classs._ViewsvsHistoryApproved.htCC = "";
+            @classs._ViewsvsHistoryApproved.htRemark = "";
             @classs._ViewsvsHistoryApproved.htDate = DateTime.Now.ToString("yyyy/MM/dd");
             @classs._ViewsvsHistoryApproved.htTime = DateTime.Now.ToString("HH:mm:ss");
 
+            // 2. เพิ่มบรรทัดนี้เพื่อล้าง ModelState เฉพาะตัว
+            // เพื่อให้ asp-for ยอมใช้ค่า "" ที่เราตั้งใหม่แทนค่าเก่าจากฟอร์ม
+            ModelState.Remove("_ViewsvsHistoryApproved.htCC");
+            ModelState.Remove("_ViewsvsHistoryApproved.htRemark");
 
+            // หรือถ้าอยากล้างทั้งหมดเลย (ปลอดภัยที่สุด)
+            // ModelState.Clear();
             return PartialView("SendMail", @classs);
         }
 
@@ -917,13 +949,11 @@ namespace ServiceStation.Controllers.RequestForm
 
 
 
-            //if (@classs._ViewsvsServiceRequest.srServiceNo is null)
-            //{
-            //    var v_emailFrom = _IT.rpEmails.Where(x => x.emEmpcode == @classs._ViewsvsServiceRequest.srRequestBy.ToString()).Select(p => p.emName_M365).FirstOrDefault(); //chg to m365
-            //    @classs._ViewsvsHistoryApproved.htFrom = v_emailFrom;
-            //}
-
             @classs._ViewsvsHistoryApproved.htStatus = "Approve";
+            @classs._ViewsvsHistoryApproved.htDate = DateTime.Now.ToString("yyyy/MM/dd");
+            @classs._ViewsvsHistoryApproved.htTime = DateTime.Now.ToString("HH:mm:ss");
+
+
             ViewBag.vWststus = @classs._ViewsvsServiceRequest.srStatus;
             ViewBag.vForm = vform;
             ViewBag.SRno = vSR;
@@ -1076,7 +1106,7 @@ namespace ServiceStation.Controllers.RequestForm
                     catch (Exception ex)
                     {
                         config = "E";
-                        msg = "Please check Email send to !!!!"+ ex.Message;
+                        msg = "Please check Email send to !!!!" + ex.Message;
                         return Json(new { c1 = config, c2 = msg });
                     }
                 }
@@ -1100,7 +1130,7 @@ namespace ServiceStation.Controllers.RequestForm
 
 
                     getSrNo = Save(@class, i_Step);  //save main
-                    getSForm = SaveForm(@class, vform, getSrNo[0]); //save form
+                    getSForm = SaveForm(@class, @class._ViewsvsServiceRequest.srFrom, getSrNo[0]); //save form
 
                     if (@class._ViewsvsServiceRequest.srStatus != null && @class._ViewsvsServiceRequest.srStatus != "") //save form worker
                     {
@@ -1572,7 +1602,6 @@ namespace ServiceStation.Controllers.RequestForm
             var v_EmpApproveBy = "";
             int v_srNo = @class._ViewsvsServiceRequest.srNo;
             int v_step = vstep;// @class._ViewsvsServiceRequest.srStep;
-            //string v_status = @class._ViewsvsHistoryApproved.htStatus == "Cancel" ? @class._ViewsvsHistoryApproved.htStatus : _IT.svsMastFlowApprove.Where(x => x.mfStep == v_step).Select(x => x.mfSubject).FirstOrDefault();
             string v_status = _IT.svsMastFlowApprove.Where(x => x.mfStep == v_step).Select(x => x.mfSubject).FirstOrDefault();
 
 

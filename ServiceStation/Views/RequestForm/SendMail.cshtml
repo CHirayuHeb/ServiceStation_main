@@ -4,39 +4,26 @@
     Layout = null;
 }
 @*New Request*@
-<div id="ResultSendMail">
-    @*@Html.HiddenFor(m => m.htEmpCode, new { id = "docno" })
-        @Html.HiddenFor(m => m.htStep, new { id = "step" })
-        @Html.HiddenFor(m => m.htTo, new { id = "EmailTo" })*@
+<div>
+
     <div class="modal-header" style="margin-top:1px">
         <h5 class="modal-title">
-            @*<input asp-for="htStep" type="text" class="
-                     " id="txtstep" style="display:none" />
-                <input asp-for="htDateIssue" type="text" class="form-control" id="txtstep" style="display:none" />*@
             <span style="font-weight: bold; font-size: 16px;">
                 ส่งคำขออนุมัติเอกสาร​ -->
-                @if (@ViewBag.vWststus == "Cancel")
-                {
-                    <span class="text-red">@ViewBag.vWststus</span>
+                @{
+                    var vStatus = Model._ViewsvsServiceRequest.srStatus;
+                    bool bStatus = false;
+                    if (Model._ViewsvsServiceRequest.srStatus == "Cancel")
+                    {
+                        bStatus = true;
+                    }
                 }
-                else if (@ViewBag.vWststus == "Done")
-                {
-                    <span style="color:green">@ViewBag.vWststus</span>
-                }
-                else
-                {
-
-                    @ViewBag.vWststus
-                }
-
+                <span style="@(bStatus == true? "color:red;" : "color:green;")">@vStatus</span>
             </span>
             @*<input id="txtSendmailStatus" />*@
             <input id="txtvFSM" value="@ViewBag.vForm" style="display:none" />
             <input id="txtvFFSN" asp-for="_ViewsvsServiceRequest.srServiceNo" style="display:none" />
             <input id="txtvFSN" value="@ViewBag.SRno" style="display:none" />
-            @*<input id="txtvFSssss" asp-for="_ViewsvsHistoryApproved.htStatus" style="display:none"  style="display:none" />*@
-            @*<span style="font-weight: bold; font-size: 18px;"> @Html.DisplayFor(model => model.htStatus)</span>
-                input asp-for="htStatus" type="text" class="form-control" id="txthtStatus"  style="display:none" />*@
         </h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
     </div>
@@ -48,25 +35,25 @@
         <div class="input-group ig-property">
             <span class="input-group-text w-25">
                 To
-                @if (@Model._ViewsvsServiceRequest.srStep == 0 && (@Model._ViewsvsServiceRequest.srSubject.IndexOf("OTP") > -1 || @Model._ViewsvsServiceRequest.srSubject.Contains("Print Color") || @Model._ViewsvsServiceRequest.srSubject.Contains("Admin Access")))
+                @if (Model._ViewsvsServiceRequest.srStep == 0)
                 {
-                    <span style="padding-left:5px">DM up.</span>
-                }
-                else if (@Model._ViewsvsServiceRequest.srStep == 0)
-                {
-                    <span style="padding-left:5px">CS up.</span>
+                    <span style="padding-left:5px">
+                        @((Model._ViewsvsServiceRequest.srSubject ?? "").Contains("OTP")
+                                                                        || (Model._ViewsvsServiceRequest.srSubject ?? "").Contains("Print Color")
+                                                                        || (Model._ViewsvsServiceRequest.srSubject ?? "").Contains("Admin Access")
+                                                                        ? "DM up." : "CS up.")
+                    </span>
                 }
             </span>
-            <input type="text" class="form-control" id="searchInputTO" asp-for="_ViewsvsHistoryApproved.htTo" required style="@(Model._ViewsvsServiceRequest.srStep ==1 ? "pointer-events: none;" : "")" />
+            <input type="text" class="form-control" id="searchInputTO" asp-for="_ViewsvsHistoryApproved.htTo"  style="@(Model._ViewsvsServiceRequest.srStep ==1 ? "pointer-events: none;" : "")" value="@Model._ViewsvsHistoryApproved.htTo" />
 
         </div>
         <div class="input-group ig-property">
             <span class="input-group-text w-25">CC.</span>
-            <textarea class="form-control" id="searchInputCC" rows="4" cols="50" asp-for="_ViewsvsHistoryApproved.htCC" required></textarea>
+            <textarea class="form-control" id="searchInputCC" rows="4" cols="50" asp-for="_ViewsvsHistoryApproved.htCC">@Model._ViewsvsHistoryApproved.htCC</textarea>
         </div>
 
         <div style="margin:5px">
-            @*<span style=" font-size: 14px;">วันที่ :  @ViewBag.vDate </span>*@
             <span style=" font-size: 14px;">
                 วันที่ :
                 @Html.DisplayFor(model => model._ViewsvsHistoryApproved.htDate, new { @class = "text-control", @style = "font-size:14px;" })
@@ -77,32 +64,20 @@
         <div class="d-flex justify-content-center" style="width: 100%; text-align: center; padding-top: 5px; padding-bottom: 5px;">
             <div class="p-1-modify" style="width: 100%; border: 1px grey;   ">
                 <div class="form-check form-check-inline">
-                    @if (@ViewBag.vWststus == "Done" || @ViewBag.vWststus == "Cancel" || @ViewBag.vWststus == "Transfer")
-                    {
-                        @Html.RadioButtonFor(m => m._ViewsvsHistoryApproved.htStatus, "Approve", new { @class = "", id = "StatusApp", onclick = "CheckDis('Approve')", required = "required", @style = "height:20px;width:20px;display:none;" }) <label></label><br />
-                    }
-                    else
-                    {
-                        @Html.RadioButtonFor(m => m._ViewsvsHistoryApproved.htStatus, "Approve", new { @class = "", id = "StatusApp", onclick = "CheckDis('Approve')", required = "required", @style = "height:20px;width:20px;" }) <label>Approve</label><br />
-                    }
-
+                    @Html.RadioButtonFor(m => m._ViewsvsHistoryApproved.htStatus, "Approve", new { @id = "StatusApp", onclick = "CheckDis('Approve')", required = "required", style = "height:20px;width:20px;" + (Model._ViewsvsServiceRequest.srStep == 3 ? "display:none;" : "") })
+                    <label style="@(Model._ViewsvsServiceRequest.srStep==3?"display:none;":"")">Approve</label><br />
                 </div>
                 <div class="form-check form-check-inline">
-                    @if (Model._ViewsvsServiceRequest.srStep == 0 || @ViewBag.vWststus == "Done" || @ViewBag.vWststus == "Cancel" || @ViewBag.vWststus == "Transfer")
-                    {
-                        @Html.RadioButtonFor(m => m._ViewsvsHistoryApproved.htStatus, "Disapprove", new { @class = "", id = "StatusApp", onclick = "CheckDis('Disapprove')", @style = "height:20px;width:20px;;display:none;" }) <label></label><br />
-                    }
-                    else
-                    {
-                        @Html.RadioButtonFor(m => m._ViewsvsHistoryApproved.htStatus, "Disapprove", new { @class = "", id = "StatusApp", onclick = "CheckDis('Disapprove')", @style = "height:20px;width:20px;" }) <label>Disapprove</label><br />
-                    }
+                    @Html.RadioButtonFor(m => m._ViewsvsHistoryApproved.htStatus, "Disapprove", new { @id = "StatusApp1", onclick = "CheckDis('Disapprove')", required = "required", style = "height:20px;width:20px;" + (Model._ViewsvsServiceRequest.srStep == 3 ? "display:none;" : "") })
+                    <label style="@(Model._ViewsvsServiceRequest.srStep==3?"display:none;":"")">Disapprove</label><br />
+
                 </div>
 
             </div>
         </div>
         <div class="input-group ig-property">
             <span class="input-group-text w-25">Remark</span>
-            <textarea class="form-control" id="Remark" rows="2" cols="50" asp-for="_ViewsvsHistoryApproved.htRemark"></textarea>
+            <textarea class="form-control" id="Remark" rows="2" cols="50" asp-for="_ViewsvsHistoryApproved.htRemark">@Model._ViewsvsHistoryApproved.htRemark</textarea>
         </div>
 
     </div>
@@ -129,10 +104,6 @@
 
     <div class="modal-footer" style="width: 100%;">
 
-        @*@if (@Model._ViewsvsServiceRequest.srStep < 5)
-            {
-                <button type="button" style="@(@Model._ViewsvsServiceRequest.srStep < 5 ? "":"display:none;")" class="btn btn-success" data-bs-dismiss="modal" onclick="sendmailsubmit('@Url.Action("SendMail_post", "RequestForm", new { vform = @ViewBag.vForm,vSR= @ViewBag.SRno})')">Send mail</button>
-            }*@
         <button type="button" style="@(@Model._ViewsvsServiceRequest.srStep < 5 ? "":"display:none;")" class="btn btn-success" data-bs-dismiss="modal" onclick="sendmailsubmit('@Url.Action("SendMail_post", "RequestForm", new { vform = @ViewBag.vForm,vSR= @ViewBag.SRno})')">Send mail</button>
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
     </div>

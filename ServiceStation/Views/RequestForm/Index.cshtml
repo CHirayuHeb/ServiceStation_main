@@ -51,20 +51,20 @@
                 </button>
 
                 @*<button class="button btnOrange" style="width:130px;" onclick="sendMail($('#txtSRno').val(),'@Url.Action("History","RequestForm")')">
-                    <img src="~/images/direct.png" style="width:30px;height:30px;padding-right:5px;margin-right:8px" />
-                    ส่งคำร้อง
-                </button>*@
+                <img src="~/images/direct.png" style="width:30px;height:30px;padding-right:5px;margin-right:8px" />
+                ส่งคำร้อง
+            </button>*@
             }
             @if (Model._ViewsvsServiceRequest.srStep > 2)
             {
-                <button class="button btnOrange" style="width:150px;" onclick="sendMailWorker($('#txtSRno').val(),'@Url.Action("History","RequestForm")')">
+                @*<button class="button btnOrange" style="width:150px;" onclick="sendMailWorker($('#txtSRno').val(),'@Url.Action("History","RequestForm")')">
+                    <img src="~/images/bell.png" style="width:38px;height:30px;padding-right:5px;margin-right:8px" />
+                    แจ้งสถานะ
+                </button>*@
+                <button class="button btnOrange" style="width:150px;" onclick="sendMailWorker($('#txtSRno').val(),'@Url.Action("SendMailDetail","RequestForm")')">
                     <img src="~/images/bell.png" style="width:38px;height:30px;padding-right:5px;margin-right:8px" />
                     แจ้งสถานะ
                 </button>
-                @*<button class="button btnOrange" style="width:150px;" onclick="sendMailWorker($('#txtSRno').val(),'@Url.Action("SendMail","RequestForm")')">
-                <img src="~/images/bell.png" style="width:38px;height:30px;padding-right:5px;margin-right:8px" />
-                แจ้งสถานะ
-            </button>*@
             }
         </div>
     </div>
@@ -76,15 +76,9 @@
             </div>
         </div>
     </div>
-    @*<div id="DisplayContent" class="content-box " style=" margin: auto; padding: 10px; width: 95%;margin-bottom:-30px">
-            <div class="container card card-radius bg-gray-dot-3">
-
-                <div class="content-box" style="border:0px solid black">
-                    @await Html.PartialAsync("_PartialHistory.cshtml", Model)
-                </div>
-            </div>
-        </div>*@
+ 
     <form action="" id="formRequest" name="formData">
+        @Html.HiddenFor(m => m._ViewsvsServiceRequest.srRequestBy, new { id = "srRequestBy" })
         <div id="DisplayContent" class="content-box " style=" margin: auto; padding: 10px; width: 95%;">
             <div class="container card card-radius bg-gray-dot-3">
                 <div class="content-box" style="border:0px solid black">
@@ -106,9 +100,7 @@
                     <tr align="left" height="20">
                         <td id="tbottom" class="">Service No.</td>
                         <td id="insertdata" class="text-gray" colspan="3">
-                            @*@Html.DisplayFor(model => model._ViewsvsServiceRequest.srNo)*@
                             @Html.TextBoxFor(model => model._ViewsvsServiceRequest.srNo, new { @class = "text-control", @readonly = "true", @id = "txtSRno", @style = "display:none" })
-                            @*@Html.TextBoxFor(model => model._ViewsvsServiceRequest.srNo, new { @class = "text-control", @readonly = "true", @style = "display:none" })*@
                             @Html.DisplayFor(model => model._ViewsvsServiceRequest.srServiceNo, new { @class = "text-control", @style = "font-size:10px;" })
                             @Html.TextBoxFor(model => model._ViewsvsServiceRequest.srServiceNo, new { @class = "text-control", @readonly = "true", @style = "display:none" })
                         </td>
@@ -116,7 +108,6 @@
                     <tr align="left" height="20">
                         <td id="tbottom" class="">ผู้ร้องขอ</td>
                         <td id="insertdata" class="text-gray">
-                            @*<input class="form-check" type="checkbox" style="width:20px; height:20px;" />*@
                             @Html.TextBoxFor(model => model._ViewsvsServiceRequest.srRequestBy, new { @class = "form-control", @readonly = "true", @style = "display:none", @id = "txtMIssueID" })
                             @Html.TextBoxFor(model => model._ViewsvsServiceRequest.srRequestName, new { @class = "form-control", @readonly = "true", @style = "display:none" })
                             <label>@Html.DisplayFor(model => model._ViewsvsServiceRequest.srRequestBy) @Html.DisplayFor(model => model._ViewAccEMPLOYEE.EMP_TNAME) @Html.DisplayFor(model => model._ViewAccEMPLOYEE.LAST_TNAME)</label>
@@ -143,7 +134,7 @@
                         <td id="tbottom">วันที่ขอ</td>
                         <td id="insertdata" class="text-gray">
                             <input type="text" id="i_SDate" class="input-with-image text-gray form-control disabled" asp-for="_ViewsvsServiceRequest.srRequestDate" style="width:80%" readonly>
-                           </td>
+                        </td>
                         <td id="tbottom">วันที่ต้องการ</td>
                         <td id="insertdata" class="text-gray">
                             <div style="@( (@_UserId == @Model._ViewsvsServiceRequest.srRequestBy|| @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode) &&  @Model._ViewsvsServiceRequest.srStep != 4  ? "" : "pointer-events: none;")">
@@ -222,20 +213,6 @@
                     @await Html.PartialAsync("_PartialWorker.cshtml", Model)
                 </div>
 
-                @*@if (@_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode && Model._ViewsvsServiceRequest.srStep == 3)
-                    {
-                        <div class="container card card-radius bg-gray-dot-3 bgwhitesmoke">
-                            @await Html.PartialAsync("_PartialWorker.cshtml", Model)
-                        </div>
-                    }
-                    else
-                    {
-                        <div class="container card card-radius bg-gray-dot-3 bgwhitesmoke" style="pointer-events: none;">
-                            @await Html.PartialAsync("_PartialWorker.cshtml", Model)
-                        </div>
-                    }*@
-
-
 
             }
         </div>
@@ -244,7 +221,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-body" id="myModalBodyDiv1">
-                   
+
                     </div>
                 </div>
             </div>
@@ -276,7 +253,7 @@
                                 </div>
                                 <div class="panel-collapse collapse show" id="History" style="overflow-y: scroll; max-height: 200px;">
                                     @*<div id="divHistory" class="panel-body">
-                                        </div>*@
+                                    </div>*@
                                     <div class="panel-body">
                                         <table class="center" id="Toptable" border="1" style="color:black;">
                                             <tr style="background-color:#E5E0FF">
@@ -302,13 +279,13 @@
                                                             <input type="button" style="font-size:14px;@(@_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode && @Model._ViewsvsServiceRequest.srStep != 5 ? "": "display:none")" value="&#x274C" onclick="DeleteFileUser('@item.fnNo','@item.fnFilename','@Url.Action("DeteleDataFile","RequestForm")')">
 
                                                             @*@if (@_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode && @Model._ViewsvsServiceRequest.srStep != 5)
-                                                                {
-                                                                    <input type="button" style="font-size:14px;@(@_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode && @Model._ViewsvsServiceRequest.srStep != 5 ?"display:none":)" value="&#x274C" onclick="DeleteFileUser('@item.fnNo','@item.fnFilename','@Url.Action("DeteleDataFile","RequestForm")')">
-                                                                }
-                                                                else
-                                                                {
-                                                                    <input type="button" style="font-size:14px;" value="&#x274C" disabled>
-                                                                }*@
+                                                            {
+                                                                <input type="button" style="font-size:14px;@(@_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode && @Model._ViewsvsServiceRequest.srStep != 5 ?"display:none":)" value="&#x274C" onclick="DeleteFileUser('@item.fnNo','@item.fnFilename','@Url.Action("DeteleDataFile","RequestForm")')">
+                                                            }
+                                                            else
+                                                            {
+                                                                <input type="button" style="font-size:14px;" value="&#x274C" disabled>
+                                                            }*@
                                                         </td>
                                                     </tr>
 
@@ -357,7 +334,7 @@
                                 </div>
                                 <div class="panel-collapse collapse show" id="History" style="overflow-y: scroll; max-height: 200px;">
                                     @*<div id="divHistory" class="panel-body">
-                                        </div>*@
+                                    </div>*@
                                     <div class="panel-body">
                                         <table class="center" id="Toptable" border="1" style="color:black;">
                                             <tr style="background-color:#E5E0FF">
@@ -380,18 +357,6 @@
                                                         </td>
                                                         <td>
                                                             <input type="button" style="font-size:14px;@(!string.IsNullOrEmpty(Model._ViewsvsServiceRequest.srApproveEmpcode) && Model._ViewsvsServiceRequest.srStep != 5 ? "" : "display:none")" value="&#x274C" onclick="DeleteFileUser('@item.fnNo','@item.fnFilename','@Url.Action("DeteleDataFile","RequestForm")')">
-
-                                                            @*<input type="button" style="@(@_UserId == @Model._ViewsvsServiceRequest.srRequestBy|| @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode ? "font-size:14px" : "pointer-events: none; font-size:14px")" value="&#x274C" onclick="DeleteFileUser('@item.fnNo','@item.fnFilename','@Url.Action("DeteleDataFile","RequestForm")')">*@
-                                                            @*@if (@_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode && @Model._ViewsvsServiceRequest.srStep != 5)
-                                                                {
-                                                                    <input type="button" style="font-size:14px;@(!string.IsNullOrEmpty(Model._ViewsvsServiceRequest.srApproveEmpcode) && Model._ViewsvsServiceRequest.srStep != 5 ? "" : "display:none")" value="&#x274C" onclick="DeleteFileUser('@item.fnNo','@item.fnFilename','@Url.Action("DeteleDataFile","RequestForm")')">
-                                                                }
-                                                                else
-                                                                {
-                                                                    <input type="button" style="font-size:14px;display:none" value="&#x274C" disabled>
-                                                                }*@
-
-                                                            @*<input type="button" style="font-size:14px" value="&#x274C" onclick="DeleteFileUser('@item.fnNo','@item.fnFilename','@Url.Action("DeteleDataFile","RequestForm")')">*@
                                                         </td>
                                                     </tr>
                                                 }
@@ -467,12 +432,12 @@
 
                         @*@await Html.PartialAsync("_PartialCalBorrow.cshtml", Model);*@
                         @*<div class="modal-header" style="margin-top:1px">
-                                <h5 class="modal-title">
-                                    <span style="font-weight: bold; font-size: 16px;">รายการการยืม/คืน โน๊ตบุ๊ต</span>
-                                </h5>
+                            <h5 class="modal-title">
+                                <span style="font-weight: bold; font-size: 16px;">รายการการยืม/คืน โน๊ตบุ๊ต</span>
+                            </h5>
 
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>*@
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>*@
                     </div>
                 </div>
             </div>

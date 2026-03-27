@@ -281,9 +281,13 @@
                                             </td>*@
                                         <td>
                                             @*<span style="font-weight:600;color:#0056b3;"></span>*@
-                                            <span style="@(item.srStep ==5 ?"color:green;font-weight:700;font-size:12px;":"" )  ">
+                                            @*<span style="@(item.srStep ==5 ?"color:green;font-weight:700;font-size:12px;":"" )  ">
+                                                @(Model?._ListViewsvsMastFlowApprove?.FirstOrDefault(x => x.mfStep == item.srStep)?.mfSubject ?? "")
+                                            </span>*@
+                                            <span style="@(item.srStep == 5 ? "color:darkseagreen;font-weight:700;font-size:12px;":item.srStep == 0 ? "color:orangered;font-weight:700;font-size:12px;" : "")">
                                                 @(Model?._ListViewsvsMastFlowApprove?.FirstOrDefault(x => x.mfStep == item.srStep)?.mfSubject ?? "")
                                             </span>
+
                                         </td>
                                         <td>
                                             <span style="@(item.srStep < 5 ? "" :"display:none" )"> @item.srApproveEmpcode  @item.srApproveName</span>

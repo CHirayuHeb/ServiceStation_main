@@ -163,8 +163,8 @@ function GoNewRequest(getID, getEvent, action, vForm, vTeam, vSubject, vSrNo) {
 
 }
 function GoNewReq(mmSecCode, msSubNo) {
-   // let vId = getID;
-    let url = "RequestForm?mmSecCode=" + mmSecCode + "&msSubNo=" + msSubNo ;
+    // let vId = getID;
+    let url = "RequestForm?mmSecCode=" + mmSecCode + "&msSubNo=" + msSubNo;
     GoSideMenu(url);
 
 }
@@ -1407,7 +1407,7 @@ function sendMail(getID, action) {
     }
     //else if (vform == "F6")//SDE User Register Application
     //{
-      
+
     //}
     else if (vform == "F7")//ITMS System register
     {
@@ -1497,21 +1497,23 @@ function sendMail(getID, action) {
     }
     else if (vEdate != null && vEdate != "") {
 
-        let mydata = $("#formRequest").serialize();
-   
+        let mydata = document.forms.namedItem("formData");
+        let viewModel = new FormData(mydata);
+        $.each(formData.elements, function (index, input) {
+            if (input.name) {
+                viewModel.append(input.name, input.value);
+            }
+        });
+
+
         $.ajax({
             type: 'post',
             url: action,
-            data: mydata,
+            data: viewModel,
+            processData: false,
+            contentType: false,
             success: function (data) {
-                //var url = data.partial + mydata + "&vform=" + vform;
-                //console.log("url" + url);
-                //$("#myModalBodyDiv1").load(url, function () {
-                //    // $('#divHistory').html(htmls);
-                //    $("#myModal1").modal("show");
-                //})
-
-
+               // console.log("Senddddddddddd");
                 $("#myModalBodyDiv1").html(data);
                 $("#myModal1").modal("show");
 
@@ -1534,7 +1536,7 @@ function sendMail(getID, action) {
 
 }
 function sendmailF3Inform(getID, action) {
-   // console.log("sssssss");
+    // console.log("sssssss");
     let vmsg = "";
     if (document.getElementById("txtF3MastNB").value == "") {
         vmsg = "กรุณากรอกชื่อเครื่อง  !!!";
@@ -1718,15 +1720,10 @@ function sendMailWorker1(getID, action) {
 
 
 }
+function sendMailWorkerold(getID, action) {
 
-
-function sendMailWorker(getID, action) {
-    //const formdata = new FormData(document.forms.item(0)).serialize();
-    //document.getElementById('searchInputTO').value = "";
     let vstep = document.getElementById("txtMsrStep").value;
 
-
-    //let vEdate = document.getElementById("i_EDate").value;
     let vform = document.getElementById("txtvForm").value;
     if (vform == "F7")//ITMS System register
     {
@@ -1802,22 +1799,6 @@ function sendMailWorker(getID, action) {
         }
     }
     let vmsg = "";
-
-    //if (document.getElementById("txtwsrStatus").value == "") {
-    //    vmsg = "กรุณากรอกข้อมูล สถานะการปฏิบัติงาน ให้ครบถ้วน  !!!";
-    //}
-    //else if (document.getElementById("txtwExpFinish").value == "") {
-    //    vmsg = "กรุณากรอกข้อมูล วันคาดว่างานเสร็จสิ้น ให้ครบถ้วน  !!!";
-    //}
-    //else if (document.getElementById("txtwFinishDate").value == "") {
-    //    vmsg = "กรุณากรอกข้อมูล วันที่งานเสร็จสิ้น ให้ครบถ้วน !!!";
-    //}
-    //else if (document.getElementById("txtwTotalWorkTime").value == "") {
-    //    vmsg = "กรุณากรอกข้อมูล เวลาการทำงานทั้งหมด ให้ครบถ้วน !!!";
-    //}
-    //else if (document.getElementById("txtwSolveProblem").value == "") {
-    //    vmsg = "กรุณากรอกข้อมูล วิธีการแก้ไข ให้ครบถ้วน !!!";
-    //}
 
     //operator 07/05/2025 11:28
     if (document.getElementById("txtwsrStatus").value.includes("Process")) {
@@ -1956,6 +1937,72 @@ function sendMailWorker(getID, action) {
     }
     //else if (vEdate != null && vEdate != "") {
 
+
+}
+
+function sendMailWorker(getID, action) {
+
+    let vstep = document.getElementById("txtMsrStep").value;
+
+    let vform = document.getElementById("txtvForm").value;
+    let vmsg = "";
+
+    //operator 07/05/2025 11:28
+    if (document.getElementById("txtwsrStatus").value.includes("Process")) {
+        vmsg = "กรุณากรอก อัพเดทสถานะการทำงาน !!!";
+    }
+    else if (document.getElementById("txtwExpFinish").value == "") {
+        vmsg = "กรุณากรอก วันคาดว่างานเสร็จสิ้น !!!";
+    }
+    else if (document.getElementById("txtwFinishDate").value == "") {
+        vmsg = "กรุณากรอก วันที่งานเสร็จสิ้น  !!!";
+    }
+    else if (document.getElementById("txtwTotalWorkTime").value == "") {
+        vmsg = "กรุณากรอก เวลาการทำงานทั้งหมด(ชั่วโมง)  !!!";
+    }
+    if (vmsg != "") {
+        swal.fire({
+            title: 'แจ้งเตือน',
+            icon: 'warning',
+            text: vmsg,
+
+        })
+            .then((result) => {
+
+
+            });
+    } else {
+        // let mydata = $("#formRequest").serialize();
+
+        let mydata = document.forms.namedItem("formData");
+        let viewModel = new FormData(mydata);
+        $.each(formData.elements, function (index, input) {
+            if (input.name) {
+                viewModel.append(input.name, input.value);
+            }
+        });
+
+
+
+
+        $.ajax({
+            type: "POST",
+            url: action,
+            data: viewModel,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+
+
+                $("#myModalBodyDiv1").html(response);
+                $("#myModal1").modal("show");
+
+
+
+
+            }
+        });
+    }
 
 }
 
