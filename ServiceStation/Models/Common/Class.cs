@@ -67,6 +67,7 @@ namespace ServiceStation.Models.Common
         //public List<ViewsvsSDE_SystemRegister> _ViewsvsSDE_SystemRegister { get; set; }
         //public DbSet<ViewsvsSDE_SystemRegister> _ViewsvsSDE_SystemRegister { get; set; }
         public List<ViewsvsSDE_SystemRegister> _ViewsvsSDE_SystemRegister { get; set; }
+        public ViewsvsSDE_SystemRegister _ViewSDE_SystemRegister { get; set; }
         public searchPrg _ViewsearchPrg { get; set; }
 
 

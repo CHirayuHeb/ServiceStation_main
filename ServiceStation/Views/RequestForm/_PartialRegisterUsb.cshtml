@@ -16,7 +16,7 @@
     </script>*@
 <div>
     <br />
-    <table class="center" style="@( (@_UserId == @Model._ViewsvsServiceRequest.srRequestBy|| @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode) && @Model._ViewsvsServiceRequest.srStep < 1  ? "" : "pointer-events: none;")">
+    <table class="center" style="@( (@_UserId == @Model._ViewsvsServiceRequest.srRequestBy || @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode) && @Model._ViewsvsServiceRequest.srStep < 1 ? "" : "pointer-events: none;")">
         <tr align="left" height="20">
             <td class="tbpurple" rowspan="2">Objective Request</td>
             <td id="insertdata2">
@@ -38,48 +38,97 @@
 
 
 <div id="f4Cancel" style="@(Model._ViewsvsRegisterUSB.ubStatusReq == "Cancel" ? "" : "display:none;")">
-    <div class="grid-container " style="@(@_UserId == @Model._ViewsvsServiceRequest.srRequestBy|| @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode ? "" : "pointer-events: none;")">
+    <div class="grid-container " style="@(@_UserId == @Model._ViewsvsServiceRequest.srRequestBy || @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode ? "" : "pointer-events: none;")">
         <div class="grid-item" style="text-align:left">
             <label class="text-orange" style="font-weight:800">Cancel</label>
         </div>
         <div class="grid-item">
         </div>
         <div class="grid-item " style="text-align:right; margin-right:5px">
-            <input type='button' class='Addcancel button btnOrange' value='+ เพิ่ม' style="width:80px;height:30px">
+            <input type='button' class='Addcancel button btnOrange' value='+ เพิ่ม' style="width:80px;height:30px;font-weight:700">
         </div>
     </div>
+
+
+
+    @{
+        var CancelDevice = (SelectList)ViewBag.formMastUSB;
+    }
+    <div id="templateCancelDevice" style="display:none;">
+        <select class="form-control vcuType" autocomplete="off" style="width:100%;font-size:10px;background-color:lightyellow;height:80%;font-weight:700">
+            <option value="">กรุณาเลือก</option>
+            @foreach (var item in CancelDevice)
+            {
+                <option value="@item.Value">@item.Text</option>
+            }
+        </select>
+    </div>
+
+    <div id="templateCancelReason" style="display:none;">
+        <select class="form-control vcuReason" style="width:100%;font-size:10px;background-color:lightyellow;height:80%;">
+            <option value="">กรุณาเลือก</option>
+            <option Value="broken" style="color:blue">สูญหาย</option>
+            <option Value="Lost" style="color:orange">พัง,เสีย</option>
+            <option value="Other" style="color:red">อื่นๆ</option>
+        </select>
+    </div>
+    @{
+        var statusListReason = new List<SelectListItem>{
+new SelectListItem { Text = "สูญหาย", Value = "broken" },
+new SelectListItem { Text = "พัง,เสีย", Value = "Lost" },
+new SelectListItem { Text = "อื่นๆ", Value = "Other" }
+};
+
+    }
+
+
     <table class="center " id="tbCancel">
-        <tr class="tbpurpleB">
-            <td width="30px">NO</td>
-            <td width="200px">Type</td>
-            <td width="200px">USB No</td>
-            <td>Reason</td>
-            <td width="30px">Delete</td>
-        </tr>
-        @{int RowNo1 = 0;}
-        @for (var i = 0; i < Model._ViewsvsRegisterUSB_Cancel.Count; i++)
-        {
-            <tr align="Center" style="vertical-align: top;">
-                <td>
-                    @(RowNo1 += 1)
-                    <input type="text" asp-for="_ViewsvsRegisterUSB_Cancel[i].cuNo" class='cuUSBNo' style="display:none" />
-                    <input type="text" asp-for="_ViewsvsRegisterUSB_Cancel[i].cuCancelNo" class='cuUSBNo' style="display:none" />
-                </td>
-                <td style="@(@_UserId == @Model._ViewsvsServiceRequest.srRequestBy|| @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode ? "" : "pointer-events: none;")">
-                    @Html.DropDownListFor(m => m._ViewsvsRegisterUSB_Cancel[i].cuType, (SelectList)ViewBag.formMastUSB, "กรุณาเลือก", new { id = "txtF4MastUsb", autocomplete = "off", required = "required", @style = "width:90%;height:30px" })
-                </td>
-                <td style="@(@_UserId == @Model._ViewsvsServiceRequest.srRequestBy|| @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode ? "" : "pointer-events: none;")">
-                    <input type="text" asp-for="_ViewsvsRegisterUSB_Cancel[i].cuUSBNo" class='cuUSBNo' style="width:90%" />
-                </td>
-                <td align='left' style="@(@_UserId == @Model._ViewsvsServiceRequest.srRequestBy|| @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode ? "" : "pointer-events: none;")">
-                    @Html.RadioButtonFor(m => m._ViewsvsRegisterUSB_Cancel[i].cuReason, "Lost", new { @class = "", id = "txtF4cuReason'" + i + "'", name = "txtF4cuReason'" + i + "'" }) <label>สูญหาย</label><br />
-                    @Html.RadioButtonFor(m => m._ViewsvsRegisterUSB_Cancel[i].cuReason, "broken", new { @class = "", id = "txtF4cuReason'" + i + "'", name = "txtF4cuReason'" + i + "'" }) <label>พัง,เสีย</label><br />
-                    @Html.RadioButtonFor(m => m._ViewsvsRegisterUSB_Cancel[i].cuReason, "Other", new { @class = "", id = "txtF4cuReason'" + i + "'", name = "txtF4cuReason'" + i + "'" }) <label> อื่นๆ</label><br />
-                    <input type="text" asp-for="_ViewsvsRegisterUSB_Cancel[i].cuReason_other" style="width: 80%" />
-                </td>
-                <td width="30px"><input type='button' class='RemoveRow' value='&#x274C' style="@(@_UserId == @Model._ViewsvsServiceRequest.srRequestBy|| @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode ? "" : "pointer-events: none;")"></td>
+        <thead>
+            <tr class="tbpurpleB">
+                <td width="30px"  align="center">No</td>
+                <td width="200px" align="center">Device Type</td>
+                <td width="200px"  align="center">USB No</td>
+                <td  align="center">เหตุผล</td>
+                <td align="center">เหตุผล(เพิ่มเติม)</td>
+                <td width="30px" style=" @(Model._ViewsvsServiceRequest.srRequestBy == _UserId ? "":"display:none;")">Delete</td>
             </tr>
-        }
+        </thead>
+        <tbody id="tableBodyItemCancel" >
+
+            @{int RowNo1 = 0;}
+            @for (var i = 0; i < Model._ViewsvsRegisterUSB_Cancel.Count; i++)
+            {
+                <tr align="Center" style="vertical-align: top;">
+                    <td>
+                        @(RowNo1 += 1)
+                        <input type="text" asp-for="_ViewsvsRegisterUSB_Cancel[i].cuNo" class='cuUSBNo' style="display:none" />
+                        <input type="text" asp-for="_ViewsvsRegisterUSB_Cancel[i].cuCancelNo" class='cuUSBNo' style="display:none" />
+                    </td>
+                    <td>
+                        @Html.DropDownListFor(m => m._ViewsvsRegisterUSB_Cancel[i].cuType, (SelectList)ViewBag.formMastUSB, "กรุณาเลือก", new { id = "txtF4MastUsb", autocomplete = "off", required = "required", @style = "width:100%;font-size:10px;background-color:lightyellow;height:80%;font-weight:700", @class = "form-control vcuType", disabled = "disabled" })
+                    </td>
+                    <td>
+                        <input type="text" asp-for="_ViewsvsRegisterUSB_Cancel[i].cuUSBNo" class='form-control cuUSBNo' style="width:100%;font-size:10px;" readonly />
+                    </td>
+                    <td align='left'>
+                        @Html.DropDownListFor(m => m._ViewsvsRegisterUSB_Cancel[i].cuReason, statusListReason, "กรุณาเลือก", new { id = "txtF4cuReason", autocomplete = "off", required = "required", @style = "width:100%;font-size:10px;background-color:lightyellow;height:80%;font-weight:700", @class = "form-control vcuReason", disabled = "disabled" })
+
+
+                        @*@Html.RadioButtonFor(m => m._ViewsvsRegisterUSB_Cancel[i].cuReason, "Lost", new { @class = "", id = "txtF4cuReason'" + i + "'", name = "txtF4cuReason'" + i + "'" }) <label>สูญหาย</label><br />
+                            @Html.RadioButtonFor(m => m._ViewsvsRegisterUSB_Cancel[i].cuReason, "broken", new { @class = "", id = "txtF4cuReason'" + i + "'", name = "txtF4cuReason'" + i + "'" }) <label>พัง,เสีย</label><br />
+                            @Html.RadioButtonFor(m => m._ViewsvsRegisterUSB_Cancel[i].cuReason, "Other", new { @class = "", id = "txtF4cuReason'" + i + "'", name = "txtF4cuReason'" + i + "'" }) <label> อื่นๆ</label><br />
+                            <input type="text" asp-for="_ViewsvsRegisterUSB_Cancel[i].cuReason_other" style="width: 80%" />*@
+                    </td>
+                    <td align='left'>
+                        <input class="form-control cuReason_other" type="text" asp-for="_ViewsvsRegisterUSB_Cancel[i].cuReason_other" style="width: 100%;font-size:10px;" readonly />
+                    </td>
+                    <td width="30px" style=" @(Model._ViewsvsServiceRequest.srRequestBy == _UserId ? "":"display:none;")"><input type='button' class='RemoveRow' value='&#x274C'></td>
+                </tr>
+            }
+
+        </tbody>
+
+
     </table>
 
 </div>
@@ -191,9 +240,9 @@
                 <td style="width:100px;field-sizing: content;@((@_UserId == @Model._ViewsvsServiceRequest.srRequestBy|| @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode) && Model._ViewsvsServiceRequest.srStep > 2  ? "" : "pointer-events: none;")">
 
                     @Html.TextAreaFor(model => model._ViewsvsRegisterUSB_New[i].nuITCode, new { @class = "form-control", style = "font-size:10px;max-width:100% ;field-sizing: content;min-height:50px " })
-                    
+
                     @*<input type="text" asp-for="_ViewsvsRegisterUSB_New[i].nuITCode" style="width:100px;field-sizing: content;@((@_UserId == @Model._ViewsvsServiceRequest.srRequestBy|| @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode) && Model._ViewsvsServiceRequest.srStep > 2  ? "" : "pointer-events: none;")" />*@
-               
+
                 </td>
 
             </tr>
@@ -212,7 +261,7 @@
             </div>
 
             <div class="modal-body text-center">
-                <img id="modalImage" src="" class="img-fluid mb-3"/>
+                <img id="modalImage" src="" class="img-fluid mb-3" />
 
                 <div>
                     <a id="downloadBtn" href="#" class="btn btn-primary" download>
@@ -224,8 +273,6 @@
         </div>
     </div>
 </div>
-
-
 
 
 

@@ -1373,8 +1373,44 @@ function sendMail(getID, action) {
         if (document.getElementById("F4ubStatusReqNew").checked == false &&
             document.getElementById("F4ubStatusReqCancel").checked == false) {
             msg = "กรุณาเลือก Objective Request !!!!";
+        }
+        else {
+            if (document.getElementById("F4ubStatusReqCancel").checked == true) {
+
+                const rows = document.querySelectorAll("#tableBodyItemCancel tr");
+                //_RegisterUSB_Cancel = [];
+                if (rows.length === 0) {
+                    alert(`กรุณาเพิ่มข้อมูล!!!!`);
+                    throw new Error("Type .​ is required."); // ❌ หยุดการทำงาน (ถ้าใช้ใน loop ใหญ่)
+                }
+
+                rows.forEach((row, index) => {
+
+                    const itemvType = row.querySelector(".vcuType");
+                    const itemTypeObject = itemvType.options[itemvType.selectedIndex].text.trim();
+
+                    if (itemTypeObject.includes("กรุณาเลือก")) {
+                        alert(`กรุณาเลือก Type  (บรรทัดที่ ${index + 1})`);
+                        itemvType.focus(); // optional: focus ช่องนั้น
+                        throw new Error("Type .​ is required."); // ❌ หยุดการทำงาน (ถ้าใช้ใน loop ใหญ่)
+                    }
+                    const itemvReason = row.querySelector(".vcuReason");
+                    const itemTypeReason = itemvReason.options[itemvReason.selectedIndex].text.trim();
+
+                    if (itemTypeReason.includes("กรุณาเลือก")) {
+                        alert(`กรุณาเลือก Reason  (บรรทัดที่ ${index + 1})`);
+                        itemvReason.focus(); // optional: focus ช่องนั้น
+                        throw new Error("Reason .​ is required."); // ❌ หยุดการทำงาน (ถ้าใช้ใน loop ใหญ่)
+                    }
+                });
+
+            }
 
         }
+
+
+
+
     }
     else if (vform == "F5") {//vpn
 
@@ -1405,10 +1441,66 @@ function sendMail(getID, action) {
         }
 
     }
-    //else if (vform == "F6")//SDE User Register Application
-    //{
+    else if (vform == "F6")//SDE User Register Application
+    {
+        const rows = document.querySelectorAll("#tableBodyItem tr"); //table id material body
+        SDE_SystemRegister = [];
+        rows.forEach((row, index) => {
 
-    //}
+
+            const itemvObject = row.querySelector(".vObject");
+            const itemTypeObject = itemvObject.options[itemvObject.selectedIndex].text.trim();
+
+            if (itemTypeObject.includes("กรุณาเลือก")) {
+                alert(`กรุณาเลือก Type of Object (บรรทัดที่ ${index + 1})`);
+                itemvObject.focus(); // optional: focus ช่องนั้น
+                throw new Error("Type of Object.​ is required."); // ❌ หยุดการทำงาน (ถ้าใช้ใน loop ใหญ่)
+            }
+
+            const itemPermissionEditor = row.querySelector(".vPermissionEditor");
+            const itemTypePermissionEditor = itemPermissionEditor.options[itemPermissionEditor.selectedIndex].text.trim();
+
+            if (itemTypePermissionEditor.includes("กรุณาเลือก")) {
+                alert(`กรุณาเลือก Type of Permission Editor (บรรทัดที่ ${index + 1})`);
+                itemPermissionEditor.focus(); // optional: focus ช่องนั้น
+                throw new Error("Permission Editor.​ is required."); // ❌ หยุดการทำงาน (ถ้าใช้ใน loop ใหญ่)
+            }
+
+            const itemPermissionRead = row.querySelector(".vPermissionRead");
+            const itemTypeitemPermissionRead = itemPermissionRead.options[itemPermissionRead.selectedIndex].text.trim();
+
+            if (itemTypeitemPermissionRead.includes("กรุณาเลือก")) {
+                alert(`กรุณาเลือก Type of Permission Read (บรรทัดที่ ${index + 1})`);
+                itemPermissionRead.focus(); // optional: focus ช่องนั้น
+                throw new Error("Permission Read.​ is required."); // ❌ หยุดการทำงาน (ถ้าใช้ใน loop ใหญ่)
+            }
+
+            const itemPermissionDelete = row.querySelector(".vPermissionDelete");
+            const itemTypeitemPermissionDelete = itemPermissionDelete.options[itemPermissionDelete.selectedIndex].text.trim();
+
+            if (itemTypeitemPermissionDelete.includes("กรุณาเลือก")) {
+                alert(`กรุณาเลือก Type of Permission Delete (บรรทัดที่ ${index + 1})`);
+                itemPermissionDelete.focus(); // optional: focus ช่องนั้น
+                throw new Error("Permission Delete.​ is required."); // ❌ หยุดการทำงาน (ถ้าใช้ใน loop ใหญ่)
+            }
+
+            //SDE_SystemRegister.push({
+            //    sysNo: 0,
+            //    sysEmpCode: row.querySelector(".vEmpcode").value.trim(),// index + 1, // ✅ เริ่มจาก 1
+            //    sysProgramName: row.querySelector(".vProgramName").value.trim(),
+            //    sysName: row.querySelector(".vName").value.trim(),
+            //    sysLastName: row.querySelector(".vLastName").value.trim(),
+            //    sysDeptCode: row.querySelector(".vDeptCode").value.trim(),
+            //    sysSectCode: row.querySelector(".vSectCode").value.trim(),
+            //    sysIntercomNo: row.querySelector(".vIntercomNo").value.trim(),
+            //    sysObject: itemvObject.options[itemvObject.selectedIndex].text.trim(),
+            //    sysPermissionEditor: itemPermissionEditor.options[itemPermissionEditor.selectedIndex].text.trim(),
+            //    sysPermissionRead: itemPermissionRead.options[itemPermissionRead.selectedIndex].text.trim(),
+            //    sysPermissionDelete: itemPermissionDelete.options[itemPermissionDelete.selectedIndex].text.trim(),
+            //    sysRemark: row.querySelector(".vRemark").value.trim(),
+            //});
+        });
+    }
     else if (vform == "F7")//ITMS System register
     {
         if (document.getElementById("txtF7txtF7itObjectiveNew").checked == false &&
@@ -1513,7 +1605,7 @@ function sendMail(getID, action) {
             processData: false,
             contentType: false,
             success: function (data) {
-               // console.log("Senddddddddddd");
+                // console.log("Senddddddddddd");
                 $("#myModalBodyDiv1").html(data);
                 $("#myModal1").modal("show");
 
@@ -2205,13 +2297,53 @@ function sendmailsubmit(action) {
     let mydata = $("#formRequest").serialize(); //F6
     let formData = document.forms.namedItem("formData");
     let viewModel = new FormData(formData);
+    $.each(formData, function (index, input) {
+        viewModel.append(input.name, input.value);
+    });
+    if (vform == "F4") { //usb
 
-    //$.each(formData, function (index, input) {
-    //    viewModel.append(input.name, input.value);
-    //});
-    //console.log($('input[name="files1"]'));
-    //console.log($('input[name="files2"]'));
-    if (vform == "F7") {
+        if (document.getElementById("F4ubStatusReqCancel").checked == true) {
+
+            const rows = document.querySelectorAll("#tableBodyItemCancel tr");
+            _RegisterUSB_Cancel = [];
+            rows.forEach((row, index) => {
+
+                const itemvType = row.querySelector(".vcuType");
+                const itemTypeObject = itemvType.options[itemvType.selectedIndex].text.trim();
+
+                //if (itemTypeObject.includes("กรุณาเลือก")) {
+                //    alert(`กรุณาเลือก Type  (บรรทัดที่ ${index + 1})`);
+                //    itemvType.focus(); // optional: focus ช่องนั้น
+                //    throw new Error("Type .​ is required."); // ❌ หยุดการทำงาน (ถ้าใช้ใน loop ใหญ่)
+                //}
+                const itemvReason = row.querySelector(".vcuReason");
+                const itemTypeReason = itemvReason.options[itemvReason.selectedIndex].text.trim();
+
+                //if (itemTypeReason.includes("กรุณาเลือก")) {
+                //    alert(`กรุณาเลือก Reason  (บรรทัดที่ ${index + 1})`);
+                //    itemvReason.focus(); // optional: focus ช่องนั้น
+                //    throw new Error("Reason .​ is required."); // ❌ หยุดการทำงาน (ถ้าใช้ใน loop ใหญ่)
+                //}
+
+                _RegisterUSB_Cancel.push({
+                    cuCancelNo: index + 1,
+                    cuNo: 0,
+                    cuType: itemTypeObject,//  itemvType.options[itemvType.selectedIndex].value.trim(),
+                    cuUSBNo: row.querySelector(".cuUSBNo").value.trim(),
+                    cuReason: itemvReason.options[itemvReason.selectedIndex].value.trim(),
+                    cuReason_other: row.querySelector(".cuReason_other").value.trim(),
+                    cuIssueBy: "",
+                    cuUpdateBy: "",
+                });
+
+
+
+            });
+            viewModel.append("_RegisterUSB_Cancel", JSON.stringify(_RegisterUSB_Cancel));
+
+        }
+    }
+    else if (vform == "F7") {
 
         $('#txtF7itPcLan_TypeThai').removeAttr('disabled', 'disabled');
         $('#txtF7itPcLan_TypeJapan').removeAttr('disabled', 'disabled');
@@ -2227,10 +2359,70 @@ function sendmailsubmit(action) {
         $('#txtF7itObjectiveGeneralInformationT9').removeAttr('disabled', 'disabled');
 
     }
+    else if (vform == "F6") {
+        const rows = document.querySelectorAll("#tableBodyItem tr"); //table id material body
+        SDE_SystemRegister = [];
+        rows.forEach((row, index) => {
 
-    $.each(formData, function (index, input) {
-        viewModel.append(input.name, input.value);
-    });
+
+            const itemvObject = row.querySelector(".vObject");
+            const itemTypeObject = itemvObject.options[itemvObject.selectedIndex].text.trim();
+
+            if (itemTypeObject.includes("กรุณาเลือก")) {
+                alert(`กรุณาเลือก Type of Object (บรรทัดที่ ${index + 1})`);
+                itemvObject.focus(); // optional: focus ช่องนั้น
+                throw new Error("Type of Object.​ is required."); // ❌ หยุดการทำงาน (ถ้าใช้ใน loop ใหญ่)
+            }
+
+            const itemPermissionEditor = row.querySelector(".vPermissionEditor");
+            const itemTypePermissionEditor = itemPermissionEditor.options[itemPermissionEditor.selectedIndex].text.trim();
+
+            if (itemTypePermissionEditor.includes("กรุณาเลือก")) {
+                alert(`กรุณาเลือก Type of Permission Editor (บรรทัดที่ ${index + 1})`);
+                itemPermissionEditor.focus(); // optional: focus ช่องนั้น
+                throw new Error("Permission Editor.​ is required."); // ❌ หยุดการทำงาน (ถ้าใช้ใน loop ใหญ่)
+            }
+
+            const itemPermissionRead = row.querySelector(".vPermissionRead");
+            const itemTypeitemPermissionRead = itemPermissionRead.options[itemPermissionRead.selectedIndex].text.trim();
+
+            if (itemTypeitemPermissionRead.includes("กรุณาเลือก")) {
+                alert(`กรุณาเลือก Type of Permission Read (บรรทัดที่ ${index + 1})`);
+                itemPermissionRead.focus(); // optional: focus ช่องนั้น
+                throw new Error("Permission Read.​ is required."); // ❌ หยุดการทำงาน (ถ้าใช้ใน loop ใหญ่)
+            }
+
+            const itemPermissionDelete = row.querySelector(".vPermissionDelete");
+            const itemTypeitemPermissionDelete = itemPermissionDelete.options[itemPermissionDelete.selectedIndex].text.trim();
+
+            if (itemTypeitemPermissionDelete.includes("กรุณาเลือก")) {
+                alert(`กรุณาเลือก Type of Permission Delete (บรรทัดที่ ${index + 1})`);
+                itemPermissionDelete.focus(); // optional: focus ช่องนั้น
+                throw new Error("Permission Delete.​ is required."); // ❌ หยุดการทำงาน (ถ้าใช้ใน loop ใหญ่)
+            }
+
+            SDE_SystemRegister.push({
+                sysNo: 0,
+                sysEmpCode: row.querySelector(".vEmpcode").value.trim(),// index + 1, // ✅ เริ่มจาก 1
+                sysProgramName: row.querySelector(".vProgramName").value.trim(),
+                sysName: row.querySelector(".vName").value.trim(),
+                sysLastName: row.querySelector(".vLastName").value.trim(),
+                sysDeptCode: row.querySelector(".vDeptCode").value.trim(),
+                sysSectCode: row.querySelector(".vSectCode").value.trim(),
+                sysIntercomNo: row.querySelector(".vIntercomNo").value.trim(),
+                sysObject: itemvObject.options[itemvObject.selectedIndex].value.trim(),
+                sysPermissionEditor: itemPermissionEditor.options[itemPermissionEditor.selectedIndex].value.trim(),
+                sysPermissionRead: itemPermissionRead.options[itemPermissionRead.selectedIndex].value.trim(),
+                sysPermissionDelete: itemPermissionDelete.options[itemPermissionDelete.selectedIndex].value.trim(),
+                sysRemark: row.querySelector(".vRemark").value.trim(),
+            });
+        });
+        viewModel.append("_SDE_SystemRegister", JSON.stringify(SDE_SystemRegister));
+    }
+
+
+
+
 
     //if (vstep > 2 && document.getElementById("txtwsrStatus").value != "Cancel") { Transfer
     if (vstep > 2 && document.getElementById("txtwsrStatus").value != "Transfer" && document.getElementById("txtwsrStatus").value != "Cancel") {

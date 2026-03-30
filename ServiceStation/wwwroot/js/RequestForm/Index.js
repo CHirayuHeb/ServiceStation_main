@@ -54,7 +54,7 @@ $('.AddNew').click(function () {
     //$("#tbNew").append('<tr><td>1</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td> <input type="button" class="RemoveRow" value="&#x274C"></td></tr>');
 });
 
-$('.Addcancel').click(function () {
+$('.Addcancel111').click(function () {
     var rowCount = document.getElementById('tbCancel').rows.length;
     var htmls = "";
     var rowi = rowCount - 1;
@@ -91,6 +91,38 @@ $('.Addcancel').click(function () {
 
     //$("#tbCancel").append('<tr><td>1</td><td></td><td></td><td> <input type="radio"  value="loss" /> สูญหาย &emsp;&emsp;<input type = "radio" value = "broken" /> พัง, เสีย &emsp;&emsp;<input type="radio" value="broken" />อื่น ๆ &emsp;<input type="text" id="namedata2" name="input" /></td><td> <input type="button" class="RemoveRow" value="&#x274C"></td></tr>');
 });
+
+$('.Addcancel').click(function () {
+    let dwDevice = $("#templateCancelDevice").html();
+    let dwReason = $("#templateCancelReason").html();
+    var rowCount = document.getElementById('tbCancel').rows.length;
+    // var rowCount = document.getElementById('tbCancel').rows.length - 1;
+    //var htmls = "";
+    var rowCount = rowCount - 1;
+    let newRow = `
+        <tr>
+            <td style="text-align:center;vertical-align: top;">${rowCount + 1}</td>
+            <td style="text-align:center;vertical-align: top;">
+                ${dwDevice}
+            </td>
+            <td style="text-align:center;vertical-align: top;">
+            <input type="text" class="cuUSBNo form-control" value="" style=" width:100%;font-size:10px;"  maxlength="50"/>
+            </td>
+            <td style="text-align:center;vertical-align: top;">
+            ${dwReason}
+            </td>
+             <td style="text-align:center;vertical-align: top;">
+            <textarea class="cuReason_other form-control" maxlength="100" style="width:100%;font-size:10px;"></textarea>
+            </td>
+            <td style="text-align:center;vertical-align: top;">
+            <input type='button' class='RemoveRow' value='&#x274C'>
+            </td>
+        </tr>
+        `;
+   // $("#tbCancel").append(newRow);
+    $("#tableBodyItemCancel").append(newRow);
+});
+
 $('.RemovecancelRow').click(function () {
     $(this).closest('tr').remove();
 });
@@ -147,13 +179,7 @@ function btnaddF6(action) {
             });
     }
     else {
-        //type: "POST",
-        //    url: '@Url.Action("SearchPersonal", "RequestForm")',
-        //        data: "{vEmpcode:'" + v_emp + "'}",
-        //            contentType: "application/json; charset=utf-8",
-        //                dataType: "html",
 
-        //action = action 
         $.ajax({
             type: "POST",
             url: action,
@@ -221,7 +247,7 @@ function btnaddF6(action) {
                         htmls += "<td align='center'> <input type='radio'  name='_ViewsvsSDE_SystemRegister[" + rowi + "].sysPermissionEditor' value ='Editor'><label style ='font-size:8px;'> Yes</label><br /> <input type='radio'  name='_ViewsvsSDE_SystemRegister[" + rowi + "].sysPermissionEditor' value ='No'><label style ='font-size:8px;'> No</label><br /></td>";
                         htmls += "<td align='center'> <input type='radio'  name='_ViewsvsSDE_SystemRegister[" + rowi + "].sysPermissionRead'   value ='Read'><label style ='font-size:8px;'> Yes</label><br /><input type='radio'  name='_ViewsvsSDE_SystemRegister[" + rowi + "].sysPermissionRead'   value ='No'><label style ='font-size:8px;'> No</label><br /></td>";
                         htmls += "<td align='center'> <input type='radio'  name='_ViewsvsSDE_SystemRegister[" + rowi + "].sysPermissionDelete' value ='Delete'><label style ='font-size:8px;'> Yes</label><br /><input type='radio'  name='_ViewsvsSDE_SystemRegister[" + rowi + "].sysPermissionDelete' value ='No'><label style ='font-size:8px;'> No</label><br /></td>";
-                        
+
                         htmls += "<td align='center'> <textarea name='_ViewsvsSDE_SystemRegister[" + rowi + "].sysRemark' style = 'font-size: 12px; max-width: 100 % ; height: 80px;'></textarea> </td>";
                         //htmls += "<td align='Center'></td>";
 
@@ -230,6 +256,95 @@ function btnaddF6(action) {
                         $("#tbUsb").append(htmls);
                         document.getElementById("txtF6empcode").value = "";
                         //$("#tbUsb").append('<tr><td>1</td><td>' + empcode + '</td><td>' + item.emP_TNAME + '</td><td>' + item.lasT_TNAME + '</td><td>' + item.depT_CODE + '</td><td>' + item.intercomno + '</td><td></td><td></td><td></td><td></td><td></td><td></td><td> <input type="button" class="RemoveRow" value="&#x274C"></td></tr>');
+                    });
+
+
+                } else {
+                    swal.fire({
+                        title: 'แจ้งเตือน',
+                        icon: "warning",
+                        text: "กรุณากรอกรหัสนักงานให้ถูกต้อง!!",
+                    })
+                        .then((result) => {
+                            document.getElementById("txtF6empcode").value = "";
+
+                        });
+                }
+
+
+            }
+        });
+    }
+}
+
+
+function btnaddNewF6(action) {
+    let empcode = document.getElementById("txtF6empcode").value;
+    let n_program = document.getElementById("ipF4pgm").value;
+    var rowCount = document.getElementById('tbUsb').rows.length;
+    var rowi = document.getElementById('tbUsb').rows.length - 2;
+
+
+    if (empcode == "") {
+        swal.fire({
+            title: 'แจ้งเตือน',
+            icon: "warning",
+            text: "กรุณากรอกรหัสนักงานเพื่อเพิ่มข้อมูล !!",
+        })
+            .then((result) => {
+
+            });
+    }
+    else if (n_program == "") {
+        swal.fire({
+            title: 'แจ้งเตือน',
+            icon: "warning",
+            text: "กรุณาเลือกโปรแกรมที่ต้องการ !!",
+        })
+            .then((result) => {
+
+
+            });
+    }
+    else {
+
+        $.ajax({
+            type: "POST",
+            url: action,
+            data: { vEmpcode: empcode },
+            success: function (data) {
+                console.log("scearh");
+                if (data._AccEMPLOYEE.length > 0) {
+                    $.each(data._AccEMPLOYEE, function (i, item) {
+
+                        var rowCount = document.getElementById('tableBodyItem').rows.length;
+                        var rowi = rowCount + 1;
+                        var htmls = "";
+                        htmls = "";
+                        htmls += "<tr>";
+                        htmls += " <td>" + rowi + "</td>";
+                        htmls += " <td><input type='text' class='vEmpcode form-control ' min='0' style='width:70px;height:90%;font-size:10px;background-color:ghostwhite ;'  value='" + empcode + "' readonly></td>";
+                        htmls += " <td><input type='text' class='vName form-control ' min='0' style='width:100px;height:90%;font-size:10px;background-color:ghostwhite ;'  value='" + item.emP_ENAME + "' readonly></td>";
+                        htmls += " <td><input type='text' class='vLastName form-control ' min='0' style='width:100px;height:90%;font-size:10px;background-color:ghostwhite ;'  value='" + item.lasT_ENAME + "' readonly></td>";
+
+
+                        htmls += " <td><input type='text' class='vDeptCode form-control ' min='0' style='width:50px;height:90%;font-size:10px;background-color:ghostwhite ;'  value='" + item.depT_CODE + "' readonly></td>";
+                        htmls += " <td><input type='text' class='vSectCode form-control ' min='0' style='width:50px;height:90%;font-size:10px;background-color:ghostwhite ;'  value='" + item.seC_CODE + "' readonly></td>";
+                        htmls += " <td><input type='text' class='vIntercomNo form-control ' min='0' style='width:50px;height:90%;font-size:10px;background-color:ghostwhite ;'  value='" + item.intercomno + "' readonly></td>";
+                        htmls += " <td><input type='text' class='vProgramName form-control ' min='0' style='width:150px;height:90%;font-size:10px;background-color:ghostwhite;'  value='" + n_program + "' readonly></td>";
+
+                        htmls += "<td>" + document.getElementById("template_SelectObject").outerHTML.replace('template_SelectObject', 'i_SelectObject').replace('style="display:none"', 'class="vObject form-control" style="80px;font-size:10px;background-color:lightyellow;"') + "</td>";
+                        htmls += "<td>" + document.getElementById("template_SelectPerEdit").outerHTML.replace('template_SelectPerEdit', 'i_SelectPerEdit').replace('style="display:none"', 'class="vPermissionEditor form-control" style="width:80px;font-size:10px;background-color:lightyellow;"') + "</td>";
+                        htmls += "<td>" + document.getElementById("template_SelectPerRead").outerHTML.replace('template_SelectPerRead', 'i_SelectPerRead').replace('style="display:none"', 'class="vPermissionRead form-control" style="width:80px;font-size:10px;background-color:lightyellow;"') + "</td>";
+                        htmls += "<td>" + document.getElementById("template_SelectPerDelete").outerHTML.replace('template_SelectPerDelete', 'i_SelectPerDelete').replace('style="display:none"', 'class="vPermissionDelete form-control" style="width:80px;font-size:10px;background-color:lightyellow;"') + "</td>";
+
+                        htmls += " <td><textarea class='vRemark form-control ' style = 'font-size: 10px; max-width: 100 % ; height: 80px;'></textarea> </td>";
+                        htmls += "<td align='Center'><input type='button' class='RemoveRow' value='&#x274C'></td>";
+                        htmls += " </td> "
+                        htmls += "</tr>";
+
+                        document.getElementById("tableBodyItem").insertAdjacentHTML('beforeend', htmls);
+                        document.getElementById("txtF6empcode").value = "";
                     });
 
 
@@ -679,7 +794,7 @@ $('#txtF5vpnStartDate').change(function () {
                 });
         }
     }
-    
+
     //else {
     //    let start = new Date(v_EDate);
     //    let end = new Date(start);
@@ -722,7 +837,7 @@ $('#txtF5vpnEndDate').change(function () {
     }
     MaxCDare = yyyy + '/' + mm + '/' + dd;
     console.log("MaxCDare" + MaxCDare);
-   
+
 
 
 
@@ -801,7 +916,7 @@ $('#txtwExpFinish').change(function () {
         console.log(today);
         //document.getElementById("txtF5vpnStartDate").value = today;
         document.getElementById("txtwExpFinish").value = today;
-        
+
     }
 });
 $('#txtwFinishDate').change(function () {
@@ -1055,7 +1170,7 @@ function CheckF1NewRevise(status) {
 
         if (status == 'New') {
             d_pgm.style.display = "none";
-          
+
             //if (d_new.style.display === "none") {
             //    d_new.style.display = "block";
             //    d_cancel.style.display = "none";

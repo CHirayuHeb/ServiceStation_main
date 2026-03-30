@@ -18,6 +18,7 @@ using ServiceStation.Models.Table.IT;
 using ServiceStation.Models.Table.LAMP;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Net.Mail;
+using Newtonsoft.Json;
 
 namespace ServiceStation.Controllers.RequestForm
 {
@@ -967,7 +968,7 @@ namespace ServiceStation.Controllers.RequestForm
                 //return Json(_IT.rpEmails.Where(p => p.emEmail.Contains(term) || p.emEmail_M365.Contains(term)).Select(p => p.emEmail_M365).ToList());
             }
         }
-        public JsonResult SendMail_post(Class @class, List<IFormFile> files, List<IFormFile> filesw, string vform, string vSR, List<IFormFile> files0, List<IFormFile> files1, List<IFormFile> files2, List<IFormFile> files3, List<IFormFile> files4, List<IFormFile> files5, List<IFormFile> files6, List<IFormFile> files7, List<IFormFile> files8, List<IFormFile> files9, List<IFormFile> files10)
+        public JsonResult SendMail_post(Class @class, List<IFormFile> files, List<IFormFile> filesw, string vform, string vSR, List<IFormFile> files0, List<IFormFile> files1, List<IFormFile> files2, List<IFormFile> files3, List<IFormFile> files4, List<IFormFile> files5, List<IFormFile> files6, List<IFormFile> files7, List<IFormFile> files8, List<IFormFile> files9, List<IFormFile> files10, string _SDE_SystemRegister, string _RegisterUSB_Cancel,string _RegisterUSB_New)
         {
             int[] getSrNo;
             string getSForm;
@@ -993,6 +994,10 @@ namespace ServiceStation.Controllers.RequestForm
             string msg = "Send Mail already ";
             try
             {
+              
+
+
+
                 string vCCemail = "";
                 int i_Step = @class._ViewsvsServiceRequest.srStep;
                 // files._items.count
@@ -1126,6 +1131,19 @@ namespace ServiceStation.Controllers.RequestForm
 
                     //@class._ViewsvsServiceRequest.srServiceNo = vSR;
                     @class._ViewsvsServiceRequest.srServiceNo = i_Step == 3 ? runSRNumber(@class._ViewsvsServiceRequest.srServiceNo) : @class._ViewsvsServiceRequest.srServiceNo;
+
+                    //for form 6 Register  
+                    if (_SDE_SystemRegister != null && vform == "F6" )
+                    {
+                        @class._ViewsvsSDE_SystemRegister = JsonConvert.DeserializeObject<List<ViewsvsSDE_SystemRegister>>(_SDE_SystemRegister);
+                    }
+
+
+                    //for form 4 Register  USB 
+                    if (_RegisterUSB_Cancel != null && vform == "F4")
+                    {
+                        @class._ViewsvsRegisterUSB_Cancel = JsonConvert.DeserializeObject<List<ViewsvsRegisterUSB_Cancel>>(_RegisterUSB_Cancel);
+                    }
 
 
 
