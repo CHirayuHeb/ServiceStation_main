@@ -1,6 +1,6 @@
 ﻿
 
-$('.AddNew').click(function () {
+$('.AddNew1').click(function () {
     var rowCount = document.getElementById('tbNew').rows.length;
     var htmls = "";
     var rowi = rowCount - 2;
@@ -52,6 +52,50 @@ $('.AddNew').click(function () {
     htmls += "</tr>";
     $("#tbNew").append(htmls);
     //$("#tbNew").append('<tr><td>1</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td> <input type="button" class="RemoveRow" value="&#x274C"></td></tr>');
+});
+$('.AddNew').click(function () {
+    let dwDevice = $("#templateNewDevice").html();
+    var rowCount = document.getElementById('tbNew').rows.length - 2;
+    // var rowCount = document.getElementById('tbCancel').rows.length - 1;
+    //var htmls = "";
+    //var rowCount = rowCount - 1;
+    let newRow = `
+        <tr>
+            <td style="text-align:center;vertical-align: top;">${rowCount + 1}
+            <input type="text" class="nuNewNo form-control" value="" style=" width:100%;font-size:10px;display:none"/>
+            <input type="hidden" class="nuNo" value="0" />
+            <input type="hidden" class="nuNewNo" value="0" />
+            </td>
+            <td style="text-align:center;vertical-align: top;">
+                ${dwDevice}
+            </td>
+            <td style="text-align:center;vertical-align: top;">
+            <input type="text" class="nuEquipment form-control" value="" style=" width:100%;font-size:10px;"  maxlength="100"/>
+            </td>
+            <td style="text-align:center;vertical-align: top;">
+            <textarea class="nuObjective form-control" maxlength="100" style="width:100%;font-size:10px;"></textarea>
+            </td>
+            <td style="text-align:center;vertical-align: top;">
+            <input type="text" class="nuCodeIncharge form-control" value="" style=" width:100%;font-size:10px;"  maxlength="6"/>
+            </td>
+            <td style="text-align:center;vertical-align: top;">
+            <input type="text" class="nuUserIncharge form-control" value="" style=" width:100%;font-size:10px;"  maxlength="50"/>
+            </td>
+            <td style="text-align:center;vertical-align: top;">
+            <input type="text" class="nuIntercomNo form-control" value="" style=" width:100%;font-size:10px;"  maxlength="4"/>
+            </td>
+            <td><input type="file" class="nuImage" accept='image/*'></td>
+            <td><input type='button' class='RemoveRow' value='&#x274C' style='font-size:8px;'></td>
+            <td style="text-align:center;vertical-align: top;">
+            <input type="text" class="nuHardwareID form-control" value="" style=" width:100%;font-size:10px;"  maxlength="50" readonly/>
+            </td>
+             <td style="text-align:center;vertical-align: top;">
+            <input type="text" class="nuITCode form-control" value="" style=" width:100%;font-size:10px;"  maxlength="50" readonly/>
+            </td>
+
+   </tr>
+        `;
+    $("#tableBodyItemNew").append(newRow);
 });
 
 $('.Addcancel111').click(function () {
@@ -119,7 +163,7 @@ $('.Addcancel').click(function () {
             </td>
         </tr>
         `;
-   // $("#tbCancel").append(newRow);
+    // $("#tbCancel").append(newRow);
     $("#tableBodyItemCancel").append(newRow);
 });
 

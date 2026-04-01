@@ -494,4 +494,24 @@ namespace ServiceStation.Models.Table.IT
         public string program_name { get; set; }
     }
 
+    public class RegisterUSBNewViewModel
+    {
+       
+        public int nuNewNo { get; set; }
+        public int nuNo { get; set; }
+        public string nuType { get; set; }
+        public string nuEquipment { get; set; }
+        public string nuObjective { get; set; }
+        public string nuCodeIncharge { get; set; }
+        public string nuUserIncharge { get; set; }
+        public string nuIntercomNo { get; set; }
+        //public string nuImage { get; set; }
+        public IFormFile nuImage { get; set; }
+        public string nuHardwareID { get; set; }
+        public string nuITCode { get; set; }
+        public string nuIssueBy { get; set; }
+        public string nuUpdateBy { get; set; }
+    }
+
+
 }

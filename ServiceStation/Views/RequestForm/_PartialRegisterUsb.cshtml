@@ -9,11 +9,6 @@
 
 }
 <link href="~/css/RequestForm/site.css" rel="stylesheet" />
-@*<script type="text/javascript">
-        $(document).ready(function () {
-            console.log("sssssss");
-        });
-    </script>*@
 <div>
     <br />
     <table class="center" style="@( (@_UserId == @Model._ViewsvsServiceRequest.srRequestBy || @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode) && @Model._ViewsvsServiceRequest.srStep < 1 ? "" : "pointer-events: none;")">
@@ -25,8 +20,6 @@
         </tr>
         <tr align="left" height="20">
             <td>
-                @*@Html.RadioButtonFor(m => m._ViewsvsRegisterUSB.ubStatusReq, "New", new { @class = "", id = "F4ubStatusReqNew", name = "F4ubStatusReq" }) <label class="form-check-label" for="StatusDis">New</label><br />
-                    @Html.RadioButtonFor(m => m._ViewsvsRegisterUSB.ubStatusReq, "Cancel", new { @class = "", id = "F4ubStatusReqCancel", name = "F4ubStatusReq" }) <label class="form-check-label" for="StatusDis">Cancel</label><br />*@
                 @Html.RadioButtonFor(m => m._ViewsvsRegisterUSB.ubStatusReq, "New", new { @class = "", id = "F4ubStatusReqNew", name = "F4ubStatusReq", onclick = "CheckF4NewCancel('New')" }) <label class="form-check-label" for="StatusDis">New</label><br />
                 @Html.RadioButtonFor(m => m._ViewsvsRegisterUSB.ubStatusReq, "Cancel", new { @class = "", id = "F4ubStatusReqCancel", name = "F4ubStatusReq", onclick = "CheckF4NewCancel('Cancel')" }) <label class="form-check-label" for="StatusDis">Cancel</label><br />
 
@@ -48,7 +41,6 @@
             <input type='button' class='Addcancel button btnOrange' value='+ เพิ่ม' style="width:80px;height:30px;font-weight:700">
         </div>
     </div>
-
 
 
     @{
@@ -81,19 +73,18 @@ new SelectListItem { Text = "อื่นๆ", Value = "Other" }
 
     }
 
-
-    <table class="center " id="tbCancel">
+    <table class="center " id="tbCancel" style="width:100%">
         <thead>
             <tr class="tbpurpleB">
-                <td width="30px"  align="center">No</td>
+                <td width="30px" align="center">No</td>
                 <td width="200px" align="center">Device Type</td>
-                <td width="200px"  align="center">USB No</td>
-                <td  align="center">เหตุผล</td>
+                <td width="200px" align="center">USB No</td>
+                <td align="center">เหตุผล</td>
                 <td align="center">เหตุผล(เพิ่มเติม)</td>
                 <td width="30px" style=" @(Model._ViewsvsServiceRequest.srRequestBy == _UserId ? "":"display:none;")">Delete</td>
             </tr>
         </thead>
-        <tbody id="tableBodyItemCancel" >
+        <tbody id="tableBodyItemCancel">
 
             @{int RowNo1 = 0;}
             @for (var i = 0; i < Model._ViewsvsRegisterUSB_Cancel.Count; i++)
@@ -122,7 +113,8 @@ new SelectListItem { Text = "อื่นๆ", Value = "Other" }
                     <td align='left'>
                         <input class="form-control cuReason_other" type="text" asp-for="_ViewsvsRegisterUSB_Cancel[i].cuReason_other" style="width: 100%;font-size:10px;" readonly />
                     </td>
-                    <td width="30px" style=" @(Model._ViewsvsServiceRequest.srRequestBy == _UserId ? "":"display:none;")"><input type='button' class='RemoveRow' value='&#x274C'></td>
+
+                    <td width="30px" style=" @(Model._ViewsvsServiceRequest.srRequestBy == _UserId && @Model._ViewsvsServiceRequest.srStep < 2 ? "":"display:none;")"><input type='button' class='RemoveRow' value='&#x274C'></td>
                 </tr>
             }
 
@@ -135,6 +127,21 @@ new SelectListItem { Text = "อื่นๆ", Value = "Other" }
 
 
 <div id="f4New" style="@(Model._ViewsvsRegisterUSB.ubStatusReq == "New" ? "" : "display:none;")">
+
+    @{
+        var NewDevice = (SelectList)ViewBag.formMastUSB;
+    }
+    <div id="templateNewDevice" style="display:none;">
+        <select class="form-control vnuType" autocomplete="off" style="width:100%;font-size:10px;background-color:lightyellow;height:80%;font-weight:700">
+            <option value="">กรุณาเลือก</option>
+            @foreach (var item in NewDevice)
+            {
+                <option value="@item.Value">@item.Text</option>
+            }
+        </select>
+    </div>
+
+
     <div class="grid-container " style="@(@_UserId == @Model._ViewsvsServiceRequest.srRequestBy|| @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode ? "" : "pointer-events: none;")">
         <div class="grid-item" style="text-align:left">
             <label style="color:green;font-weight:800">New</label>
@@ -143,110 +150,108 @@ new SelectListItem { Text = "อื่นๆ", Value = "Other" }
         </div>
         <div class="grid-item " style="text-align:right; margin-right:5px">
             <input type='button' class='AddNew button ' value='+ เพิ่ม' style="width:80px;height:30px">
+
+
         </div>
     </div>
-    <table class="center" id="tbNew">
+    <table class="center" id="tbNew" style="width:100%;">
         <tr align="Center">
-            <td colspan="8" class="tbpurpleB">User(only)</td>
-            <td colspan="3" class="tbgreenB">For IT(only)</td>
+            <td colspan="9" class="tbpurpleB" style="font-size:10px">User(only)</td>
+            <td colspan="3" class="tbgreenB" style="font-size:10px">For IT(only)</td>
         </tr>
         <tr align="Center">
-            <td class="tbpurple" width="30px">NO<br /></td>
-            <td class="tbpurple">Type<br /></td>
-            <td class="tbpurple">Equipment<br /></td>
-            <td class="tbpurple">Objective<br /></td>
-            <td class="tbpurple">User Incharge<br /></td>
-            <td class="tbpurple">Intercom No.</td>
-            <td class="tbpurple">Image(Equipment)<br /></td>
-            <td class="tbpurple">Delete</td>
-            <td class="tbgreen">Hardware ID</td>
-            <td class="tbgreen">IT Code<br /></td>
-            @*<td class="tbgreen" width="30px">Delete</td>*@
+            <td class="tbpurple" width="30px" style="font-size:10px">NO<br /></td>
+            <td class="tbpurple" style="font-size:10px">Type</td>
+            <td class="tbpurple" style="font-size:10px">Equipment</td>
+            <td class="tbpurple" style="font-size:10px">Objective</td>
+            <td class="tbpurple" width="80px" style="font-size:10px">User Incharge(Emp code)</td>
+            <td class="tbpurple" width="100px" style="font-size:10px">User Incharge(Name)</td>
+            <td class="tbpurple" width="60px" style="font-size:10px">Intercom No.</td>
+            <td class="tbpurple" style="font-size:10px">Image(Equipment)</td>
+            <td class="tbpurple" style="font-size:10px">Del</td>
+            <td class="tbgreen" style="font-size:10px">Hardware ID</td>
+            <td class="tbgreen" style="font-size:10px">IT Code<br /></td>
+
         </tr>
-        @{int RowNo = 0;}
-        @for (var i = 0; i < Model._ViewsvsRegisterUSB_New.Count; i++)
-        {
-            <tr align="Center" style="vertical-align: top;">
-                <td style="@(@_UserId == @Model._ViewsvsServiceRequest.srRequestBy|| @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode ? "" : "pointer-events: none;")">
-                    @{RowNo++;}@RowNo
-                    <input type="text" asp-for="_ViewsvsRegisterUSB_New[i].nuNo" style="display:none;" />
-                    <input type="text" asp-for="_ViewsvsRegisterUSB_New[i].nuNewNo" style="display:none;" />
-                </td>
-                <td style="@(@_UserId == @Model._ViewsvsServiceRequest.srRequestBy|| @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode ? "" : "pointer-events: none;")">
-                    @Html.DropDownListFor(m => m._ViewsvsRegisterUSB_New[i].nuType, (SelectList)ViewBag.formMastUSB, "กรุณาเลือก", new { id = "txtF4NewMastUsb", autocomplete = "off", required = "required", @style = "width:100px;height:30px;font-size:10px" })
-                </td>
-                <td style="@(@_UserId == @Model._ViewsvsServiceRequest.srRequestBy|| @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode ? "" : "pointer-events: none;")">
-                    <input type="text" asp-for="_ViewsvsRegisterUSB_New[i].nuEquipment" style="width:90%" />
-                </td>
-                <td style="@(@_UserId == @Model._ViewsvsServiceRequest.srRequestBy|| @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode ? "" : "pointer-events: none;")">
-                    <textarea asp-for="_ViewsvsRegisterUSB_New[i].nuObjective" class='cObject' value="" rows="3" cols="30"></textarea>
-                    @*<input type="text" asp-for="_ViewsvsRegisterUSB_New[i].nuObjective" style="width:90%" />*@
-                </td>
-                <td style="@(@_UserId == @Model._ViewsvsServiceRequest.srRequestBy|| @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode ? "" : "pointer-events: none;")">
-                    <input type="text" asp-for="_ViewsvsRegisterUSB_New[i].nuUserIncharge" style="width:90%" />
-                </td>
-                <td style="@(@_UserId == @Model._ViewsvsServiceRequest.srRequestBy|| @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode ? "" : "pointer-events: none;")">
-                    <input type="text" asp-for="_ViewsvsRegisterUSB_New[i].nuIntercomNo" style="width:90%" />
-                </td>
-                <td>
-                    @{
-                        byte[] result = System.Text.Encoding.Unicode.GetBytes(@"\\thsweb\\ServiceStation\\" + Model._ViewsvsRegisterUSB_New[i].nuImage);
-                        var base64 = Convert.ToBase64String(result);
-                        var imgSrc = String.Format("data:image/png;base64,{0}", base64);
-                    }
-                    <input type="text" asp-for="_ViewsvsRegisterUSB_New[i].nuImage" style="width:90%;display:none" />
-                    @*@if (Model._ViewsvsRegisterUSB_New[i].nuImage != null)
-                        {
-                            <a href="@Url.Action("openFile", "RequestForm", new { pathFile = Model._ViewsvsRegisterUSB_New[i].nuImage })" class="btn-image" target="_blank" style="padding-left:5px;text-decoration:auto; @(Model._ViewsvsRegisterUSB_New[i].nuImage != null ?"display:none":"" )">
-                                <span>
-                                    <img id="btnOpenfile" src="~/images/img1.png" class="btn-image" style="cursor: pointer; height:28px;width:30px;">
-                                </span>
-                                เปิดไฟล์
-                            </a>
-                        }*@
-                    @*<a href="@Url.Action("openFile", "RequestForm", new { pathFile = Model._ViewsvsRegisterUSB_New[i].nuImage })"
-                           class="btn-image" target="_blank" style="padding-left:5px;text-decoration:auto; @(string.IsNullOrEmpty(Model._ViewsvsRegisterUSB_New[i].nuImage)? "display:none;": "")">
+        <tbody id="tableBodyItemNew">
+            @{int RowNo = 0;}
+            @for (var i = 0; i < Model._ViewsvsRegisterUSB_New.Count; i++)
+            {
+                <tr align="Center" style="vertical-align: top;">
+                    <td style="@(@_UserId == @Model._ViewsvsServiceRequest.srRequestBy|| @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode ? "" : "pointer-events: none;")">
+                        @{RowNo++;}@RowNo
+                        <input type="text" asp-for="_ViewsvsRegisterUSB_New[i].nuNo" style="display:none;" class="nuNo" />
+                        <input type="text" asp-for="_ViewsvsRegisterUSB_New[i].nuNewNo" style="display:none;" class="nuNewNo" />
+
+                    </td>
+                    <td>
+                        @Html.DropDownListFor(m => m._ViewsvsRegisterUSB_New[i].nuType, (SelectList)ViewBag.formMastUSB, "กรุณาเลือก", new { id = "txtF4NewMastUsb", autocomplete = "off", required = "required", @style = "width:100%;font-size:9px;background-color:lightyellow;height:80%;font-weight:700", @class = "form-control vnuType" })
+
+                        @*@Html.DropDownListFor(m => m._ViewsvsRegisterUSB_New[i].nuType, (SelectList)ViewBag.formMastUSB, "กรุณาเลือก", new { id = "txtF4NewMastUsb", autocomplete = "off", required = "required", @style = "width:100px;height:30px;font-size:10px" })*@
+                    </td>
+                    <td>
+                        <textarea asp-for="_ViewsvsRegisterUSB_New[i].nuEquipment" style="width:100%;font-size:10px" class="form-control nuEquipment" rows="2" cols="10"></textarea>
+                    </td>
+                    <td>
+                        <textarea asp-for="_ViewsvsRegisterUSB_New[i].nuObjective" value="" rows="3" cols="30" class="form-control nuObjective" style="width:100%;font-size:10px"></textarea>
+
+                    </td>
+                    <td>
+                        <input type="text" asp-for="_ViewsvsRegisterUSB_New[i].nuCodeIncharge" class="form-control nuCodeIncharge" style="width:100%;font-size:10px" />
+                    </td>
+                    <td>
+                        <input type="text" asp-for="_ViewsvsRegisterUSB_New[i].nuUserIncharge" class="form-control nuUserIncharge" style="width:100%;font-size:10px" />
+                    </td>
+                    <td style="@(@_UserId == @Model._ViewsvsServiceRequest.srRequestBy|| @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode ? "" : "pointer-events: none;")">
+                        <input type="text" asp-for="_ViewsvsRegisterUSB_New[i].nuIntercomNo" class="form-control nuIntercomNo" style="width:100%;font-size:10px" readonly />
+                    </td>
+                    <td>
+                        @{
+                            byte[] result = System.Text.Encoding.Unicode.GetBytes(@"\\thsweb\\ServiceStation\\" + Model._ViewsvsRegisterUSB_New[i].nuImage);
+                            var base64 = Convert.ToBase64String(result);
+                            var imgSrc = String.Format("data:image/png;base64,{0}", base64);
+                        }
+                        <input type="text" asp-for="_ViewsvsRegisterUSB_New[i].nuImage" style="width:90%;display:none" />
+
+                        <input type="file" class="nuImage" accept='image/*' style="display:none">
+                        <a href="javascript:void(0);"
+                           onclick="showImageModal('@Url.Action("openFile", "RequestForm", new { pathFile = Model._ViewsvsRegisterUSB_New[i].nuImage })')"
+                           class="btn-image"
+                           style="padding-left:5px;text-decoration:auto; @(string.IsNullOrEmpty(Model._ViewsvsRegisterUSB_New[i].nuImage)? "display:none;": "")">
                             <span>
                                 <img src="~/images/img1.png"
-                                     class="btn-image"
-                                     style="cursor:pointer;height:28px;width:30px;">
+                                     style="cursor:pointer;height:25px;width:25px;">
                             </span>
                             เปิดไฟล์
-                        </a>*@
-
-                    <a href="javascript:void(0);"
-                       onclick="showImageModal('@Url.Action("openFile", "RequestForm", new { pathFile = Model._ViewsvsRegisterUSB_New[i].nuImage })')"
-                       class="btn-image"
-                       style="padding-left:5px;text-decoration:auto; @(string.IsNullOrEmpty(Model._ViewsvsRegisterUSB_New[i].nuImage)? "display:none;": "")">
-                        <span>
-                            <img src="~/images/img1.png"
-                                 style="cursor:pointer;height:28px;width:30px;">
-                        </span>
-                        เปิดไฟล์
-                    </a>
+                        </a>
 
 
 
-                </td>
-                <td>
-                    <input type='button' class='RemoveRow' value='&#x274C' style="@(@_UserId == @Model._ViewsvsServiceRequest.srRequestBy|| @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode ? "" : "pointer-events: none;")">
-                </td>
-                <td style="width:100px;field-sizing: content;@((@_UserId == @Model._ViewsvsServiceRequest.srRequestBy|| @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode) && Model._ViewsvsServiceRequest.srStep > 2  ? "" : "pointer-events: none;")">
-                    @*<input type="text" asp-for="_ViewsvsRegisterUSB_New[i].nuHardwareID"  />*@
+                    </td>
+                    <td>
+                        @if (@_UserId == @Model._ViewsvsServiceRequest.srRequestBy && @Model._ViewsvsServiceRequest.srStep < 2)
+                        {
+                            <input type='button' class='RemoveRow' value='&#x274C' style="font-size:8px;">
+                        }
 
-                    @Html.TextAreaFor(model => model._ViewsvsRegisterUSB_New[i].nuHardwareID, new { @class = "form-control", style = "font-size:10px;max-width:100% ;field-sizing: content;min-height:50px " })
+                    </td>
+                    <td style="width:100px;field-sizing: content;@((@_UserId == @Model._ViewsvsServiceRequest.srRequestBy|| @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode) && Model._ViewsvsServiceRequest.srStep > 2  ? "" : "pointer-events: none;")">
 
-                </td>
-                <td style="width:100px;field-sizing: content;@((@_UserId == @Model._ViewsvsServiceRequest.srRequestBy|| @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode) && Model._ViewsvsServiceRequest.srStep > 2  ? "" : "pointer-events: none;")">
+                        @Html.TextAreaFor(model => model._ViewsvsRegisterUSB_New[i].nuHardwareID, new { @class = "form-control nuHardwareID", style = "font-size:10px;max-width:100% ;field-sizing: content;min-height:50px " })
 
-                    @Html.TextAreaFor(model => model._ViewsvsRegisterUSB_New[i].nuITCode, new { @class = "form-control", style = "font-size:10px;max-width:100% ;field-sizing: content;min-height:50px " })
+                    </td>
+                    <td style="width:100px;field-sizing: content;@((@_UserId == @Model._ViewsvsServiceRequest.srRequestBy|| @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode) && Model._ViewsvsServiceRequest.srStep > 2  ? "" : "pointer-events: none;")">
 
-                    @*<input type="text" asp-for="_ViewsvsRegisterUSB_New[i].nuITCode" style="width:100px;field-sizing: content;@((@_UserId == @Model._ViewsvsServiceRequest.srRequestBy|| @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode) && Model._ViewsvsServiceRequest.srStep > 2  ? "" : "pointer-events: none;")" />*@
+                        @Html.TextAreaFor(model => model._ViewsvsRegisterUSB_New[i].nuITCode, new { @class = "form-control nuITCode", style = "font-size:10px;max-width:100% ;field-sizing: content;min-height:50px " })
 
-                </td>
+                    </td>
 
-            </tr>
-        }
+                </tr>
+            }
+
+        </tbody>
+
+
     </table>
 </div>
 

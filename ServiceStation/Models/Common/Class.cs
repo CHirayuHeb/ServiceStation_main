@@ -20,15 +20,15 @@ namespace ServiceStation.Models.Common
         //HRMS
         public ViewAccEMPLOYEE _ViewAccEMPLOYEE { get; set; }
         public ViewAccPOSMAST _ViewAccPOSMAST { get; set; }
-        
+
 
         //IT
         public List<ViewsvsMastServiceSub> _ListsvsMastServiceSub { get; set; }
         public List<ViewsvsMastServiceMain> _ListsvsMastServiceMain { get; set; }
         public List<ViewsvsServiceRequest> _ListsvsServiceRequest { get; set; }
         public ViewsvsServiceRequest _ViewsvsServiceRequest { get; set; }
-  
-     
+
+
         public ViewsvsMastFlowApprove _ViewsvsMastFlowApprove { get; set; }
         public List<ViewsvsMastFlowApprove> _ListViewsvsMastFlowApprove { get; set; }
 
@@ -41,7 +41,7 @@ namespace ServiceStation.Models.Common
 
         //my request
         public ViewSearchMyReq _ViewSearchMyReq { get; set; }
-        
+
         public ViewProgramList _ViewProgramList { get; set; }
 
         //F5
@@ -94,6 +94,9 @@ namespace ServiceStation.Models.Common
 
 
         public ViewAccEMPLOYEE _ViewAccUser { get; set; }
+
+        //public RegisterUSBNewViewModel RegisterUSBNewViewModel { get; set; }
+        public List<RegisterUSBNewViewModel> RegisterUSBNewViewModel { get; set; }
     }
 
     public class OTTimeStart

@@ -1405,6 +1405,55 @@ function sendMail(getID, action) {
                 });
 
             }
+            else {
+                const rows = document.querySelectorAll("#tableBodyItemNew tr");
+                if (rows.length === 0) {
+                    if (rows.length === 0) {
+                        alert(`กรุณาเพิ่มข้อมูล!!!!`);
+                        throw new Error("Type .​ is required."); // ❌ หยุดการทำงาน (ถ้าใช้ใน loop ใหญ่)
+                    }
+                }
+                rows.forEach((row, index) => {
+                    const itemvType = row.querySelector(".vnuType");
+                    const itemTypeObject = itemvType.options[itemvType.selectedIndex].text.trim();
+                    if (itemTypeObject.includes("กรุณาเลือก")) {
+                        alert(`กรุณาเลือก Type  (บรรทัดที่ ${index + 1})`);
+                        itemvType.focus(); // optional: focus ช่องนั้น
+                        throw new Error("Type .​ is required."); // ❌ หยุดการทำงาน (ถ้าใช้ใน loop ใหญ่)
+                    }
+
+                    const itenuEquipment = row.querySelector(".nuEquipment");
+                    if (itenuEquipment.value == "") {
+                        alert(`กรุณากรอก Equipment  (บรรทัดที่ ${index + 1})`);
+                        itenuEquipment.focus(); // optional: focus ช่องนั้น
+                        throw new Error("Equipment .​ is required."); // ❌ หยุดการทำงาน (ถ้าใช้ใน loop ใหญ่)
+                    }
+
+                    const itenuObjective = row.querySelector(".nuObjective");
+                    if (itenuObjective.value == "") {
+                        alert(`กรุณากรอก Objective  (บรรทัดที่ ${index + 1})`);
+                        itenuObjective.focus(); // optional: focus ช่องนั้น
+                        throw new Error("Objective .​ is required."); // ❌ หยุดการทำงาน (ถ้าใช้ใน loop ใหญ่)
+                    }
+
+                    const itenuCodeIncharge = row.querySelector(".nuCodeIncharge");
+                    if (itenuCodeIncharge.value == "") {
+                        alert(`กรุณากรอก Emp Code Incharge  (บรรทัดที่ ${index + 1})`);
+                        itenuCodeIncharge.focus(); // optional: focus ช่องนั้น
+                        throw new Error("CodeIncharge .​ is required."); // ❌ หยุดการทำงาน (ถ้าใช้ใน loop ใหญ่)
+                    }
+
+                    const itemnuUserIncharge = row.querySelector(".nuUserIncharge");
+                    if (itemnuUserIncharge.value == "") {
+                        alert(`กรุณากรอก User Name Incharge  (บรรทัดที่ ${index + 1})`);
+                        itemnuUserIncharge.focus(); // optional: focus ช่องนั้น
+                        throw new Error("User Name Incharge .​ is required."); // ❌ หยุดการทำงาน (ถ้าใช้ใน loop ใหญ่)
+                    }
+
+
+                });
+
+            }
 
         }
 
@@ -2302,8 +2351,7 @@ function sendmailsubmit(action) {
     });
     if (vform == "F4") { //usb
 
-        if (document.getElementById("F4ubStatusReqCancel").checked == true) {
-
+        if (document.getElementById("F4ubStatusReqCancel").checked == true) {//cancel
             const rows = document.querySelectorAll("#tableBodyItemCancel tr");
             _RegisterUSB_Cancel = [];
             rows.forEach((row, index) => {
@@ -2311,19 +2359,10 @@ function sendmailsubmit(action) {
                 const itemvType = row.querySelector(".vcuType");
                 const itemTypeObject = itemvType.options[itemvType.selectedIndex].text.trim();
 
-                //if (itemTypeObject.includes("กรุณาเลือก")) {
-                //    alert(`กรุณาเลือก Type  (บรรทัดที่ ${index + 1})`);
-                //    itemvType.focus(); // optional: focus ช่องนั้น
-                //    throw new Error("Type .​ is required."); // ❌ หยุดการทำงาน (ถ้าใช้ใน loop ใหญ่)
-                //}
+
                 const itemvReason = row.querySelector(".vcuReason");
                 const itemTypeReason = itemvReason.options[itemvReason.selectedIndex].text.trim();
 
-                //if (itemTypeReason.includes("กรุณาเลือก")) {
-                //    alert(`กรุณาเลือก Reason  (บรรทัดที่ ${index + 1})`);
-                //    itemvReason.focus(); // optional: focus ช่องนั้น
-                //    throw new Error("Reason .​ is required."); // ❌ หยุดการทำงาน (ถ้าใช้ใน loop ใหญ่)
-                //}
 
                 _RegisterUSB_Cancel.push({
                     cuCancelNo: index + 1,
@@ -2340,6 +2379,40 @@ function sendmailsubmit(action) {
 
             });
             viewModel.append("_RegisterUSB_Cancel", JSON.stringify(_RegisterUSB_Cancel));
+
+        }
+        else //new
+        {
+            const rows = document.querySelectorAll("#tableBodyItemNew tr");
+            //_RegisterUSB_New = [];
+            rows.forEach((row, index) => {
+                const itemvType = row.querySelector(".vnuType");
+                const itemTypeObject = itemvType.options[itemvType.selectedIndex].text.trim();
+
+                // กำหนด Prefix เพื่อให้ Code สะอาดขึ้น
+                const prefix = `RegisterUSBNewViewModel[${index}]`;
+
+                const vnuNo = (parseInt(row.querySelector(".nuNewNo").value) || 0) === 0 ? index + 1 : parseInt(row.querySelector(".nuNewNo").value);
+
+                viewModel.append(`${prefix}.nuNewNo`, vnuNo);
+                viewModel.append(`${prefix}.nuNo`, row.querySelector(".nuNo").value.trim());
+                viewModel.append(`${prefix}.nuType`, itemTypeObject);
+                viewModel.append(`${prefix}.nuEquipment`, row.querySelector(".nuEquipment").value.trim());
+                viewModel.append(`${prefix}.nuObjective`, row.querySelector(".nuObjective").value.trim());
+                viewModel.append(`${prefix}.nuCodeIncharge`, row.querySelector(".nuCodeIncharge").value.trim());
+                viewModel.append(`${prefix}.nuUserIncharge`, row.querySelector(".nuUserIncharge").value.trim());
+                viewModel.append(`${prefix}.nuIntercomNo`, row.querySelector(".nuIntercomNo").value.trim());
+
+                // การจัดการไฟล์
+                var fileInput = $(row).find(".nuImage")[0];
+                if (fileInput && fileInput.files.length > 0) {
+                    // ตรวจสอบว่าใน C# Property ชื่อ nuImage ต้องรับค่าเป็น IFormFile
+                    viewModel.append(`${prefix}.nuImage`, fileInput.files[0]);
+                }
+
+                viewModel.append(`${prefix}.nuHardwareID`, row.querySelector(".nuHardwareID").value.trim());
+                viewModel.append(`${prefix}.nuITCode`, row.querySelector(".nuITCode").value.trim());
+            });
 
         }
     }
@@ -2718,9 +2791,134 @@ function savesubmit(action) {
     $.each(formData, function (index, input) {
         viewModel.append(input.name, input.value);
     });
+    if (vform == "F4") { //usb
+
+        if (document.getElementById("F4ubStatusReqCancel").checked == true) {//cancel
+            const rows = document.querySelectorAll("#tableBodyItemCancel tr");
+            _RegisterUSB_Cancel = [];
+            rows.forEach((row, index) => {
+
+                const itemvType = row.querySelector(".vcuType");
+                const itemTypeObject = itemvType.options[itemvType.selectedIndex].text.trim();
+
+
+                const itemvReason = row.querySelector(".vcuReason");
+                const itemTypeReason = itemvReason.options[itemvReason.selectedIndex].text.trim();
+
+
+                _RegisterUSB_Cancel.push({
+                    cuCancelNo: index + 1,
+                    cuNo: 0,
+                    cuType: itemTypeObject,//  itemvType.options[itemvType.selectedIndex].value.trim(),
+                    cuUSBNo: row.querySelector(".cuUSBNo").value.trim(),
+                    cuReason: itemvReason.options[itemvReason.selectedIndex].value.trim(),
+                    cuReason_other: row.querySelector(".cuReason_other").value.trim(),
+                    cuIssueBy: "",
+                    cuUpdateBy: "",
+                });
 
 
 
+            });
+            viewModel.append("_RegisterUSB_Cancel", JSON.stringify(_RegisterUSB_Cancel));
+
+        }
+        else //new
+        {
+            const rows = document.querySelectorAll("#tableBodyItemNew tr");
+            //_RegisterUSB_New = [];
+            rows.forEach((row, index) => {
+                const itemvType = row.querySelector(".vnuType");
+                const itemTypeObject = itemvType.options[itemvType.selectedIndex].text.trim();
+
+                // กำหนด Prefix เพื่อให้ Code สะอาดขึ้น
+                const prefix = `RegisterUSBNewViewModel[${index}]`;
+
+                const vnuNo = (parseInt(row.querySelector(".nuNewNo").value) || 0) === 0 ? index + 1 : parseInt(row.querySelector(".nuNewNo").value);
+
+                viewModel.append(`${prefix}.nuNewNo`, vnuNo);
+                viewModel.append(`${prefix}.nuNo`, row.querySelector(".nuNo").value.trim());
+                viewModel.append(`${prefix}.nuType`, itemTypeObject);
+                viewModel.append(`${prefix}.nuEquipment`, row.querySelector(".nuEquipment").value.trim());
+                viewModel.append(`${prefix}.nuObjective`, row.querySelector(".nuObjective").value.trim());
+                viewModel.append(`${prefix}.nuCodeIncharge`, row.querySelector(".nuCodeIncharge").value.trim());
+                viewModel.append(`${prefix}.nuUserIncharge`, row.querySelector(".nuUserIncharge").value.trim());
+                viewModel.append(`${prefix}.nuIntercomNo`, row.querySelector(".nuIntercomNo").value.trim());
+
+                // การจัดการไฟล์
+                var fileInput = $(row).find(".nuImage")[0];
+                if (fileInput && fileInput.files.length > 0) {
+                    // ตรวจสอบว่าใน C# Property ชื่อ nuImage ต้องรับค่าเป็น IFormFile
+                    viewModel.append(`${prefix}.nuImage`, fileInput.files[0]);
+                }
+
+                viewModel.append(`${prefix}.nuHardwareID`, row.querySelector(".nuHardwareID").value.trim());
+                viewModel.append(`${prefix}.nuITCode`, row.querySelector(".nuITCode").value.trim());
+            });
+
+        }
+    }
+    else if (vform == "F6") {
+        const rows = document.querySelectorAll("#tableBodyItem tr"); //table id material body
+        SDE_SystemRegister = [];
+        rows.forEach((row, index) => {
+
+
+            const itemvObject = row.querySelector(".vObject");
+            const itemTypeObject = itemvObject.options[itemvObject.selectedIndex].text.trim();
+
+            if (itemTypeObject.includes("กรุณาเลือก")) {
+                alert(`กรุณาเลือก Type of Object (บรรทัดที่ ${index + 1})`);
+                itemvObject.focus(); // optional: focus ช่องนั้น
+                throw new Error("Type of Object.​ is required."); // ❌ หยุดการทำงาน (ถ้าใช้ใน loop ใหญ่)
+            }
+
+            const itemPermissionEditor = row.querySelector(".vPermissionEditor");
+            const itemTypePermissionEditor = itemPermissionEditor.options[itemPermissionEditor.selectedIndex].text.trim();
+
+            if (itemTypePermissionEditor.includes("กรุณาเลือก")) {
+                alert(`กรุณาเลือก Type of Permission Editor (บรรทัดที่ ${index + 1})`);
+                itemPermissionEditor.focus(); // optional: focus ช่องนั้น
+                throw new Error("Permission Editor.​ is required."); // ❌ หยุดการทำงาน (ถ้าใช้ใน loop ใหญ่)
+            }
+
+            const itemPermissionRead = row.querySelector(".vPermissionRead");
+            const itemTypeitemPermissionRead = itemPermissionRead.options[itemPermissionRead.selectedIndex].text.trim();
+
+            if (itemTypeitemPermissionRead.includes("กรุณาเลือก")) {
+                alert(`กรุณาเลือก Type of Permission Read (บรรทัดที่ ${index + 1})`);
+                itemPermissionRead.focus(); // optional: focus ช่องนั้น
+                throw new Error("Permission Read.​ is required."); // ❌ หยุดการทำงาน (ถ้าใช้ใน loop ใหญ่)
+            }
+
+            const itemPermissionDelete = row.querySelector(".vPermissionDelete");
+            const itemTypeitemPermissionDelete = itemPermissionDelete.options[itemPermissionDelete.selectedIndex].text.trim();
+
+            if (itemTypeitemPermissionDelete.includes("กรุณาเลือก")) {
+                alert(`กรุณาเลือก Type of Permission Delete (บรรทัดที่ ${index + 1})`);
+                itemPermissionDelete.focus(); // optional: focus ช่องนั้น
+                throw new Error("Permission Delete.​ is required."); // ❌ หยุดการทำงาน (ถ้าใช้ใน loop ใหญ่)
+            }
+
+            SDE_SystemRegister.push({
+                sysNo: 0,
+                sysEmpCode: row.querySelector(".vEmpcode").value.trim(),// index + 1, // ✅ เริ่มจาก 1
+                sysProgramName: row.querySelector(".vProgramName").value.trim(),
+                sysName: row.querySelector(".vName").value.trim(),
+                sysLastName: row.querySelector(".vLastName").value.trim(),
+                sysDeptCode: row.querySelector(".vDeptCode").value.trim(),
+                sysSectCode: row.querySelector(".vSectCode").value.trim(),
+                sysIntercomNo: row.querySelector(".vIntercomNo").value.trim(),
+                sysObject: itemvObject.options[itemvObject.selectedIndex].value.trim(),
+                sysPermissionEditor: itemPermissionEditor.options[itemPermissionEditor.selectedIndex].value.trim(),
+                sysPermissionRead: itemPermissionRead.options[itemPermissionRead.selectedIndex].value.trim(),
+                sysPermissionDelete: itemPermissionDelete.options[itemPermissionDelete.selectedIndex].value.trim(),
+                sysRemark: row.querySelector(".vRemark").value.trim(),
+            });
+        });
+        viewModel.append("_SDE_SystemRegister", JSON.stringify(SDE_SystemRegister));
+    }
+    
     $.ajax({
         type: "POST",
         url: action,

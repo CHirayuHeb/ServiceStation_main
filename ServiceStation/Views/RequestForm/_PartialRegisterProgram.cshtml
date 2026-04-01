@@ -89,7 +89,7 @@
                 <td class="tbpurpleB" rowspan="2" style="width:80px;vertical-align: top;">นามสกุล</td>
                 <td class="tbpurpleB" rowspan="2" style="width:50px;vertical-align: top;">ฝ่าย</td>
                 <td class="tbpurpleB" rowspan="2" style="width:80px;vertical-align: top;">แผนก</td>
-                <td class="tbpurpleB" rowspan="2" style="vertical-align: top;">ติดต่อ</td>
+                <td class="tbpurpleB" rowspan="2"  width="80px" style="vertical-align: top;">ติดต่อ</td>
                 <td class="tbpurpleB" rowspan="2" style="vertical-align: top;">Program Name</td>
                 <td class="tbpurpleB" rowspan="2" width="80px" style="vertical-align: top;">ประเภทผู้ใช้งาน</td>
                 <td class="tbpurpleB" colspan="3">Permission</td>
@@ -117,26 +117,51 @@
                         <tr>
                             <td style="vertical-align: top;">
                                 @(row += 1)
-                                <input type='text' class='vNo form-control ' min='0' style='width:70px;height:90%;font-size:10px;background-color:ghostwhite;display:none' asp-for="_ViewsvsSDE_SystemRegister[i].sysNo" readonly>
-                            </td>
-                            <td style="vertical-align: top;"><input type='text' class='vEmpcode form-control ' min='0' style='width:50px;height:90%;font-size:10px;background-color:ghostwhite ;' asp-for="_ViewsvsSDE_SystemRegister[i].sysEmpCode" readonly></td>
-                            <td style="vertical-align: top;"><input type='text' class='vName form-control ' min='0' style='width:70px;height:90%;font-size:10px;background-color:ghostwhite ;' asp-for="_ViewsvsSDE_SystemRegister[i].sysName" readonly></td>
-                            <td style="vertical-align: top;"><input type='text' class='vLastName form-control ' min='0' style='width:100px;height:90%;font-size:10px;background-color:ghostwhite ;' asp-for="_ViewsvsSDE_SystemRegister[i].sysLastName" readonly></td>
-                            <td style="vertical-align: top;"><input type='text' class='vDeptCode form-control ' min='0' style='width:60px;height:90%;font-size:10px;background-color:ghostwhite ;' asp-for="_ViewsvsSDE_SystemRegister[i].sysDeptCode" readonly></td>
-                            <td style="vertical-align: top;"><input type='text' class='vSectCode form-control ' min='0' style='width:60px;height:90%;font-size:10px;background-color:ghostwhite ;' asp-for="_ViewsvsSDE_SystemRegister[i].sysSectCode" readonly></td>
-                            <td style="vertical-align: top;"><input type='text' class='vIntercomNo form-control ' min='0' style='width:50px;height:90%;font-size:10px;background-color:ghostwhite ;' asp-for="_ViewsvsSDE_SystemRegister[i].sysIntercomNo" readonly></td>
-                            <td style="vertical-align: top;"><input type='text' class='vProgramName form-control ' min='0' style='width:100%;height:90%;font-size:10px;background-color:ghostwhite;' asp-for="_ViewsvsSDE_SystemRegister[i].sysProgramName" readonly></td>
-                            <td style="vertical-align: top;">
-                                @Html.DropDownListFor(m => m._ViewsvsSDE_SystemRegister[i].sysObject, statusListObject, "กรุณาเลือก", new { @class = "form-control vObject", id = "ipStatus", autocomplete = "off", @style = "width:100%;font-size:10px;background-color:aliceblue;font-weight:700;", disabled = "disabled" })
+                                <input type='text' class='vNo form-control ' min='0' style='width:70px;height:100%;font-size:10px;background-color:ghostwhite;display:none' asp-for="_ViewsvsSDE_SystemRegister[i].sysNo" readonly>
                             </td>
                             <td style="vertical-align: top;">
-                                @Html.DropDownListFor(m => m._ViewsvsSDE_SystemRegister[i].sysPermissionEditor, statusListPerEdit, "กรุณาเลือก", new { @class = "form-control vPermissionEditor", id = "ipEdit", autocomplete = "off", @style = "width:100%;font-size:10px;background-color:aliceblue;font-weight:700;", disabled = "disabled" })
+                                <textarea type='text' class='vEmpcode form-control ' min='0' style='width:100%;height:90%;font-size:10px;background-color:ghostwhite ;' asp-for="_ViewsvsSDE_SystemRegister[i].sysEmpCode" readonly></textarea>
+
+                                @*<input type='text' class='vEmpcode form-control ' min='0' style='width:100%;height:90%;font-size:10px;background-color:ghostwhite ;' asp-for="_ViewsvsSDE_SystemRegister[i].sysEmpCode" readonly>*@
                             </td>
                             <td style="vertical-align: top;">
-                                @Html.DropDownListFor(m => m._ViewsvsSDE_SystemRegister[i].sysPermissionRead, statusListPerRead, "กรุณาเลือก", new { @class = "form-control vPermissionRead", id = "ipread", autocomplete = "off", @style = "width:100%;font-size:10px;background-color:aliceblue;font-weight:700;", disabled = "disabled" })
+                                <textarea type='text' class='vName form-control ' min='0' style='width:100%;height:90%;font-size:10px;background-color:ghostwhite ;' asp-for="_ViewsvsSDE_SystemRegister[i].sysName" readonly></textarea>
+                                @*<input type='text' class='vName form-control ' min='0' style='width:100%;height:90%;font-size:10px;background-color:ghostwhite ;' asp-for="_ViewsvsSDE_SystemRegister[i].sysName" readonly>*@
                             </td>
                             <td style="vertical-align: top;">
-                                @Html.DropDownListFor(m => m._ViewsvsSDE_SystemRegister[i].sysPermissionDelete, statusListPerDelete, "กรุณาเลือก", new { @class = "form-control vPermissionDelete", id = "ipread", autocomplete = "off", @style = "width:100%;font-size:10px;background-color:aliceblue;font-weight:700;", disabled = "disabled" })
+                                <textarea type='text' class='vLastName form-control ' min='0' style='width:100%;height:90%;font-size:10px;background-color:ghostwhite ;' asp-for="_ViewsvsSDE_SystemRegister[i].sysLastName" readonly></textarea>
+                                @*<input type='text' class='vLastName form-control ' min='0' style='width:100%;height:90%;font-size:10px;background-color:ghostwhite ;' asp-for="_ViewsvsSDE_SystemRegister[i].sysLastName" readonly>*@
+                            </td>
+                            <td style="vertical-align: top;">
+                                <textarea type='text' class='vDeptCode form-control ' min='0' style='width:100%;height:90%;font-size:10px;background-color:ghostwhite ;' asp-for="_ViewsvsSDE_SystemRegister[i].sysDeptCode" readonly></textarea>
+                                @*<input type='text' class='vDeptCode form-control ' min='0' style='width:60px;height:100%;font-size:10px;background-color:ghostwhite ;' asp-for="_ViewsvsSDE_SystemRegister[i].sysDeptCode" readonly>*@
+                            </td>
+                            <td style="vertical-align: top;">
+                                <textarea type='text' class='vSectCode form-control ' min='0' style='width:100%;height:90%;font-size:10px;background-color:ghostwhite ;' asp-for="_ViewsvsSDE_SystemRegister[i].sysDeptCode" readonly></textarea>
+
+                                @*<input type='text' class='vSectCode form-control ' min='0' style='width:60px;height:100%;font-size:10px;background-color:ghostwhite ;' asp-for="_ViewsvsSDE_SystemRegister[i].sysSectCode" readonly>*@
+                            </td>
+                            <td style="vertical-align: top;">
+                                <textarea type='text' class='vIntercomNo form-control ' min='0' style='width:100%;height:90%;font-size:10px;background-color:ghostwhite ;' asp-for="_ViewsvsSDE_SystemRegister[i].sysIntercomNo" readonly></textarea>
+
+                                @*<input type='text' class='vIntercomNo form-control ' min='0' style='width:50px;height:100%;font-size:10px;background-color:ghostwhite ;' asp-for="_ViewsvsSDE_SystemRegister[i].sysIntercomNo" readonly>*@
+                            </td>
+                            <td style="vertical-align: top;">
+                                <textarea type='text' class='vProgramName form-control ' min='0' style='width:100%;height:90%;font-size:10px;background-color:ghostwhite ;' asp-for="_ViewsvsSDE_SystemRegister[i].sysProgramName" readonly></textarea>
+
+                                @*<input type='text' class='vProgramName form-control ' min='0' style='width:100%;height:100%;font-size:10px;background-color:ghostwhite;' asp-for="_ViewsvsSDE_SystemRegister[i].sysProgramName" readonly>*@
+                            </td>
+                            <td style="vertical-align: top;">
+                                @Html.DropDownListFor(m => m._ViewsvsSDE_SystemRegister[i].sysObject, statusListObject, "กรุณาเลือก", new { @class = "form-control vObject", id = "ipStatus", autocomplete = "off", @style = "width:100%;font-size:10px;background-color:aliceblue;font-weight:700;height:40px;", disabled = "disabled" })
+                            </td>
+                            <td style="vertical-align: top;">
+                                @Html.DropDownListFor(m => m._ViewsvsSDE_SystemRegister[i].sysPermissionEditor, statusListPerEdit, "กรุณาเลือก", new { @class = "form-control vPermissionEditor", id = "ipEdit", autocomplete = "off", @style = "width:100%;font-size:10px;background-color:aliceblue;font-weight:700;height:40px;", disabled = "disabled" })
+                            </td>
+                            <td style="vertical-align: top;">
+                                @Html.DropDownListFor(m => m._ViewsvsSDE_SystemRegister[i].sysPermissionRead, statusListPerRead, "กรุณาเลือก", new { @class = "form-control vPermissionRead", id = "ipread", autocomplete = "off", @style = "width:100%;font-size:10px;background-color:aliceblue;font-weight:700;height:40px;", disabled = "disabled" })
+                            </td>
+                            <td style="vertical-align: top;">
+                                @Html.DropDownListFor(m => m._ViewsvsSDE_SystemRegister[i].sysPermissionDelete, statusListPerDelete, "กรุณาเลือก", new { @class = "form-control vPermissionDelete", id = "ipread", autocomplete = "off", @style = "width:100%;font-size:10px;background-color:aliceblue;font-weight:700;height:40px;", disabled = "disabled" })
                             </td>
                             <td><textarea class='vRemark form-control ' style='font-size: 10px; max-width: 100%; height: 80px;' asp-for="_ViewsvsSDE_SystemRegister[i].sysRemark"></textarea> </td>
                             <td align='Center' style=" @(Model._ViewsvsServiceRequest.srRequestBy == _UserId ? "":"display:none;")"><input type='button' class='RemoveRow' value='&#x274C'></td>

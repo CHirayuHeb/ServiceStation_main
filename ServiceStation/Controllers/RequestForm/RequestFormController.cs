@@ -806,8 +806,7 @@ namespace ServiceStation.Controllers.RequestForm
             return PartialView("SendMail", @classs);
         }
 
-
-
+        
 
         public ActionResult SendMailDetail(Class @classs)
         {
@@ -968,7 +967,7 @@ namespace ServiceStation.Controllers.RequestForm
                 //return Json(_IT.rpEmails.Where(p => p.emEmail.Contains(term) || p.emEmail_M365.Contains(term)).Select(p => p.emEmail_M365).ToList());
             }
         }
-        public JsonResult SendMail_post(Class @class, List<IFormFile> files, List<IFormFile> filesw, string vform, string vSR, List<IFormFile> files0, List<IFormFile> files1, List<IFormFile> files2, List<IFormFile> files3, List<IFormFile> files4, List<IFormFile> files5, List<IFormFile> files6, List<IFormFile> files7, List<IFormFile> files8, List<IFormFile> files9, List<IFormFile> files10, string _SDE_SystemRegister, string _RegisterUSB_Cancel,string _RegisterUSB_New)
+        public JsonResult SendMail_post(Class @class, List<IFormFile> files, List<IFormFile> filesw, string vform, string vSR, string _SDE_SystemRegister, string _RegisterUSB_Cancel, string _RegisterUSB_New)
         {
             int[] getSrNo;
             string getSForm;
@@ -979,24 +978,11 @@ namespace ServiceStation.Controllers.RequestForm
 
             //for test
             string[] fsavefile0;
-            string[] fsavefile1;
-            string[] fsavefile2;
-            string[] fsavefile3;
-            string[] fsavefile4;
-            string[] fsavefile5;
-            string[] fsavefile6;
-            string[] fsavefile7;
-            string[] fsavefile8;
-            string[] fsavefile9;
-            string fsavefile10 = "";
 
             string config = "S";
             string msg = "Send Mail already ";
             try
             {
-              
-
-
 
                 string vCCemail = "";
                 int i_Step = @class._ViewsvsServiceRequest.srStep;
@@ -1133,20 +1119,50 @@ namespace ServiceStation.Controllers.RequestForm
                     @class._ViewsvsServiceRequest.srServiceNo = i_Step == 3 ? runSRNumber(@class._ViewsvsServiceRequest.srServiceNo) : @class._ViewsvsServiceRequest.srServiceNo;
 
                     //for form 6 Register  
-                    if (_SDE_SystemRegister != null && vform == "F6" )
+                    if (_SDE_SystemRegister != null && vform == "F6")
                     {
                         @class._ViewsvsSDE_SystemRegister = JsonConvert.DeserializeObject<List<ViewsvsSDE_SystemRegister>>(_SDE_SystemRegister);
                     }
 
-
-                    //for form 4 Register  USB 
-                    if (_RegisterUSB_Cancel != null && vform == "F4")
+                    //for form 4 Register  USB  cancel
+                    if (vform == "F4")
                     {
-                        @class._ViewsvsRegisterUSB_Cancel = JsonConvert.DeserializeObject<List<ViewsvsRegisterUSB_Cancel>>(_RegisterUSB_Cancel);
+                        if (@class._ViewsvsRegisterUSB.ubStatusReq == "Cancel")
+                        {
+                            if (_RegisterUSB_Cancel != null)
+                            {
+                                @class._ViewsvsRegisterUSB_Cancel = JsonConvert.DeserializeObject<List<ViewsvsRegisterUSB_Cancel>>(_RegisterUSB_Cancel);
+                            }
+                        }
+                        else //new
+                        {
+                            if (@class.RegisterUSBNewViewModel != null)
+                            {
+                                @class._ViewsvsRegisterUSB_New = @class.RegisterUSBNewViewModel.Select((item, index) => new ViewsvsRegisterUSB_New
+                                {
+                                    nuNewNo = item.nuNewNo, // index + 1,
+                                    nuNo = @class._ViewsvsServiceRequest.srNo,
+                                    nuType = item.nuType,
+                                    nuEquipment = item.nuEquipment,
+                                    nuObjective = item.nuObjective,
+                                    nuCodeIncharge = item.nuCodeIncharge,
+                                    nuUserIncharge = item.nuUserIncharge,
+                                    nuIntercomNo = item.nuIntercomNo,
+                                    nuImage = item.nuImage != null ? item.nuImage.FileName : (_IT.svsRegisterUSB_New.Where(x => x.nuNo == item.nuNo && x.nuNewNo == item.nuNewNo).Select(x => x.nuImage).FirstOrDefault() ?? ""),
+                                    nuHardwareID = item.nuHardwareID,
+                                    nuITCode = item.nuITCode,
+                                    nuIssueBy = "",
+                                    nuUpdateBy = ""
+                                }).ToList();
+
+                            }
+
+
+                        }
+
+
                     }
-
-
-
+                    //for form 4 Register  USB  new
                     getSrNo = Save(@class, i_Step);  //save main
                     getSForm = SaveForm(@class, @class._ViewsvsServiceRequest.srFrom, getSrNo[0]); //save form
 
@@ -1157,6 +1173,21 @@ namespace ServiceStation.Controllers.RequestForm
 
                     fsavefileUser = save_file(@class, files, getSrNo[0], ""); // save file
                     fsavefileWorker = save_file(@class, filesw, getSrNo[0], "Worker"); // save file
+
+                    if (vform == "F4")
+                    {
+                        //remove
+                        if (@class._ViewsvsServiceRequest.srStep == 1)
+                        {
+                            var _DataAttachment = _IT.Attachment.Where(c => c.fnNo == getSrNo[0].ToString());
+                            _IT.Attachment.RemoveRange(_DataAttachment);
+                            _IT.SaveChanges();
+
+                        }
+                        fsavefile0 = save_file_UsbNew(@class, getSrNo[0]);
+
+                    }
+
 
 
 
@@ -1244,53 +1275,6 @@ namespace ServiceStation.Controllers.RequestForm
 
 
 
-                    if (vform == "F4")
-                    {
-                        //remove
-                        var _DataAttachment = _IT.Attachment.Where(c => c.fnNo == getSrNo[0].ToString());
-                        _IT.Attachment.RemoveRange(_DataAttachment);
-                        _IT.SaveChanges();
-
-                        if (files0.Count > 0)
-                        {
-                            fsavefile0 = save_file_F4(@class, getSrNo[0], files0, 1);
-                            fsavefile10 = fsavefile10 + "F0" + fsavefile0[0];
-                        }
-                        if (files1.Count > 0)
-                        {
-                            fsavefile1 = save_file_F4(@class, getSrNo[0], files1, 2);
-                            fsavefile10 = fsavefile10 + "F1" + fsavefile1[0];
-                        }
-                        if (files2.Count > 0)
-                        {
-                            fsavefile2 = save_file_F4(@class, getSrNo[0], files2, 3);
-                            fsavefile10 = fsavefile10 + "F2" + fsavefile2[0];
-                        }
-                        if (files3.Count > 0)
-                        {
-                            fsavefile3 = save_file_F4(@class, getSrNo[0], files3, 4);
-                            fsavefile10 = fsavefile10 + "F3" + fsavefile3[0];
-                        }
-                        if (files4.Count > 0)
-                        {
-                            fsavefile4 = save_file_F4(@class, getSrNo[0], files4, 5);
-                            fsavefile10 = fsavefile10 + "F4" + fsavefile4[0];
-                        }
-                        if (files5.Count > 0)
-                        {
-                            fsavefile5 = save_file_F4(@class, getSrNo[0], files5, 6);
-                            fsavefile10 = fsavefile10 + "F5" + fsavefile5[0];
-                        }
-                        if (files6.Count > 0) { fsavefile6 = save_file_F4(@class, getSrNo[0], files6, 7); }
-                        if (files7.Count > 0) { fsavefile7 = save_file_F4(@class, getSrNo[0], files7, 8); }
-                        if (files8.Count > 0) { fsavefile8 = save_file_F4(@class, getSrNo[0], files8, 9); }
-                        if (files9.Count > 0) { fsavefile9 = save_file_F4(@class, getSrNo[0], files9, 10); }
-                        //if (files10.Count > 0) { fsavefile10 = save_file_F4(@class, getSrNo[0], files10, 11); }
-
-                        //fsavefile10 = "F1" + fsavefile0[0] + "F2" + fsavefile1 + "F3" + fsavefile2 + "F4" + fsavefile3 + "F5" + fsavefile4;
-
-                        // fsavefile = save_fileF4(@class, getSrNo[0], files0, files1, files2, files3, files4, files5, files6, files7, files8, files9, files10); // save file
-                    }
 
                     var varifyUrl = "http://thsweb/MVCPublish/ServiceStation/Login/index?vSrNo=" + getSrNo[0].ToString();
                     var bodyBuilder = new BodyBuilder();
@@ -1368,7 +1352,7 @@ namespace ServiceStation.Controllers.RequestForm
                     }
 
 
-                    return Json(new { c1 = config, c2 = msg, c3 = fsavefile10 });
+                    return Json(new { c1 = config, c2 = msg, c3 = "" });
                 }
 
                 else
@@ -1401,12 +1385,8 @@ namespace ServiceStation.Controllers.RequestForm
             }
             return vSR;
         }
-
-
-
-        public JsonResult SavePageForm(Class @class, List<IFormFile> files, List<IFormFile> filesw, string vform, List<IFormFile> files0, List<IFormFile> files1, List<IFormFile> files2, List<IFormFile> files3, List<IFormFile> files4, List<IFormFile> files5, List<IFormFile> files6, List<IFormFile> files7, List<IFormFile> files8, List<IFormFile> files9, List<IFormFile> files10)
+        public JsonResult SavePageForm(Class @class, List<IFormFile> files, List<IFormFile> filesw, string vform, string _SDE_SystemRegister, string _RegisterUSB_Cancel, string _RegisterUSB_New)
         {
-
 
             int[] getSrNo;
             string getSForm;
@@ -1415,36 +1395,20 @@ namespace ServiceStation.Controllers.RequestForm
             string[] fsavefileWoker;
             string[] chkPermis;
 
-            //for test
-            string[] fsavefile0;
-            string[] fsavefile1;
-            string[] fsavefile2;
-            string[] fsavefile3;
-            string[] fsavefile4;
-            string[] fsavefile5;
-            string[] fsavefile6;
-            string[] fsavefile7;
-            string[] fsavefile8;
-            string[] fsavefile9;
-            string fsavefile10 = "";
-
             string config = "S";
             string msg = "Save page Sucess ";
             int i_Step = @class._ViewsvsServiceRequest.srStep;
             // files._items.count
-
-
             string _UserId = User.Claims.FirstOrDefault(s => s.Type == "UserId")?.Value;
             var chkData = _IT.svsServiceRequest.Where(x => x.srNo == @class._ViewsvsServiceRequest.srNo).FirstOrDefault();
-            string message_per = "";
-            string status_per = "";
+            //string message_per = "";
+            //string status_per = "";
             string _empcs = "";
 
             if (@class._ViewsvsServiceRequest.srStep > 2) //check cs IS
             {
                 var _EmailCS = _IT.svsHistoryApproved.Where(x => x.htSrNo == @class._ViewsvsServiceRequest.srNo.ToString() && x.htStep == 3).Select(x => x.htFrom).FirstOrDefault();
                 _empcs = _IT.rpEmails.Where(x => x.emEmail_M365 == _EmailCS).Select(x => x.emEmpcode).FirstOrDefault();
-
             }
 
             if (_UserId == chkData.srApproveEmpcode || _UserId == _empcs || (_UserId == @class._ViewsvsServiceRequest.srRequestBy && @class._ViewsvsServiceRequest.srStep == 3))
@@ -1457,21 +1421,44 @@ namespace ServiceStation.Controllers.RequestForm
                 msg = "You don't have permission to access";
             }
 
-            //chkPermis = chkPermission(@class);
-
-
-
-            //if (chkPermis[0] == "Yes") { config = "S"; }
-            //else { config = "P"; msg = chkPermis[1]; }
-
             if (config == "S")
             {
-
-
-
                 //check status Transfer
-
                 @class._ViewsvsServiceRequest.srServiceNo = @class._ViewsvsServiceRequest.srServiceNo;
+                if (vform == "F4")
+                {
+                    if (@class._ViewsvsRegisterUSB.ubStatusReq == "Cancel")
+                    {
+                        if (_RegisterUSB_Cancel != null)
+                        {
+                            @class._ViewsvsRegisterUSB_Cancel = JsonConvert.DeserializeObject<List<ViewsvsRegisterUSB_Cancel>>(_RegisterUSB_Cancel);
+                        }
+                    }
+                    else //new
+                    {
+                        if (@class.RegisterUSBNewViewModel != null)
+                        {
+                            @class._ViewsvsRegisterUSB_New = @class.RegisterUSBNewViewModel.Select((item, index) => new ViewsvsRegisterUSB_New
+                            {
+                                nuNewNo = item.nuNewNo, // index + 1,
+                                nuNo = @class._ViewsvsServiceRequest.srNo,
+                                nuType = item.nuType,
+                                nuEquipment = item.nuEquipment,
+                                nuObjective = item.nuObjective,
+                                nuCodeIncharge = item.nuCodeIncharge,
+                                nuUserIncharge = item.nuUserIncharge,
+                                nuIntercomNo = item.nuIntercomNo,
+                                nuImage = item.nuImage != null ? item.nuImage.FileName : (_IT.svsRegisterUSB_New.Where(x => x.nuNo == item.nuNo && x.nuNewNo == item.nuNewNo).Select(x => x.nuImage).FirstOrDefault() ?? ""),
+                                nuHardwareID = item.nuHardwareID,
+                                nuITCode = item.nuITCode,
+                                nuIssueBy = "",
+                                nuUpdateBy = ""
+                            }).ToList();
+
+                        }
+                    }
+                }
+
                 getSrNo = Save(@class, i_Step);  //save main
                 getSForm = SaveForm(@class, vform, getSrNo[0]); //save form
 
@@ -1481,68 +1468,21 @@ namespace ServiceStation.Controllers.RequestForm
                 }
                 fsavefileUser = save_file(@class, files, getSrNo[0], ""); // save file user
                 fsavefileWoker = save_file(@class, filesw, getSrNo[0], "Worker"); // save file worker
-                if (vform == "F4")
-                {
-                    //remove
-                    var _DataAttachment = _IT.Attachment.Where(c => c.fnNo == getSrNo[0].ToString());
-                    _IT.Attachment.RemoveRange(_DataAttachment);
-                    _IT.SaveChanges();
 
-                    if (files0.Count > 0)
-                    {
-                        fsavefile0 = save_file_F4(@class, getSrNo[0], files0, 1);
-                        fsavefile10 = fsavefile10 + "F0" + fsavefile0[0];
-                    }
-                    if (files1.Count > 0)
-                    {
-                        fsavefile1 = save_file_F4(@class, getSrNo[0], files1, 2);
-                        fsavefile10 = fsavefile10 + "F1" + fsavefile1[0];
-                    }
-                    if (files2.Count > 0)
-                    {
-                        fsavefile2 = save_file_F4(@class, getSrNo[0], files2, 3);
-                        fsavefile10 = fsavefile10 + "F2" + fsavefile2[0];
-                    }
-                    if (files3.Count > 0)
-                    {
-                        fsavefile3 = save_file_F4(@class, getSrNo[0], files3, 4);
-                        fsavefile10 = fsavefile10 + "F3" + fsavefile3[0];
-                    }
-                    if (files4.Count > 0)
-                    {
-                        fsavefile4 = save_file_F4(@class, getSrNo[0], files4, 5);
-                        fsavefile10 = fsavefile10 + "F4" + fsavefile4[0];
-                    }
-                    if (files5.Count > 0)
-                    {
-                        fsavefile5 = save_file_F4(@class, getSrNo[0], files5, 6);
-                        fsavefile10 = fsavefile10 + "F5" + fsavefile5[0];
-                    }
-                    if (files6.Count > 0) { fsavefile6 = save_file_F4(@class, getSrNo[0], files6, 7); }
-                    if (files7.Count > 0) { fsavefile7 = save_file_F4(@class, getSrNo[0], files7, 8); }
-                    if (files8.Count > 0) { fsavefile8 = save_file_F4(@class, getSrNo[0], files8, 9); }
-                    if (files9.Count > 0) { fsavefile9 = save_file_F4(@class, getSrNo[0], files9, 10); }
-                    //if (files10.Count > 0) { fsavefile10 = save_file_F4(@class, getSrNo[0], files10, 11); }
-
-                    //fsavefile10 = "F1" + fsavefile0[0] + "F2" + fsavefile1 + "F3" + fsavefile2 + "F4" + fsavefile3 + "F5" + fsavefile4;
-
-                    // fsavefile = save_fileF4(@class, getSrNo[0], files0, files1, files2, files3, files4, files5, files6, files7, files8, files9, files10); // save file
-                }
-
-                return Json(new { c1 = config, c2 = msg, c3 = fsavefile10 });
+                return Json(new { c1 = config, c2 = msg, c3 = "" });
 
 
             }
             else if (config == "P")
             {
                 config = "P";
-                msg = msg;
+                //msg = msg;
                 return Json(new { c1 = config, c2 = msg });
             }
             else
             {
                 config = "E";
-                msg = msg;
+                // msg = msg;
                 return Json(new { c1 = config, c2 = msg });
             }
 
@@ -2123,24 +2063,7 @@ namespace ServiceStation.Controllers.RequestForm
 
                             }
                             _IT.SaveChanges();
-                            //for (int i = 0; i < @class._ViewsvsRegisterUSB_Cancel.Count; i++)
-                            //{
-                            //    ViewsvsRegisterUSB_Cancel _svsRegisterUSB_Cancel = _IT.svsRegisterUSB_Cancel.Where(x => x.cuCancelNo == @class._ViewsvsRegisterUSB_Cancel[i].cuCancelNo && x.cuNo == @class._ViewsvsRegisterUSB_Cancel[i].cuNo).FirstOrDefault();
-                            //    if (_svsRegisterUSB_Cancel != null)
-                            //    {
-                            //        _svsRegisterUSB_Cancel.cuCancelNo = @class._ViewsvsRegisterUSB_Cancel[i].cuCancelNo;
-                            //        _svsRegisterUSB_Cancel.cuNo = @class._ViewsvsRegisterUSB_Cancel[i].cuNo;
-                            //        _svsRegisterUSB_Cancel.cuType = @class._ViewsvsRegisterUSB_Cancel[i].cuType;
-                            //        _svsRegisterUSB_Cancel.cuUSBNo = @class._ViewsvsRegisterUSB_Cancel[i].cuUSBNo;
-                            //        _svsRegisterUSB_Cancel.cuReason = @class._ViewsvsRegisterUSB_Cancel[i].cuReason;
-                            //        _svsRegisterUSB_Cancel.cuReason_other = @class._ViewsvsRegisterUSB_Cancel[i].cuReason_other;
-                            //        //_svsRegisterUSB_Cancel.cuIssueBy = IssueBy;
-                            //        _svsRegisterUSB_Cancel.cuUpdateBy = UpdateBy;
-                            //        _IT.svsRegisterUSB_Cancel.Update(_svsRegisterUSB_Cancel);
-                            //        _IT.SaveChanges();
-                            //    }
 
-                            //}
                             vmsg = "Update success";
                             dbContextTransaction.Commit();
                         }
@@ -2440,16 +2363,6 @@ namespace ServiceStation.Controllers.RequestForm
 
 
 
-
-
-                        //_svsVPN.vpnNo = vsrNo;
-                        //_svsVPN.vpnPCName = @class._ViewsvsVPN.vpnPCName;
-                        //_svsVPN.vpnStatusUse = @class._ViewsvsVPN.vpnStatusUse;
-                        //_svsVPN.vpnEmpCode = @class._ViewsvsVPN.vpnEmpCode;
-                        //_svsVPN.vpnWork = @class._ViewsvsVPN.vpnWork;
-                        //_svsVPN.vpnRemark = @class._ViewsvsVPN.vpnRemark;
-                        //_svsVPN.vpnStartDate = @class._ViewsvsVPN.vpnStartDate;
-                        //_svsVPN.vpnEndDate = @class._ViewsvsVPN.vpnEndDate;
                         _IT.svsITMS_SystemRegister.Add(_svsITMS_SystemRegister);
                         _IT.SaveChanges();
 
@@ -2539,6 +2452,95 @@ namespace ServiceStation.Controllers.RequestForm
 
             //return Json(_IT.rpEmails.Where(p => p.emEmail.Contains(term) || p.emEmail_M365.Contains(term)).Select(p => p.emEmail_M365).ToList());
 
+        }
+
+        public string[] save_file_UsbNew(Class @class, int vSno)
+        {
+            string IssueBy = DateTime.Now.ToString("yyyyMMdd HH:mm:ss") + " - " + HttpContext.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name)?.Value;
+            string v_name = "";
+            string fileName = "";
+            string v_error = "";
+            string v_fnType = @class._ViewsvsServiceRequest.srType;
+            string IssueDate = DateTime.Now.ToString("yyyyMMdd HHmmss");
+
+            try
+            {
+
+                using (var dbContextTransaction = _IT.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        for (int i = 0; i < @class.RegisterUSBNewViewModel.Count; i++)
+                        {
+                            if (@class.RegisterUSBNewViewModel[i].nuImage != null)
+                            {
+                                fileName = IssueDate + "-" + @class.RegisterUSBNewViewModel[i].nuImage.FileName;// + "-" + DateTime.Now.ToString("yyyyMMdd HH:mm:ss").ToString();//System.IO.Path.GetExtension(file.FileName).ToLower();
+                                string filePath = path + fileName;
+                                var fileLocation = new FileInfo(filePath);
+                                //filePaths.Add(filePath);
+                                if (!Directory.Exists(filePath))
+                                {
+                                    using (var stream = new FileStream(filePath, FileMode.Create))
+                                    {
+                                        @class.RegisterUSBNewViewModel[i].nuImage.CopyTo(stream);
+                                    }
+                                }
+                                ViewsvsRegisterUSB_New _svsRegisterUSB_New = new ViewsvsRegisterUSB_New();
+                                _svsRegisterUSB_New = _IT.svsRegisterUSB_New.Where(x => x.nuNo == vSno && x.nuNewNo == (i + 1)).FirstOrDefault();
+                                if (_svsRegisterUSB_New != null)
+                                {
+                                    _svsRegisterUSB_New.nuImage = fileName;
+                                    _IT.svsRegisterUSB_New.Update(_svsRegisterUSB_New);
+                                    //  _IT.SaveChanges();
+
+
+                                }
+
+                                ViewAttachment _viewAttachment = new ViewAttachment();
+                                _viewAttachment.fnNo = vSno.ToString();
+                                _viewAttachment.fnPath = filePath;
+                                _viewAttachment.fnFilename = fileName;
+                                _viewAttachment.fnIssueBy = IssueBy;
+                                _viewAttachment.fnUpdateBy = IssueBy;
+                                _viewAttachment.fnType = (i + 1).ToString();
+                                _viewAttachment.fnProgram = "ServiceStation";
+                                _IT.Attachment.AddAsync(_viewAttachment);
+                                _IT.SaveChanges();
+                                dbContextTransaction.Commit();
+                            }
+
+                        }
+
+
+                    }
+                    catch (Exception e)
+                    {
+                        v_error = e.Message;
+                        v_name = e.Message;
+                        dbContextTransaction.Rollback();
+                    }
+                    finally
+                    {
+                        if (dbContextTransaction != null)
+                        {
+                            dbContextTransaction.Dispose();
+                        }
+
+
+                    }
+                }
+
+
+            }
+            catch (Exception e)
+            {
+                v_error = e.Message;
+                v_name = e.Message;
+            }
+
+            string[] returnVal = { v_name };
+            //string[] returnVal = { "1", "" };
+            return returnVal;
         }
 
         public string[] save_file_F4(Class @class, int vSno, List<IFormFile> files0, int v_row)
@@ -2659,17 +2661,6 @@ namespace ServiceStation.Controllers.RequestForm
             string v_error = "";
             string v_fnType = v_type != "" ? v_type : @class._ViewsvsServiceRequest.srType;
             string IssueDate = DateTime.Now.ToString("yyyyMMddHHmmss");
-            //if (@class._ViewsvsServiceRequest.srStatus != null)
-            //{
-            //    v_fnType = "Woker";
-            //    //if (@class._ViewsvsServiceRequest.srStatus.Contains("Done"))
-            //    //{
-            //    //    v_fnType = "Woker";
-            //    //}
-            //}
-
-
-
 
 
             try
