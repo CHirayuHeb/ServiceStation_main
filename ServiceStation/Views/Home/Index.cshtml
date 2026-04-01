@@ -216,8 +216,8 @@
                         </div>
                     </div>
                     <div class="row center table-container" style="align-items: center;max-height: 500px; ">
-                      
-                        <table class="summarys">
+
+                        <table class="summarys" style="min-width:800px">
                             <thead>
                                 <tr>
                                     <th width="5%">No.</th>
@@ -253,49 +253,42 @@
                                 {
                                     rowNumber++; // เพิ่มค่าทีละ 1 ในทุกๆ รอบที่วน loop
                                     <tr align="Center">
-                                        @*<td>@(row += 1)</td>*@
                                         <td>@rowNumber</td>
                                         <td class="center">
                                             <p style="font-size:10px;">@item.srServiceNo</p>
                                         </td>
-                                        <td>@item.srSubject</td>
-                                        <td>@item.srRequestName</td>
-                                        <td>@item.srIntercom</td>
-                                        <td>@item.srDeptCode</td>
+                                        <td><span style="font-size:10px;">@item.srSubject</span></td>
+                                        <td><span style="font-size:10px;">@item.srRequestName</span></td>
+                                        <td><span style="font-size:10px;">@item.srIntercom</span></td>
+                                        <td><span style="font-size:10px;">@item.srDeptCode</span></td>
                                         <td>
                                             @{
                                                 string text = @item.srIssueDateTime;
                                                 string result = text.Substring(9, 8); // ดึงจาก index 9 ความยาว 8 ตัวอักษร
                                             }
-                                            @item.srRequestDate  @result
+                                            <span style="font-size:10px;">@item.srRequestDate  @result </span>
                                         </td>
                                         <td>
-                                            @item.srOperatorEmpcode @item.srOperatorName
+                                            <span style="font-size:10px;">@item.srOperatorEmpcode @item.srOperatorName </span>
                                         </td>
                                         <td>
-                                            @item.srDesiredDate
+                                            <span style="font-size:10px;">@item.srDesiredDate</span>
                                         </td>
                                         @*<td>
                                                 @(@item.srStep += 1)
 
                                             </td>*@
                                         <td>
-                                            @*<span style="font-weight:600;color:#0056b3;"></span>*@
-                                            @*<span style="@(item.srStep ==5 ?"color:green;font-weight:700;font-size:12px;":"" )">
-                                            @(Model?._ListViewsvsMastFlowApprove?.FirstOrDefault(x => x.mfStep == item.srStep)?.mfSubject ?? "")</span>*@
-                                            <span style="@(item.srStep == 5 ? "color:darkseagreen;font-weight:700;font-size:12px;":item.srStep == 0 ? "color:orangered;font-weight:700;font-size:12px;" : "")">
+                                            <span style="@(item.srStep == 5 ? "color:darkseagreen;font-weight:700;font-size:12px;":item.srStep == 0 ? "color:orangered;font-weight:700;font-size:12px;" : "font-size:10px;")">
                                                 @(Model?._ListViewsvsMastFlowApprove?.FirstOrDefault(x => x.mfStep == item.srStep)?.mfSubject ?? "")
                                             </span>
-                                            @*<span style="@(item.srStep == 5 ? "font-weight:700;font-size:12px;":item.srStep == 0 ? "font-weight:700;font-size:12px;" : "")">
-                                                @(Model?._ListViewsvsMastFlowApprove?.FirstOrDefault(x => x.mfStep == item.srStep)?.mfSubject ?? "")
-                                            </span>*@
                                         </td>
                                         <td>
-                                            <span style="@(item.srStep < 5 ? "" :"display:none" )"> @item.srApproveEmpcode  @item.srApproveName</span>
+                                            <span style="font-size:10px;@(item.srStep < 5 ? "" :"display:none" )"> @item.srApproveEmpcode  @item.srApproveName</span>
                                         </td>
                                         <td>
 
-                                            <a href="@Url.Action("Index", "RequestForm", new { vSrNo = @item.srNo})" target="_blank" style="font-size:22px;text-decoration: none;">
+                                            <a href="@Url.Action("Index", "RequestForm", new { vSrNo = @item.srNo})" target="_blank" style="font-size:20px;text-decoration: none;">
                                                 &#x1F50E;
                                             </a>
 
