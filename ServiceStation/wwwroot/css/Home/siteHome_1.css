@@ -3,8 +3,7 @@
 }
 .grid-container {
     display: grid;
-    grid-template-columns: auto auto auto;
- 
+    grid-template-columns: auto auto auto ;
     /*background-color: #2196F3;*/
 }
 
@@ -16,7 +15,7 @@ label {
     /*background-color: rgba(255, 255, 255, 0.8);*/
     border: 0px solid rgba(0, 0, 0, 0.8);
     padding: 7px;
-    max-width: 280px;
+    max-width: 250px;
     min-height: 280px; /* Should be removed. Only for demonstration */
     margin: 10px;
     /*border:2px solid blue; #c9def4*/
@@ -50,6 +49,11 @@ label {
 }
 .Other {
     background: url("../../images/Other.png") no-repeat right center;
+    margin-right: 20px;
+    background-size: 80% 80%;
+}
+.DXT {
+    background: url("../../images/DXT.png") no-repeat right center;
     margin-right: 20px;
     background-size: 80% 80%;
 }
