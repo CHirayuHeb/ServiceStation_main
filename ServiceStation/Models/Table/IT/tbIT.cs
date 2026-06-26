@@ -86,6 +86,14 @@ namespace ServiceStation.Models.Table.IT
         public string srOperatorEmpcode { get; set; }
         public string srOperatorName { get; set; }
 
+        [NotMapped]
+        public string useByemp { get; set; }
+        [NotMapped]
+        public string useByNickname { get; set; }
+        [NotMapped]
+        public string useByIntercom { get; set; }
+
+
     }
     //svsGeneral
     [Table("svsGeneral")]

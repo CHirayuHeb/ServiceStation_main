@@ -77,94 +77,99 @@
 
                         @foreach (var item in Model._ListsvsServiceRequest)
                         {
-                            <div class="centerdiv" id="divMyreq" style="margin-inline: auto; ">
-                                <div class="row ">
-                                    <div class="col-60">
-                                        <label style="font-weight:800">Service No:</label>
-                                        <label>@item.srServiceNo</label>
-
-                                    </div>
-                                    <div class="col-30">
-                                        @*<label>@item.srStatus</label>*@
-                                        @if (@item.srStep == 1)
-                                        {
-
-                                            <img src="~/images/S1.png" width="25px" height="25px" />
-                                           
-                                            @*<label>Waiting for approval of Dept.</label>*@
-                                        }
-                                        else if (@item.srStep == 2)
-                                        {
-                                            <img src="~/images/S2.png" width="25px" height="25px" />
-                                            @*<label>Waiting for approval by CS of IS.</label>*@
-                                         
-                                        }
-                                        else if (@item.srStep == 3)
-                                        {
-                                            <img src="~/images/S3.png" width="25px" height="25px" />
-                                            @*<label>In Process.</label>*@
-                                            
-                                        }
-                                        else if (@item.srStep == 4)
-                                        {
-                                            <img src="~/images/S4.png" width="25px" height="25px" />
-                                            @*<label>Waiting for accept by CS of IS.</label>*@
-                                         
-                                        }
-                                        else if (@item.srStep == 5)
-                                        {
-                                            <img src="~/images/S5.png" width="25px" height="25px" />
-                                            @*<label>Finish.</label>*@
-
-                                        }
-                                        <label>@item.srStatus</label>
-                                        @*<label>@item.srStep</label>*@
-
-                                    </div>
-                                    <div class="col-10">
-                                        @*<a href="@Url.Action("Index", "RequestForm", new { id = @item.srNo,vtype ="Edit",vForm=@item.srFrom,vTeam=@item.srType,vSubject=@item.srSubject,vSrNo=@item.srNo })" target="_blank" style="font-size:22px;text-decoration: none;">
-                                            &#x1F50E;
-                                        </a>*@
-                                        <a href="@Url.Action("Index", "RequestForm", new { vSrNo = @item.srNo})" target="_blank" style="font-size:22px;text-decoration: none;">
-                                            &#x1F50E;
-                                        </a>
-                                        @*<input type="button" style="font-size:18px" value="&#x1F50E;" onclick="GoNewRequest('@item.srRequestBy','Edit','@Url.Action("Index", "RequestForm")','@item.srFrom','@item.srType','@item.srSubject','@item.srNo')">*@
-                                        <input type="button" style="font-size:18px" value="&#x1F5D1" onclick="DeleteData('@item.srNo','@Url.Action("DeteleData","RequestForm")')" disabled>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-60">
-                                        <label style="font-weight:800">Title:</label>
-                                        <span style="font-size:13px">@item.srSubject </span>
-
-                                    </div>
-                                    <div class="col-30">
-                                        <label style="font-weight:800">Request Date:</label>
-                                        <label style="font-size:10px">@item.srRequestDate </label>
-
-                                    </div>
-                                    <div class="col-10">
-
-
-                                    </div>
-                                </div>
-                                <div class="row" style=" align-items: center;">
-                                    <div class="col-60">
-                                        <label style="font-weight:800">Request By:</label>
-                                        <label>@item.srRequestName </label>
-                                        <label>(@item.srIntercom)</label>
-                                    </div>
-                                    <div class="col-30">
-                                        <label style="font-weight:800">Target Date:</label>
-                                        <label>@item.srDesiredDate </label>
-
-                                    </div>
-                                    <div class="col-10">
-
-
-                                    </div>
-                                </div>
+                    <div class="centerdiv" id="divMyreq" style="margin-inline: auto; ">
+                        <div class="row ">
+                            <div class="col-60">
+                                <label style="font-weight:800">Service No:</label>
+                                <label>@item.srServiceNo</label>
                             </div>
+                            <div class="col-30">
+                                @*<label>@item.srStatus</label>*@
+                                @if (@item.srStep == 1)
+                                {
+
+                                    <img src="~/images/S1.png" width="25px" height="25px" />
+
+                                    @*<label>Waiting for approval of Dept.</label>*@
+                                }
+                                else if (@item.srStep == 2)
+                                {
+                                    <img src="~/images/S2.png" width="25px" height="25px" />
+                                    @*<label>Waiting for approval by CS of IS.</label>*@
+
+                                }
+                                else if (@item.srStep == 3)
+                                {
+                                    <img src="~/images/S3.png" width="25px" height="25px" />
+                                    @*<label>In Process.</label>*@
+
+                                }
+                                else if (@item.srStep == 4)
+                                {
+                                    <img src="~/images/S4.png" width="25px" height="25px" />
+                                    @*<label>Waiting for accept by CS of IS.</label>*@
+
+                                }
+                                else if (@item.srStep == 5)
+                                {
+                                    <img src="~/images/S5.png" width="25px" height="25px" />
+                                    @*<label>Finish.</label>*@
+
+                                }
+                                <label>@item.srStatus</label>
+                                @*<label>@item.srStep</label>*@
+                            </div>
+                            <div class="col-10">
+                                @*<a href="@Url.Action("Index", "RequestForm", new { id = @item.srNo,vtype ="Edit",vForm=@item.srFrom,vTeam=@item.srType,vSubject=@item.srSubject,vSrNo=@item.srNo })" target="_blank" style="font-size:22px;text-decoration: none;">
+                    &#x1F50E;
+                </a>*@
+                                <a href="@Url.Action("Index", "RequestForm", new { vSrNo = @item.srNo})" target="_blank" style="font-size:22px;text-decoration: none;">
+                                    &#x1F50E;
+                                </a>
+                                @*<input type="button" style="font-size:18px" value="&#x1F50E;" onclick="GoNewRequest('@item.srRequestBy','Edit','@Url.Action("Index", "RequestForm")','@item.srFrom','@item.srType','@item.srSubject','@item.srNo')">*@
+                                <input type="button" style="font-size:18px" value="&#x1F5D1" onclick="DeleteData('@item.srNo','@Url.Action("DeteleData","RequestForm")')" disabled>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-60">
+                                <label style="font-weight:800">Title:</label>
+                                <span style="font-size:13px">@item.srSubject </span>
+                            </div>
+                            <div class="col-30">
+                                <label style="font-weight:800">Request Date:</label>
+                                <label style="font-size:10px">@item.srRequestDate </label>
+                            </div>
+                            <div class="col-10">
+
+                            </div>
+                        </div>
+                        <div class="row" style=" align-items: center;">
+                            <div class="col-60">
+                                <label style="font-weight:800">Request By: </label>
+                                <label>(@item.srRequestBy)</label>
+                                <label>@item.srRequestName </label>
+                                <label>(@item.srIntercom)</label>
+                            </div>
+                            <div class="col-30">
+                                <label style="font-weight:800;">Target Date:</label>
+                                <label>@item.srDesiredDate </label>
+                            </div>
+                            <div class="col-10">
+
+                            </div>
+                        </div>
+                        <div class="row" style=" align-items: center; @(item.srFrom == "F5" ? "":"display:none") ">
+                            <div class="col-60">
+                                <label style="font-weight:800">Use By: </label>
+                                <label>(@item.useByemp) </label>
+                                <label>@item.useByNickname </label>
+                                <label>(@item.useByIntercom)</label>
+                            </div>
+                            <div class="col-40">
+                               
+                            </div>
+                        </div>
+                    </div>
                         }
 
 
