@@ -10,7 +10,6 @@
 }
 <link href="~/css/RequestForm/site.css" rel="stylesheet" />
 <table class="center" id="Toptable" border="1" style="@(@_UserId == @Model._ViewsvsServiceRequest.srRequestBy|| @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode ? "" : "pointer-events: none;")">
-
     <tr align="left" height="15">
         <td id="tbottom">PC-Name(หมายเลขเครื่อง) <span class="text-red">*จำเป็น</span></td>
         <td id="insertdata">
@@ -23,28 +22,49 @@
         <td id="insertdata">
             @Html.RadioButtonFor(m => m._ViewsvsVPN.vpnStatusUse, "ever", new { @class = "", id = "txtF5vpnStatusUse1", name = "txtF5vpnStatusUse", onclick = "CheckCA('ever','Case')" }) <label>เคยใช้งาน</label><br />
             @Html.RadioButtonFor(m => m._ViewsvsVPN.vpnStatusUse, "Notever", new { @class = "", id = "txtF5vpnStatusUse2", name = "txtF5vpnStatusUse", onclick = "CheckCA('Notever','Case')" }) <label class="form-check-label" for="StatusDis">ไม่เคยใช้งาน</label>
-
         </td>
     </tr>
     <tr align="left" height="20">
         <td id="op" colspan="3">Take Out For(วัตถุประสงค์การนำออก)</td>
     </tr>
     <tr align="left" height="20">
-        <td id="tbottom" style="vertical-align:top">รหัสพนักงาน<span class="text-red">*จำเป็น</span><p>กรอกรหัสพนักงาน 6 หลัก </p> <span style="font-size:12px;font-weight:400">หมายเหตุ กรณีส่งเเทนให้กรอกรหัสพนักงานของผู้ต้องการใช้</span></td>
+        <td id="tbottom" style="vertical-align:top">
+            รหัสพนักงาน<span class="text-red">*จำเป็น</span><p>กรอกรหัสพนักงาน 6 หลัก </p>
+            <span style="font-size:12px;font-weight:400"><span style="font-size:12px;font-weight:600">หมายเหตุ </span>กรณีส่งเเทนให้กรอกรหัสพนักงานของผู้ต้องการใช้</span>
+            <br />
+        </td>
         <td id="insertdata" style="vertical-align:top">
-            <input class="form-control" type="text" autocomplete="off" style="width:150px; height:30px;text-align:left;font-size:12px" id="txtF5vpnEmpCode" asp-for="_ViewsvsVPN.vpnEmpCode" />
+            <input class="form-control" type="text" autocomplete="off" style="width:150px; height:30px;text-align:left;font-size:12px" id="txtF5vpnEmpCode" asp-for="_ViewsvsVPN.vpnEmpCode" maxlength="10" />
         </td>
     </tr>
     <tr align="left" height="20">
-        <td id="tbottom">งานที่ได้รับมอบหมาย <span class="text-red">*จำเป็น</span></td>
+        <td id="tbottom">
+            งานที่ได้รับมอบหมาย งานที่ได้รับมอบหมาย
+            และระบบที่ต้องการใช้งาน<br />
+            <span class="text-red">*จำเป็น</span>
+        </td>
         <td id="insertdata">
-            @Html.TextAreaFor(model => model._ViewsvsVPN.vpnWork, new { @class = "form-control", style = "font-size:12px", @cols = 40, @rows = 3, @id = "txtF5vpnWork" })
+            <span style="font-size:12px">(Save Cost VPN) บริษัทมีเป้าหมายลดค่าใช้จ่าย VPN ลง 50% เนื่องจากลงทุนใน M365 Security แล้ว</span>
+
+            <br />
+            <span style="font-size:12px;font-weight:600;">
+                ***สิ่งที่ต้องกรอก***
+            </span>
+            <br />
+            <span style="font-size:12px">(1) งานที่ทำ = ... </span><br />
+            <span style="font-size:12px">(2) ระบบที่ต้องการใช้งาน (กรอกได้มากกว่า 1 ตามการใช้งานจริง)</span><br />
+            <span style="font-size:12px;margin-left:25px">(1) SAP HANA = ...</span><br />
+            <span style="font-size:12px;margin-left:25px">(2) WOLF = ...</span><br />
+            <span style="font-size:12px;margin-left:25px">(3) Program Dev by IS Dept (อนาคตจะย้ายไปบน M365 Power Platform) = ...</span>
+            <br />
+            <br />
+            @Html.TextAreaFor(model => model._ViewsvsVPN.vpnWork, new { @class = "form-control", style = "font-size:12px;field-sizing: content;min-height:100px", @cols = 40, @rows = 4, @id = "txtF5vpnWork" })
         </td>
     </tr>
     <tr align="left" height="20">
         <td id="tbottom">หมายเหตุ<br />&emsp;<br />&emsp;</td>
         <td id="insertdata">
-            @Html.TextAreaFor(model => model._ViewsvsVPN.vpnRemark, new { @class = "form-control", style = "font-size:12px;field-sizing: content;min-height:100px",  @rows = 5, @id = "txtF5vpnRemark" })
+            @Html.TextAreaFor(model => model._ViewsvsVPN.vpnRemark, new { @class = "form-control", style = "font-size:12px;field-sizing: content;min-height:100px", @rows = 4, @id = "txtF5vpnRemark" })
         </td>
     </tr>
     <tr align="left" height="20">
@@ -56,7 +76,7 @@
                 เปิดไฟล์แนบ @ViewBag.listAttachmentCOunt ไฟล์
                 @if (@ViewBag.listAttachmentCOunt > 0)
                 {
-                <span class="badge">@ViewBag.listAttachmentCOunt</span>
+                    <span class="badge">@ViewBag.listAttachmentCOunt</span>
                 }
             </button>
         </td>
