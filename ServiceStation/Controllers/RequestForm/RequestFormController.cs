@@ -45,13 +45,25 @@ namespace ServiceStation.Controllers.RequestForm
         }
 
         //[HttpPost]
+
         [Authorize("Checked")]
-        public ActionResult Index(string id, string vtype, string vForm, string vTeam, string vSubject, string vSrNo, string mmSecCode, string msSubNo)
+        public ActionResult Index(string id, string vtype, string vForm, string vTeam, string vSubject, string vSrNo, string mmSecCode, string msSubNo, string vtoken)
         {
 
             try
             {
                 string _UserId = User.Claims.FirstOrDefault(s => s.Type == "UserId")?.Value;
+
+
+                if (!string.IsNullOrEmpty(vtoken))
+                {
+                    // ถอดรหัสค่า Base64 กลับมาเป็นเลข ID เดิม
+                    byte[] base64EncodedBytes = System.Convert.FromBase64String(vSrNo);
+                    id = System.Text.Encoding.UTF8.GetString(base64EncodedBytes);
+
+                    // นำ realSrNo ไปใช้งานต่อตามปกติ...
+                }
+
                 //case new
                 //string mmSecCode,string msSubNo
                 if (mmSecCode != null && msSubNo != null)
@@ -231,6 +243,7 @@ namespace ServiceStation.Controllers.RequestForm
             }
             catch (Exception ex)
             {
+                string msgr = ex.Message;
                 return RedirectToAction("Index", "FakePage");
             }
 
@@ -806,7 +819,7 @@ namespace ServiceStation.Controllers.RequestForm
             return PartialView("SendMail", @classs);
         }
 
-        
+
 
         public ActionResult SendMailDetail(Class @classs)
         {
@@ -1033,42 +1046,124 @@ namespace ServiceStation.Controllers.RequestForm
                 //check vpn step 1 cs up 13 / 01 / 2024 if ((vform == "F5" || vSrSubject.Contains("Print Color") || vSrSubject.Contains("Admin Access Request")) && i_Step == 1)
                 if ((vform == "F5" || vSrSubject.Contains("Print Color") || vSrSubject.Contains("Admin Access Request")) && i_Step == 1)
                 {
+                    //string _Divicheck = "";
+                    //string _Depcheck = "";
                     //check emp positon
                     try
                     {
                         string v_POS_HCM_CODE = "1111"; //default value case null
-                        string v_empcsup = _IT.rpEmails.Where(w => w.emName_M365 == @class._ViewsvsHistoryApproved.htTo).Select(x => x.emEmpcode).FirstOrDefault();
+                       //string v_empcsup = _IT.rpEmails.Where(w => w.emName_M365 == @class._ViewsvsHistoryApproved.htTo).Select(x => x.emEmpcode).FirstOrDefault();
 
-                        string _Divicheck = User.Claims.FirstOrDefault(s => s.Type == "Division")?.Value;
-                        string _Depcheck = User.Claims.FirstOrDefault(s => s.Type == "Department")?.Value;
-                        if (_Divicheck.Contains("SL") || _Depcheck.Contains("DMP"))
+                        //string _Divicheck = User.Claims.FirstOrDefault(s => s.Type == "Division")?.Value;
+                        //string _Depcheck = User.Claims.FirstOrDefault(s => s.Type == "Department")?.Value;
+                        //if (_Divicheck.Contains("SL") || _Depcheck.Contains("DMP"))
+                        //{
+                        //    //check case SL ddm
+                        //    v_POS_HCM_CODE = _HRMS.AccPOSMAST.Where(x => x.POS_CODE == "DDM").Select(x => x.POS_HCM_CODE).FirstOrDefault() ?? "1111";
+                        //}
+                        //else
+                        //{
+                        //    //normal case
+                        //    v_POS_HCM_CODE = _HRMS.AccPOSMAST.Where(x => x.POS_CODE == "DM").Select(x => x.POS_HCM_CODE).FirstOrDefault() ?? "1111";
+                        //}
+                        //_Divicheck = User.FindFirst("Division")?.Value ?? "";
+                        //_Depcheck = User.FindFirst("Department")?.Value ?? "";
+
+                        //bool isSL_DMP =
+                        //    _Divicheck.Contains("SL") ||
+                        //    _Depcheck.Contains("DMP");
+
+                        //string posCode = isSL_DMP ? "DDM" : "DM";
+
+                        //v_POS_HCM_CODE = _HRMS.AccPOSMAST
+                        //    .Where(x => x.POS_CODE == posCode)
+                        //    .Select(x => x.POS_HCM_CODE)
+                        //    .FirstOrDefault() ?? "1111";
+
+
+
+                        //ViewAccEMPLOYEE _ViewAccEMPLOYEE = _HRMS.AccEMPLOYEE.Where(x => x.EMP_CODE == v_empcsup).FirstOrDefault();
+                        //List<ViewAccPOSMAST> _ViewAccPOSMAST = _HRMS.AccPOSMAST.Where(x => int.Parse(x.POS_HCM_CODE) <= int.Parse(v_POS_HCM_CODE)).ToList();
+                        //string v_chk = _ViewAccPOSMAST.Where(x => x.POS_CODE == _ViewAccEMPLOYEE.POS_CODE).Select(x => x.POS_CODE).FirstOrDefault();
+
+                        //if (v_chk == null || v_chk == "")
+                        //{
+                        //    config = "E";
+                        //    msg = "Please send approval to DM Up of Dept.!!!";
+                        //    return Json(new { c1 = config, c2 = msg });
+                        //}
+
+                        string v_empcsup = _IT.rpEmails
+                          .Where(w => w.emName_M365 == @class._ViewsvsHistoryApproved.htTo)
+                          .Select(x => x.emEmpcode)
+                          .FirstOrDefault();
+
+                        v_POS_HCM_CODE = _HRMS.AccPOSMAST
+                            .Where(x => x.POS_CODE == "DDM")
+                            .Select(x => x.POS_HCM_CODE)
+                            .FirstOrDefault();
+
+                        // Check POS HCM CODE
+                        if (string.IsNullOrWhiteSpace(v_POS_HCM_CODE))
                         {
-                            //check case SL ddm
-                            v_POS_HCM_CODE = _HRMS.AccPOSMAST.Where(x => x.POS_CODE == "DDM").Select(x => x.POS_HCM_CODE).FirstOrDefault() ?? "1111";
+                            config = "E";
+                            msg = "ไม่พบ POS_HCM_CODE ของ POS_CODE = GL";
+                            return Json(new { c1 = config, c2 = msg });
                         }
-                        else
+
+                        // Check Employee Code
+                        if (string.IsNullOrWhiteSpace(v_empcsup))
                         {
-                            //normal case
-                            v_POS_HCM_CODE = _HRMS.AccPOSMAST.Where(x => x.POS_CODE == "DM").Select(x => x.POS_HCM_CODE).FirstOrDefault() ?? "1111";
+                            config = "E";
+                            msg = "ไม่พบ Employee Code ของผู้อนุมัติ";
+                            return Json(new { c1 = config, c2 = msg });
                         }
 
+                        ViewAccEMPLOYEE _ViewAccEMPLOYEE = _HRMS.AccEMPLOYEE
+                            .Where(x => x.EMP_CODE == v_empcsup)
+                            .FirstOrDefault();
 
-                        ViewAccEMPLOYEE _ViewAccEMPLOYEE = _HRMS.AccEMPLOYEE.Where(x => x.EMP_CODE == v_empcsup).FirstOrDefault();
-                        List<ViewAccPOSMAST> _ViewAccPOSMAST = _HRMS.AccPOSMAST.Where(x => int.Parse(x.POS_HCM_CODE) <= int.Parse(v_POS_HCM_CODE)).ToList();
-                        string v_chk = _ViewAccPOSMAST.Where(x => x.POS_CODE == _ViewAccEMPLOYEE.POS_CODE).Select(x => x.POS_CODE).FirstOrDefault();
+                        if (_ViewAccEMPLOYEE == null)
+                        {
+                            config = "E";
+                            msg = "ไม่พบข้อมูล Employee : " + v_empcsup;
+                            return Json(new { c1 = config, c2 = msg });
+                        }
 
-                        if (v_chk == null || v_chk == "")
+                        if (!int.TryParse(v_POS_HCM_CODE, out int posHcmCode))
+                        {
+                            config = "E";
+                            msg = "POS_HCM_CODE ไม่ใช่ตัวเลข : " + v_POS_HCM_CODE;
+                            return Json(new { c1 = config, c2 = msg });
+                        }
+
+                        List<ViewAccPOSMAST> _ViewAccPOSMAST = _HRMS.AccPOSMAST
+                            .Where(x => x.POS_HCM_CODE != null)
+                            .AsEnumerable()
+                            .Where(x => int.TryParse(x.POS_HCM_CODE, out int posCode)
+                                     && posCode <= posHcmCode)
+                            .ToList();
+
+                        string v_chk = _ViewAccPOSMAST
+                            .Where(x => x.POS_CODE == _ViewAccEMPLOYEE.POS_CODE)
+                            .Select(x => x.POS_CODE)
+                            .FirstOrDefault();
+
+                        if (string.IsNullOrEmpty(v_chk))
                         {
                             config = "E";
                             msg = "Please send approval to DM Up of Dept.!!!";
                             return Json(new { c1 = config, c2 = msg });
                         }
 
+
+
+
                     }
                     catch (Exception ex)
                     {
                         config = "E";
-                        msg = "Please check Email send to !!!!";
+                        msg = "Please check Email send to !!!!" + ex.InnerException.Message;
                         return Json(new { c1 = config, c2 = msg });
                     }
 
@@ -1079,25 +1174,74 @@ namespace ServiceStation.Controllers.RequestForm
                     try
                     {
                         string v_POS_HCM_CODE = "";
-                        string v_empcsup = _IT.rpEmails.Where(w => w.emName_M365 == @class._ViewsvsHistoryApproved.htTo).Select(x => x.emEmpcode).FirstOrDefault();
-                        string _Divicheck = User.Claims.FirstOrDefault(s => s.Type == "Division")?.Value;
-                        v_POS_HCM_CODE = _HRMS.AccPOSMAST.Where(x => x.POS_CODE == "GL").Select(x => x.POS_HCM_CODE).FirstOrDefault();
-                        ViewAccEMPLOYEE _ViewAccEMPLOYEE = _HRMS.AccEMPLOYEE.Where(x => x.EMP_CODE == v_empcsup).FirstOrDefault();
-                        List<ViewAccPOSMAST> _ViewAccPOSMAST = _HRMS.AccPOSMAST.Where(x => int.Parse(x.POS_HCM_CODE) < int.Parse(v_POS_HCM_CODE)).ToList();
-                        string v_chk = _ViewAccPOSMAST.Where(x => x.POS_CODE == _ViewAccEMPLOYEE.POS_CODE).Select(x => x.POS_CODE).FirstOrDefault();
 
-                        if (v_chk == null || v_chk == "")
+                        string v_empcsup = _IT.rpEmails
+                            .Where(w => w.emName_M365 == @class._ViewsvsHistoryApproved.htTo)
+                            .Select(x => x.emEmpcode)
+                            .FirstOrDefault();
+
+                        v_POS_HCM_CODE = _HRMS.AccPOSMAST
+                            .Where(x => x.POS_CODE == "GL")
+                            .Select(x => x.POS_HCM_CODE)
+                            .FirstOrDefault();
+
+                        // Check POS HCM CODE
+                        if (string.IsNullOrWhiteSpace(v_POS_HCM_CODE))
+                        {
+                            config = "E";
+                            msg = "ไม่พบ POS_HCM_CODE ของ POS_CODE = GL";
+                            return Json(new { c1 = config, c2 = msg });
+                        }
+
+                        // Check Employee Code
+                        if (string.IsNullOrWhiteSpace(v_empcsup))
+                        {
+                            config = "E";
+                            msg = "ไม่พบ Employee Code ของผู้อนุมัติ";
+                            return Json(new { c1 = config, c2 = msg });
+                        }
+
+                        ViewAccEMPLOYEE _ViewAccEMPLOYEE = _HRMS.AccEMPLOYEE
+                            .Where(x => x.EMP_CODE == v_empcsup)
+                            .FirstOrDefault();
+
+                        if (_ViewAccEMPLOYEE == null)
+                        {
+                            config = "E";
+                            msg = "ไม่พบข้อมูล Employee : " + v_empcsup;
+                            return Json(new { c1 = config, c2 = msg });
+                        }
+
+                        if (!int.TryParse(v_POS_HCM_CODE, out int posHcmCode))
+                        {
+                            config = "E";
+                            msg = "POS_HCM_CODE ไม่ใช่ตัวเลข : " + v_POS_HCM_CODE;
+                            return Json(new { c1 = config, c2 = msg });
+                        }
+
+                        List<ViewAccPOSMAST> _ViewAccPOSMAST = _HRMS.AccPOSMAST
+                            .Where(x => x.POS_HCM_CODE != null)
+                            .AsEnumerable()
+                            .Where(x => int.TryParse(x.POS_HCM_CODE, out int posCode)
+                                     && posCode < posHcmCode)
+                            .ToList();
+
+                        string v_chk = _ViewAccPOSMAST
+                            .Where(x => x.POS_CODE == _ViewAccEMPLOYEE.POS_CODE)
+                            .Select(x => x.POS_CODE)
+                            .FirstOrDefault();
+
+                        if (string.IsNullOrEmpty(v_chk))
                         {
                             config = "E";
                             msg = "Please send approval to CS Up of Dept.!!!";
                             return Json(new { c1 = config, c2 = msg });
                         }
-
                     }
                     catch (Exception ex)
                     {
                         config = "E";
-                        msg = "Please check Email send to !!!!" + ex.Message;
+                        msg = "Please check Email send to !!!! " + ex.Message;
                         return Json(new { c1 = config, c2 = msg });
                     }
                 }

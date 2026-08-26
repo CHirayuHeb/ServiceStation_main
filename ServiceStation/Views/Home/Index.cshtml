@@ -291,6 +291,11 @@
                                             <a href="@Url.Action("Index", "RequestForm", new { vSrNo = @item.srNo})" target="_blank" style="font-size:20px;text-decoration: none;">
                                                 &#x1F50E;
                                             </a>
+                                            @*<a href="@Url.Action("Index", "RequestForm", new { vtoken = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(item.srNo.ToString())) })"
+                                               target="_blank"
+                                               style="font-size:20px;text-decoration: none;">
+                                                🔎
+                                            </a>*@
 
                                         </td>
                                         <td>

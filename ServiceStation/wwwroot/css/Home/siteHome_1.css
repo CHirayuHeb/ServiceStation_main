@@ -15,7 +15,7 @@ label {
     /*background-color: rgba(255, 255, 255, 0.8);*/
     border: 0px solid rgba(0, 0, 0, 0.8);
     padding: 7px;
-    max-width: 250px;
+    width: 240px;
     min-height: 280px; /* Should be removed. Only for demonstration */
     margin: 10px;
     /*border:2px solid blue; #c9def4*/
@@ -28,45 +28,45 @@ label {
 .ITMS {
     background: url("../../images/ITMS.png") no-repeat right center;
     margin-right: 20px;
-    background-size: 80% 80%;
+    background-size: 80% 70%;
 }
 
 .ISMS {
     background: url("../../images/ISMS.png") no-repeat right center;
     margin-right: 20px;
-    background-size: 80% 80%;
+    background-size: 80% 70%;
 }
 
 .SDE {
     background: url("../../images/SDE.png") no-repeat right center;
     margin-right: 20px;
-    background-size: 80% 80%;
+    background-size: 80% 70%;
 }
 .MIS {
     background: url("../../images/MIS.png") no-repeat right center;
     margin-right: 20px;
-    background-size: 80% 80%;
+    background-size: 80% 70%;
 }
 .Other {
     background: url("../../images/Other.png") no-repeat right center;
     margin-right: 20px;
-    background-size: 80% 80%;
+    background-size: 80% 70%;
 }
 .DXT {
     background: url("../../images/DXT.png") no-repeat right center;
     margin-right: 20px;
-    background-size: 80% 80%;
+    background-size: 80% 70%;
 }
 .NewEmployee {
     background: url("../../images/New.png") no-repeat right center;
     margin-right: 20px;
-    background-size: 80% 80%;
+    background-size: 80% 70%;
  
 }
 .TSC {
     background: url("../../images/TSC.png") no-repeat right center;
     margin-right: 20px;
-    background-size: 80% 80%;
+    background-size: 80% 70%;
 }
 
 .grid-itemdes {

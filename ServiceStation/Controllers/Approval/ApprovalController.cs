@@ -89,8 +89,25 @@ namespace ServiceStation.Controllers.Approval
                     {
                         if (@classs._ViewSearchMyReq.v_Status.Contains("Cancel"))
                         {
-                            @classs._ListsvsServiceRequest = @classs._ListsvsServiceRequest.Where(x => x.srStep == 0).ToList();
+                            @classs._ListsvsServiceRequest = @classs._ListsvsServiceRequest.Where(x => x.srStatus.Contains("Cancel")).ToList();
                         }
+                        else if (@classs._ViewSearchMyReq.v_Status.Contains("In Process"))
+                        {
+                            @classs._ListsvsServiceRequest = @classs._ListsvsServiceRequest.Where(x => x.srStatus.Contains("In Process")).ToList();
+
+                        }
+                        else if (@classs._ViewSearchMyReq.v_Status.Contains("Done"))
+                        {
+                            @classs._ListsvsServiceRequest = @classs._ListsvsServiceRequest.Where(x => x.srStatus.Contains("Done")).ToList();
+
+                        }
+                        else if (@classs._ViewSearchMyReq.v_Status.Contains("Transfer"))
+                        {
+                            @classs._ListsvsServiceRequest = @classs._ListsvsServiceRequest.Where(x => x.srStatus.Contains("Transfer")).ToList();
+
+                        }
+
+                        //Disapprove 0
                         else if (@classs._ViewSearchMyReq.v_Status.Contains("Waiting for approval CS Up of Dept."))
                         {
                             @classs._ListsvsServiceRequest = @classs._ListsvsServiceRequest.Where(x => x.srStep == 1).ToList();
@@ -98,11 +115,6 @@ namespace ServiceStation.Controllers.Approval
                         else if (@classs._ViewSearchMyReq.v_Status.Contains("Waiting for approval by CS of IS"))
                         {
                             @classs._ListsvsServiceRequest = @classs._ListsvsServiceRequest.Where(x => x.srStep == 2).ToList();
-                        }
-                        else if (@classs._ViewSearchMyReq.v_Status.Contains("In Process") || @classs._ViewSearchMyReq.v_Status.Contains("Transfer")
-                            || @classs._ViewSearchMyReq.v_Status.Contains("Done"))
-                        {
-                            @classs._ListsvsServiceRequest = @classs._ListsvsServiceRequest.Where(x => x.srStep == 3).ToList();
                         }
                         else if (@classs._ViewSearchMyReq.v_Status.Contains("Waiting for accept by CS of IS"))
                         {
@@ -112,6 +124,33 @@ namespace ServiceStation.Controllers.Approval
                         {
                             @classs._ListsvsServiceRequest = @classs._ListsvsServiceRequest.Where(x => x.srStep == 5).ToList();
                         }
+
+
+                        //if (@classs._ViewSearchMyReq.v_Status.Contains("Cancel"))
+                        //{
+                        //    @classs._ListsvsServiceRequest = @classs._ListsvsServiceRequest.Where(x => x.srStep == 0).ToList();
+                        //}
+                        //else if (@classs._ViewSearchMyReq.v_Status.Contains("Waiting for approval CS Up of Dept."))
+                        //{
+                        //    @classs._ListsvsServiceRequest = @classs._ListsvsServiceRequest.Where(x => x.srStep == 1).ToList();
+                        //}
+                        //else if (@classs._ViewSearchMyReq.v_Status.Contains("Waiting for approval by CS of IS"))
+                        //{
+                        //    @classs._ListsvsServiceRequest = @classs._ListsvsServiceRequest.Where(x => x.srStep == 2).ToList();
+                        //}
+                        //else if (@classs._ViewSearchMyReq.v_Status.Contains("In Process") || @classs._ViewSearchMyReq.v_Status.Contains("Transfer")
+                        //    || @classs._ViewSearchMyReq.v_Status.Contains("Done"))
+                        //{
+                        //    @classs._ListsvsServiceRequest = @classs._ListsvsServiceRequest.Where(x => x.srStep == 3).ToList();
+                        //}
+                        //else if (@classs._ViewSearchMyReq.v_Status.Contains("Waiting for accept by CS of IS"))
+                        //{
+                        //    @classs._ListsvsServiceRequest = @classs._ListsvsServiceRequest.Where(x => x.srStep == 4).ToList();
+                        //}
+                        //else if (@classs._ViewSearchMyReq.v_Status.Contains("Finish"))
+                        //{
+                        //    @classs._ListsvsServiceRequest = @classs._ListsvsServiceRequest.Where(x => x.srStep == 5).ToList();
+                        //}
                         //1 - Waiting for approval of Dept.
                         //2 - Waiting for approval by CS of IS
                         //3   0   In Process

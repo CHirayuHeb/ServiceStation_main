@@ -280,9 +280,9 @@ namespace ServiceStation.Controllers.Account
                 claims.Add(new Claim("EmpCode", acc.EMP_CODE?.ToString()));
                 // claims.Add(new Claim("Permission", login.Permission?.ToString()));
                 // claims.Add(new Claim(ClaimTypes.Role, login.Permission?.ToString()));
-                claims.Add(new Claim("Division", acc.DIVI_CODE.ToUpper()));
-                claims.Add(new Claim("Department", acc.DEPT_CODE.ToUpper()));
-                claims.Add(new Claim("DeptCode", acc.DEPT_CODE.ToUpper()));
+                claims.Add(new Claim("Division", acc.DIVI_CODE.Trim().ToUpper()));
+                claims.Add(new Claim("Department", acc.DEPT_CODE.Trim().ToUpper()));
+                claims.Add(new Claim("DeptCode", acc.DEPT_CODE.Trim().ToUpper()));
                 claims.Add(new Claim("Section", acc.SEC_CODE.ToUpper()));
                 claims.Add(new Claim("Group", acc.GRP_CODE.ToUpper()));
                 claims.Add(new Claim("Unit", acc.UNT_CODE.ToUpper()));
