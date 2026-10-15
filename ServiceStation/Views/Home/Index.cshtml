@@ -216,21 +216,22 @@
                         </div>
                     </div>
                     <div class="row center table-container" style="align-items: center;max-height: 500px; ">
-
                         <table class="summarys" style="min-width:800px">
                             <thead>
                                 <tr>
-                                    <th width="5%">No.</th>
-                                    <th width="80px">Service No.</th>
+                                    <th width="3%">No.</th>
+                                    <th>Service No.</th>
                                     <th>Service Type</th>
                                     <th>Name Request</th>
                                     <th>Intercom</th>
                                     <th>Dept.</th>
                                     <th>Date/Time Request</th>
                                     <th>Operator</th>
-                                    <th>Target Date</th>
+                                    @*<th>Target Date</th>*@
+                                    <th>วันที่คาดว่างานเสร็จสิ้น</th>
+                                    <th>วันที่งานเสร็จสิ้น</th>
                                     @*<th>step</th>*@
-                                    <th width="13%">Status</th>
+                                    <th>Status</th>
                                     <th>Wait Approve By</th>
                                     <th>View</th>
                                     <th>DEL</th>
@@ -251,52 +252,56 @@
                             {
                                 @foreach (var item in @Model._ListsvsServiceRequest)
                                 {
+
+
                                     rowNumber++; // เพิ่มค่าทีละ 1 ในทุกๆ รอบที่วน loop
                                     <tr align="Center">
                                         <td>@rowNumber</td>
-                                        <td class="center">
-                                            <p style="font-size:10px;">@item.srServiceNo</p>
+                                        <td class="center" style="font-weight:600;font-size:10px">
+                                            @item.srServiceNo
                                         </td>
-                                        <td><span style="font-size:10px;">@item.srSubject</span></td>
-                                        <td><span style="font-size:10px;">@item.srRequestName</span></td>
-                                        <td><span style="font-size:10px;">@item.srIntercom</span></td>
-                                        <td><span style="font-size:10px;">@item.srDeptCode</span></td>
+                                        <td>
+                                            <span > @item.srSubject</span>
+                                                  @if (!string.IsNullOrWhiteSpace(item.srSubjectOther)) { <br />
+                                                @: - @item.srSubjectOther
+                                            }
+
+                                        </td>
+                                        <td>@item.srRequestName</td>
+                                        <td>@item.srIntercom</td>
+                                        <td>@item.srDeptCode</td>
                                         <td>
                                             @{
                                                 string text = @item.srIssueDateTime;
                                                 string result = text.Substring(9, 8); // ดึงจาก index 9 ความยาว 8 ตัวอักษร
                                             }
-                                            <span style="font-size:10px;">@item.srRequestDate  @result </span>
+                                            @item.srRequestDate  @result
                                         </td>
                                         <td>
-                                            <span style="font-size:10px;">@item.srOperatorEmpcode @item.srOperatorName </span>
+                                            @item.srOperatorEmpcode @item.srOperatorName
                                         </td>
                                         <td>
-                                            <span style="font-size:10px;">@item.srDesiredDate</span>
+                                            @item.srExpFinishDate
                                         </td>
-                                        @*<td>
-                                                @(@item.srStep += 1)
+                                        <td>
+                                            @item.srFinishDate
+                                        </td>
 
-                                            </td>*@
                                         <td>
-                                            <span style="@(item.srStep == 5 ? "color:darkseagreen;font-weight:700;font-size:12px;":item.srStep == 0 ? "color:orangered;font-weight:700;font-size:12px;" : "font-size:10px;")">
+                                            @*<span style="@(item.srStep == 5 ? "color:darkseagreen;font-weight:700;font-size:12px;":item.srStep == 0 ? "color:orangered;font-weight:700;font-size:12px;" : "color:blue;font-size:10px;")">
+                                                    @(Model?._ListViewsvsMastFlowApprove?.FirstOrDefault(x => x.mfStep == item.srStep)?.mfSubject ?? "")
+                                                </span>*@
+                                            <span class="@(item.srStep == 5 ? "step-done" : item.srStep == 0 ? "step-reject" : item.srStep == 3 ? "step-pending" : "step-other")">
                                                 @(Model?._ListViewsvsMastFlowApprove?.FirstOrDefault(x => x.mfStep == item.srStep)?.mfSubject ?? "")
                                             </span>
                                         </td>
                                         <td>
-                                            <span style="font-size:10px;@(item.srStep < 5 ? "" :"display:none" )"> @item.srApproveEmpcode  @item.srApproveName</span>
+                                            <span style="font-size:9px;@(item.srStep < 5 ? "" :"display:none" )"> @item.srApproveEmpcode  @item.srApproveName</span>
                                         </td>
                                         <td>
-
                                             <a href="@Url.Action("Index", "RequestForm", new { vSrNo = @item.srNo})" target="_blank" style="font-size:20px;text-decoration: none;">
                                                 &#x1F50E;
                                             </a>
-                                            @*<a href="@Url.Action("Index", "RequestForm", new { vtoken = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(item.srNo.ToString())) })"
-                                               target="_blank"
-                                               style="font-size:20px;text-decoration: none;">
-                                                🔎
-                                            </a>*@
-
                                         </td>
                                         <td>
                                             <input type="button" style="font-size:14px; @(_EmpCode == @item.srRequestBy && @item.srStep < 2 ? "":"display:none")" value="&#x274C" onclick="DeleteData('@item.srNo','@Url.Action("DeteleData","RequestForm")')">

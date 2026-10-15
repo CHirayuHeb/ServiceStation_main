@@ -207,7 +207,7 @@ new SelectListItem { Text = "อื่นๆ", Value = "Other" }
                     </td>
                     <td>
                         @{
-                            byte[] result = System.Text.Encoding.Unicode.GetBytes(@"\\thsweb\\ServiceStation\\" + Model._ViewsvsRegisterUSB_New[i].nuImage);
+                            byte[] result = System.Text.Encoding.Unicode.GetBytes(@"\\10.200.128.20\\ServiceStation\\" + Model._ViewsvsRegisterUSB_New[i].nuImage);
                             var base64 = Convert.ToBase64String(result);
                             var imgSrc = String.Format("data:image/png;base64,{0}", base64);
                         }

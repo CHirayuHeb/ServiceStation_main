@@ -70,8 +70,8 @@ namespace ServiceStation
                                 using (ITAppcenter _ITApp = new ITAppcenter())
                                 {
                                     decimal target_program = _ITApp.Programs.Where(c => c.program_name == GlobalVariable.ProgramName).Select(s => s.id).FirstOrDefault();
-
-                                    var loginUrl = $"http://thsweb/mvcpublish/appcenter/landing?appid={target_program}";
+                                    //http://10.200.128.20/mvcpublish/AppCenter/
+                                    var loginUrl = $"http://10.200.128.20/mvcpublish/AppCenter/landing?appid={target_program}";
                                     context.Response.Redirect(loginUrl);
                                 }
 

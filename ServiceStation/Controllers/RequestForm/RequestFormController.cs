@@ -29,7 +29,8 @@ namespace ServiceStation.Controllers.RequestForm
         private IT _IT;
         private CacheSettingController _Cache;
         private FunctionsController _callFunc;
-        public string path = @"\\thsweb\\ServiceStation\\";
+        //public string path = @"\\thsweb\\ServiceStation\\";
+        public string path = @"\\10.200.128.20\\ServiceStation\\";
 
         [BindProperty]
         public FileUpload fileUpload { get; set; }
@@ -568,7 +569,7 @@ namespace ServiceStation.Controllers.RequestForm
                 //var varifyUrl = "http://thsweb/MVCPublish/MoldMaintenance/Home/Login?mode=edit&DocumentNo=" + getDocNO[1] + "&MoldNo=" + @class.ViewRequest.v_moldNo_Name + "&UserID=" + v_ApproveBy + "&Plant=" + vplant + "&Date=" + @class.ViewRequest.v_month;
                 //"RequestForm?id=" + vId + "&vtype=" + getEvent + "&vForm=" + vForm + "&vTeam=" + vTeam + "&vSubject=" + vSubject + "&vSrNo=" + vSrNo;
                 // onclick="GoNewRequest('@item.srRequestBy','Edit','@Url.Action("Index", "RequestForm")','@item.srFrom','@item.srType','@item.srSubject','@item.srNo')"
-                var varifyUrl = "http://thsweb/MVCPublish/ServiceStation/Login/index?vSrNo=" + @class._ViewsvsServiceRequest.srNo;
+                var varifyUrl = "//10.200.128.20/MVCPublish/ServiceStation/Login/index?vSrNo=" + @class._ViewsvsServiceRequest.srNo;
                 var bodyBuilder = new BodyBuilder();
                 //var image = bodyBuilder.LinkedResources.Add(@"E:\01_My Document\02_Project\_2023\1. PartTransferUnbalance\PartTransferUnbalance\wwwroot\images\btn\OK.png");
                 string vIssue = HttpContext.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name)?.Value;
@@ -660,7 +661,7 @@ namespace ServiceStation.Controllers.RequestForm
         }
 
 
-
+        [Authorize("Checked")]
         [HttpPost]
         public JsonResult History(Class @classs, string vform)//string getID)
         {
@@ -725,6 +726,7 @@ namespace ServiceStation.Controllers.RequestForm
 
         // [Authorize("Checked")]
         //[HttpPost]
+        [Authorize("Checked")]
         public ActionResult SendMail(Class @classs, string vform)
         {
             int docno = @classs._ViewsvsServiceRequest.srNo;
@@ -1052,54 +1054,16 @@ namespace ServiceStation.Controllers.RequestForm
                     try
                     {
                         string v_POS_HCM_CODE = "1111"; //default value case null
-                       //string v_empcsup = _IT.rpEmails.Where(w => w.emName_M365 == @class._ViewsvsHistoryApproved.htTo).Select(x => x.emEmpcode).FirstOrDefault();
+                                                        //string v_empcsup = _IT.rpEmails.Where(w => w.emName_M365 == @class._ViewsvsHistoryApproved.htTo).Select(x => x.emEmpcode).FirstOrDefault();
 
-                        //string _Divicheck = User.Claims.FirstOrDefault(s => s.Type == "Division")?.Value;
-                        //string _Depcheck = User.Claims.FirstOrDefault(s => s.Type == "Department")?.Value;
-                        //if (_Divicheck.Contains("SL") || _Depcheck.Contains("DMP"))
-                        //{
-                        //    //check case SL ddm
-                        //    v_POS_HCM_CODE = _HRMS.AccPOSMAST.Where(x => x.POS_CODE == "DDM").Select(x => x.POS_HCM_CODE).FirstOrDefault() ?? "1111";
-                        //}
-                        //else
-                        //{
-                        //    //normal case
-                        //    v_POS_HCM_CODE = _HRMS.AccPOSMAST.Where(x => x.POS_CODE == "DM").Select(x => x.POS_HCM_CODE).FirstOrDefault() ?? "1111";
-                        //}
-                        //_Divicheck = User.FindFirst("Division")?.Value ?? "";
-                        //_Depcheck = User.FindFirst("Department")?.Value ?? "";
-
-                        //bool isSL_DMP =
-                        //    _Divicheck.Contains("SL") ||
-                        //    _Depcheck.Contains("DMP");
-
-                        //string posCode = isSL_DMP ? "DDM" : "DM";
-
-                        //v_POS_HCM_CODE = _HRMS.AccPOSMAST
-                        //    .Where(x => x.POS_CODE == posCode)
-                        //    .Select(x => x.POS_HCM_CODE)
-                        //    .FirstOrDefault() ?? "1111";
-
-
-
-                        //ViewAccEMPLOYEE _ViewAccEMPLOYEE = _HRMS.AccEMPLOYEE.Where(x => x.EMP_CODE == v_empcsup).FirstOrDefault();
-                        //List<ViewAccPOSMAST> _ViewAccPOSMAST = _HRMS.AccPOSMAST.Where(x => int.Parse(x.POS_HCM_CODE) <= int.Parse(v_POS_HCM_CODE)).ToList();
-                        //string v_chk = _ViewAccPOSMAST.Where(x => x.POS_CODE == _ViewAccEMPLOYEE.POS_CODE).Select(x => x.POS_CODE).FirstOrDefault();
-
-                        //if (v_chk == null || v_chk == "")
-                        //{
-                        //    config = "E";
-                        //    msg = "Please send approval to DM Up of Dept.!!!";
-                        //    return Json(new { c1 = config, c2 = msg });
-                        //}
-
+                      
                         string v_empcsup = _IT.rpEmails
                           .Where(w => w.emName_M365 == @class._ViewsvsHistoryApproved.htTo)
                           .Select(x => x.emEmpcode)
                           .FirstOrDefault();
 
                         v_POS_HCM_CODE = _HRMS.AccPOSMAST
-                            .Where(x => x.POS_CODE == "DDM")
+                            .Where(x => x.POS_CODE == "SPM")  //DDM
                             .Select(x => x.POS_HCM_CODE)
                             .FirstOrDefault();
 
@@ -1152,7 +1116,7 @@ namespace ServiceStation.Controllers.RequestForm
                         if (string.IsNullOrEmpty(v_chk))
                         {
                             config = "E";
-                            msg = "Please send approval to DM Up of Dept.!!!";
+                            msg = "Please send approval to GM Up of Dept.!!!";
                             return Json(new { c1 = config, c2 = msg });
                         }
 
@@ -1205,12 +1169,16 @@ namespace ServiceStation.Controllers.RequestForm
                             .Where(x => x.EMP_CODE == v_empcsup)
                             .FirstOrDefault();
 
+                     
+
                         if (_ViewAccEMPLOYEE == null)
                         {
                             config = "E";
                             msg = "ไม่พบข้อมูล Employee : " + v_empcsup;
                             return Json(new { c1 = config, c2 = msg });
                         }
+
+                        if (_ViewAccEMPLOYEE.POS_CODE == "CS")  _ViewAccEMPLOYEE.POS_CODE = "SM";
 
                         if (!int.TryParse(v_POS_HCM_CODE, out int posHcmCode))
                         {
@@ -1420,7 +1388,7 @@ namespace ServiceStation.Controllers.RequestForm
 
 
 
-                    var varifyUrl = "http://thsweb/MVCPublish/ServiceStation/Login/index?vSrNo=" + getSrNo[0].ToString();
+                    var varifyUrl = "//10.200.128.20/MVCPublish/ServiceStation/Login/index?vSrNo=" + getSrNo[0].ToString();
                     var bodyBuilder = new BodyBuilder();
                     //var image = bodyBuilder.LinkedResources.Add(@"E:\01_My Document\02_Project\_2023\1. PartTransferUnbalance\PartTransferUnbalance\wwwroot\images\btn\OK.png");
                     string vIssue = HttpContext.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name)?.Value;
@@ -1491,8 +1459,26 @@ namespace ServiceStation.Controllers.RequestForm
                             }
                         }
 
-                        mess.AlternateViews.Add(alternate);
-                        smtp.Send(mess);
+
+                        try
+                        {
+                            mess.AlternateViews.Add(alternate);
+                            smtp.Send(mess);
+                        }
+                        catch (Exception ex)
+                        {
+                            msg = ex.Message;
+
+                            while (ex.InnerException != null)
+                            {
+                                ex = ex.InnerException;
+                                msg += " -> " + ex.Message;
+                            }
+
+                            // throw new Exception("Send Mail Error: " + msg);
+                        }
+
+
                     }
 
 
@@ -1760,6 +1746,9 @@ namespace ServiceStation.Controllers.RequestForm
                         _svsServiceRequest.srOperatorEmpcode = "";
                         _svsServiceRequest.srOperatorName = "";
 
+                        //chirayu add subject other 07/10/2024
+                        _svsServiceRequest.srSubjectOther = @class._ViewsvsServiceRequest?.srSubjectOther ?? "";
+
 
                         _IT.svsServiceRequest.Add(_svsServiceRequest);
                         _IT.SaveChanges();
@@ -1793,6 +1782,8 @@ namespace ServiceStation.Controllers.RequestForm
                         _ViewsvsServiceRequest.srFlow = "01";
                         _ViewsvsServiceRequest.srStep = vstep;          //v_step == 4 ? v_step : v_step + 1;
 
+                        //chirayu add subject other 07/10/2024
+                        _ViewsvsServiceRequest.srSubjectOther = @class._ViewsvsServiceRequest?.srSubjectOther ?? "";
 
                         //chirayu add operator 06/01/2024
                         if (vstep == 3)

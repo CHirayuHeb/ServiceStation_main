@@ -93,6 +93,8 @@ namespace ServiceStation.Models.Table.IT
         [NotMapped]
         public string useByIntercom { get; set; }
 
+        public string srSubjectOther { get; set; } //07/10/2026
+
 
     }
     //svsGeneral

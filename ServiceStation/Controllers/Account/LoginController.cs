@@ -71,7 +71,7 @@ namespace ServiceStation.Controllers.Account
             if (HttpContext.Request.Query.Count() > 0)
             {
                 vSrNo = HttpContext.Request.Query["vSrNo"];
-                @class.paramvrNo = vSrNo;
+                @class.paramvrNo = vSrNo.Trim();
             }
             if (remember != null)
             {
@@ -165,6 +165,12 @@ namespace ServiceStation.Controllers.Account
             string[] stat = await Task.Run(() => SetClaim(accData, sUsername, ""));
             if (stat[0] == "Ok")
             {
+                if (empcode != null)
+                {
+                    return RedirectToAction("RememberMe", "Login", @class);
+                }
+
+
                 return RedirectToAction("Index", "Home");
             }
             else
@@ -342,7 +348,7 @@ namespace ServiceStation.Controllers.Account
                 return Unauthorized();
 
             var client = _httpClientFactory.CreateClient();
-            var requestUrl = "http://thsweb/mvcpublish/api/account/token/jwtverify";
+            var requestUrl = "http://10.200.128.20/mvcpublish/api/account/token/jwtverify";
 
             try
             {

@@ -890,6 +890,10 @@ function sendMail1(getID, action) {
 
             }
 
+            if (document.getElementById("F1TypeNew").checked == false
+                && document.getElementById("F1TypeRevise").checked == false) {
+                msg = "ประเภทการร้องขอ";
+            }
 
 
 
@@ -1315,7 +1319,12 @@ function sendMail(getID, action) {
         //check new & revise program SDE
         if (vtxtSUbject.search("Revise") > -1) {
             console.log("typeuser : " + document.getElementById("ipF1typeuser").value);
-            if (document.getElementById("F1TypeNew").checked == false
+
+            if (document.getElementById("F1SubjectOther").value == "") {
+                msg = "ข้อเรื่อง (พอสังเขป)";
+                document.getElementById("F1SubjectOther").focus();
+            }
+            else if (document.getElementById("F1TypeNew").checked == false
                 && document.getElementById("F1TypeRevise").checked == false) {
                 msg = "ประเภทการร้องขอ";
             }
@@ -1326,6 +1335,7 @@ function sendMail(getID, action) {
                 }
 
             }
+
         }
 
     }
@@ -2918,7 +2928,7 @@ function savesubmit(action) {
         });
         viewModel.append("_SDE_SystemRegister", JSON.stringify(SDE_SystemRegister));
     }
-    
+
     $.ajax({
         type: "POST",
         url: action,

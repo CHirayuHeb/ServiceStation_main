@@ -9,17 +9,23 @@
 }
 <link href="~/css/RequestForm/site.css" rel="stylesheet" />
 <div style=" width:95%;" class="center">
+ 
     <div style="@(@_UserId == @Model._ViewsvsServiceRequest.srRequestBy|| @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode ? "" : "pointer-events: none;")">
         @*<div>*@
+        <div class="my-2">
+            <div class="my-1">
+                <div class="grid-item fw-800" style="text-align:left;padding-left:10px"><label style="font-size:14px">ชื่อหัวข้อเรื่อง (พอสังเขป) <span style="color:red">*</span></label></div>
+                <input type="text" class="form-control" style="font-size:10px" asp-for="_ViewsvsServiceRequest.srSubjectOther" id="F1SubjectOther" maxlength="99" />
+            </div>
+
+        </div>
         <div class="grid-item fw-800" style="text-align:left;padding-left:10px"><label style="font-size:14px">ประเภทการร้องขอ<span style="color:red">*</span></label></div>
         <div class="grid-container ">
             <div class="grid-item" style="text-align:left; margin-right:5px; ">
                 @Html.RadioButtonFor(m => m._ViewsvsGeneral.gnType, "New", new { @class = "", id = "F1TypeNew", name = "F1TypeNew", onclick = "CheckF1NewRevise('New')" }) <label class="form-check-label" for="StatusNew" style="color:green;font-weight:800">New</label><br />
                 @Html.RadioButtonFor(m => m._ViewsvsGeneral.gnType, "Revise", new { @class = "", id = "F1TypeRevise", name = "F1TypeRevise", onclick = "CheckF1NewRevise('Revise')" }) <label class="form-check-label" for="StatusRevise" style="color:orange;font-weight:800">Revise</label><br />
-                @*<div style="@(@ViewBag.gnType == "New" || @ViewBag.gnType == ""|| @ViewBag.gnType == null ? "display:none;" : "")">
-                        @Html.DropDownListFor(m => m._ViewsvsGeneral.gnProgramName, (SelectList)ViewBag.formPgm, "กรุณาเลือกโปรแกรม", new { @class = "", id = "ipF1pgm", autocomplete = "off", required = "required", @style = "width:200px;height:30px;vertical-align: sub;font-size:12px;margin-top: 6px" })
-                    </div>*@
-             
+
+
                 @if (@ViewBag.gnType == "New" || @ViewBag.gnType == "" || @ViewBag.gnType == null)
                 {
                     @Html.DropDownListFor(m => m._ViewsvsGeneral.gnProgramName, (SelectList)ViewBag.formPgm, "กรุณาเลือกโปรแกรม", new { @class = "", id = "ipF1pgm", autocomplete = "off", required = "required", @style = "width:200px;height:30px;vertical-align: sub;font-size:12px;margin-top: 6px;display:none;" })
