@@ -97,6 +97,17 @@ namespace ServiceStation.Models.Common
 
         //public RegisterUSBNewViewModel RegisterUSBNewViewModel { get; set; }
         public List<RegisterUSBNewViewModel> RegisterUSBNewViewModel { get; set; }
+
+        public ViewsvsServiceProject _ViewsvsServiceProject { get; set; }
+
+        public Viewsvsps_project_request _Viewsvsps_project_request { get; set; }
+        public Viewsvsps_lookup_item _Viewsvsps_lookup_item { get; set; }
+        public Viewsvsps_lookup_category _Viewsvsps_lookup_category { get; set; }
+        //public  LookupCategoryVM _LookupCategories { get; set; }
+
+        public LookupGroupViewModel LookupGroupViewModel { get; set; }
+        public LookupItemViewModel LookupItemViewModel { get; set; }
+        public List<LookupGroupViewModel> ListLookupGroupViewModel { get; set; }
     }
 
     public class OTTimeStart

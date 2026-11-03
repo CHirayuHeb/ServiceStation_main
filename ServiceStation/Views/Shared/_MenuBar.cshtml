@@ -48,7 +48,10 @@
     <script src="~/js/index.global.min.js"></script>
     <link href="~/js/Calendar.css" rel="stylesheet" />
     @*capture page*@
-    <script src="~/js/html2canvas.min.js"></script>
+    @*<script src="~/js/html2canvas.min.js"></script>*@
+    @*<script src="~/js/html2canvasRevise.min.js"></script>*@
+    @*<script src="~/js/index.global.min.js"></script>*@
+    @*<script src="~/js/modern-screenshot.js"></script>*@
     <title>ServiceStation</title>
 </head>
 <body>
@@ -332,6 +335,6 @@
 
         history.pushState(null, "", location.href);
     </script>
-
+    @RenderSection("Scripts", required: false)
 </body>
 </html>

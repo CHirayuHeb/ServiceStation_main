@@ -10,10 +10,9 @@
 }
 <link href="~/css/RequestForm/site.css" rel="stylesheet" />
 <div>
-    <br />
-    <table class="center" style="@( (@_UserId == @Model._ViewsvsServiceRequest.srRequestBy || @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode) && @Model._ViewsvsServiceRequest.srStep < 1 ? "" : "pointer-events: none;")">
+    <table class="svc" style="@( (@_UserId == @Model._ViewsvsServiceRequest.srRequestBy || @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode) && @Model._ViewsvsServiceRequest.srStep < 1 ? "" : "pointer-events: none;")">
         <tr align="left" height="20">
-            <td class="tbpurple" rowspan="2">Objective Request</td>
+            <th rowspan="2">Objective Request</th>
             <td id="insertdata2">
                 List Equipment can connect THS company by USB Ports Reference : RG-IT-007
             </td>
@@ -26,7 +25,6 @@
             </td>
         </tr>
     </table>
-    <br />
 </div>
 
 

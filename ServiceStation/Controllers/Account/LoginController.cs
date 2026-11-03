@@ -58,16 +58,6 @@ namespace ServiceStation.Controllers.Account
             }
 
 
-
-            //if (HttpContext.Request.Query.Count() > 0)
-            //{
-            //    vSrNo = HttpContext.Request.Query["vSrNo"];
-            //    @class.paramvrNo = vSrNo;
-            //    //TempData["vSrNo"] = vSrNo;
-            //    //@class._ViewLogin.LastLogin = RequestEmp;
-            //}
-
-
             if (HttpContext.Request.Query.Count() > 0)
             {
                 vSrNo = HttpContext.Request.Query["vSrNo"];
@@ -88,12 +78,6 @@ namespace ServiceStation.Controllers.Account
             ViewLogin login = new ViewLogin();
             string sUsername = @class._ViewLogin.UserId.Trim();
             string sPassword = @class._ViewLogin.Password.Trim();
-            //if (sUsername != GlobalVariable.AdminUserName && sPassword != GlobalVariable.AdminPassword){
-            //    login = _LAMP.Login.FirstOrDefault(s => s.UserId == sUsername && s.Password == sPassword && s.Program == GlobalVariable.ProgramName);}
-            //else{
-            //    login.UserId = GlobalVariable.AdminUserName;
-            //    login.Password = GlobalVariable.AdminPassword;
-            //    login.Permission = GlobalVariable.AdminPermission;}
 
             ViewAccEMPLOYEE accData = new ViewAccEMPLOYEE();
             //accData = _HRMS.AccEMPLOYEE.FirstOrDefault(x => x.EMP_CODE == sUsername);
@@ -157,7 +141,7 @@ namespace ServiceStation.Controllers.Account
         public async Task<IActionResult> AutherizeAppcenter(string empcode)
         {
             Class @class = new Class();
-            ViewLogin login = new ViewLogin();
+            @class._ViewLogin = new ViewLogin();
             string sUsername = empcode; //@class._ViewLogin.UserId.Trim();
 
             ViewAccEMPLOYEE accData = new ViewAccEMPLOYEE();
@@ -167,6 +151,11 @@ namespace ServiceStation.Controllers.Account
             {
                 if (empcode != null)
                 {
+                    //string sUsername = @class._ViewLogin.UserId.Trim();
+                    //string sPassword = @class._ViewLogin.Password.Trim();
+                    @class._ViewLogin.UserId = empcode;
+                    @class._ViewLogin.Password = accData.EMP_ID.Substring(7, 6);
+
                     return RedirectToAction("RememberMe", "Login", @class);
                 }
 
@@ -193,12 +182,6 @@ namespace ServiceStation.Controllers.Account
                 string sUsername = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "UserId")?.Value;
                 string sPassword = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Password")?.Value;
 
-                //if (sUsername != GlobalVariable.AdminUserName && sPassword != GlobalVariable.AdminPassword){
-                //    login = _LAMP.Login.FirstOrDefault(s => s.UserId == sUsername && s.Password == sPassword && s.Program == GlobalVariable.ProgramName);}
-                //else{
-                //    login.UserId = GlobalVariable.AdminUserName;
-                //    login.Password = GlobalVariable.AdminPassword;
-                //    login.Permission = GlobalVariable.AdminPermission;}
 
 
                 accData = _HRMS.AccEMPLOYEE.FirstOrDefault(x => x.EMP_CODE == sUsername);

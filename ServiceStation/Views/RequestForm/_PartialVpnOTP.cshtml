@@ -9,23 +9,23 @@
 
 }
 <link href="~/css/RequestForm/site.css" rel="stylesheet" />
-<table class="center" id="Toptable" border="1" style="@(@_UserId == @Model._ViewsvsServiceRequest.srRequestBy|| @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode ? "" : "pointer-events: none;")">
+<table class="svc" border="1" style="@(@_UserId == @Model._ViewsvsServiceRequest.srRequestBy|| @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode ? "" : "pointer-events: none;")">
     <tr align="left" height="15">
-        <td id="tbottom">PC-Name(หมายเลขเครื่อง) <span class="text-red">*จำเป็น</span></td>
-        <td id="insertdata">
+        <th >PC-Name(หมายเลขเครื่อง) <span class="text-red">*จำเป็น</span></th>
+        <td >
             <input class="form-control" type="text" autocomplete="off" style="width:150px; height:30px;text-align:left;font-size:12px" id="txtF5vpnPCName" asp-for="_ViewsvsVPN.vpnPCName" />
         </td>
     </tr>
     <tr>
     <tr align="left" height="20">
-        <td id="tbottom">User(ผู้ใช้งาน) <span class="text-red">*จำเป็น</span></td>
-        <td id="insertdata">
+        <th>User(ผู้ใช้งาน) <span class="text-red">*จำเป็น</span></th>
+        <td >
             @Html.RadioButtonFor(m => m._ViewsvsVPN.vpnStatusUse, "ever", new { @class = "", id = "txtF5vpnStatusUse1", name = "txtF5vpnStatusUse", onclick = "CheckCA('ever','Case')" }) <label>เคยใช้งาน</label><br />
             @Html.RadioButtonFor(m => m._ViewsvsVPN.vpnStatusUse, "Notever", new { @class = "", id = "txtF5vpnStatusUse2", name = "txtF5vpnStatusUse", onclick = "CheckCA('Notever','Case')" }) <label class="form-check-label" for="StatusDis">ไม่เคยใช้งาน</label>
         </td>
     </tr>
-    <tr align="left" height="20">
-        <td id="op" colspan="3">Take Out For(วัตถุประสงค์การนำออก)</td>
+    <tr class="section">
+        <th colspan="3">Take Out For(วัตถุประสงค์การนำออก)</th>
     </tr>
     <tr align="left" height="20">
         <td id="tbottom" style="vertical-align:top">
@@ -38,12 +38,12 @@
         </td>
     </tr>
     <tr align="left" height="20">
-        <td id="tbottom">
+        <th class="wrap">
             งานที่ได้รับมอบหมาย งานที่ได้รับมอบหมาย
             และระบบที่ต้องการใช้งาน<br />
             <span class="text-red">*จำเป็น</span>
-        </td>
-        <td id="insertdata">
+        </th>
+        <td>
             <span style="font-size:12px">(Save Cost VPN) บริษัทมีเป้าหมายลดค่าใช้จ่าย VPN ลง 50% เนื่องจากลงทุนใน M365 Security แล้ว</span>
 
             <br />
@@ -57,19 +57,19 @@
             <span style="font-size:12px;margin-left:25px">(2) WOLF = ...</span><br />
             <span style="font-size:12px;margin-left:25px">(3) Program Dev by IS Dept (อนาคตจะย้ายไปบน M365 Power Platform) = ...</span>
             <br />
-            <br />
+          
             @Html.TextAreaFor(model => model._ViewsvsVPN.vpnWork, new { @class = "form-control", style = "font-size:12px;field-sizing: content;min-height:100px", @cols = 40, @rows = 4, @id = "txtF5vpnWork" })
         </td>
     </tr>
     <tr align="left" height="20">
-        <td id="tbottom">หมายเหตุ<br />&emsp;<br />&emsp;</td>
-        <td id="insertdata">
+        <th>หมายเหตุ<br />&emsp;<br />&emsp;</th>
+        <td>
             @Html.TextAreaFor(model => model._ViewsvsVPN.vpnRemark, new { @class = "form-control", style = "font-size:12px;field-sizing: content;min-height:100px", @rows = 4, @id = "txtF5vpnRemark" })
         </td>
     </tr>
     <tr align="left" height="20">
-        <td id="tbottom">แนบเอกสารเพิ่มเติม</td>
-        <td id="insertdata">
+        <th>แนบเอกสารเพิ่มเติม</th>
+        <td>
             <input name="files" type="file" id="files" multiple="" class="button " style="width:300px;margin-right:20px">
             <button type="button" class="button notification" style="width:140px; height:28px;background-color:#7286D3" data-bs-dismiss="modal" id="btnfile">
                 <img src="~/images/open-folder.png" style="width:25px;height:25px;padding-right:5px;margin-right:8px">
@@ -82,15 +82,15 @@
         </td>
     </tr>
     <tr align="left" height="20">
-        <td id="tbottom"> Date Start(วันที่เริ่มใช้) <span class="text-red">*จำเป็น</span></td>
-        <td id="insertdata">
+        <th> Date Start(วันที่เริ่มใช้) <span class="text-red">*จำเป็น</span></th>
+        <td>
             <input type="text" class="input-with-image datepicker form-control" placeholder="YYYY/MM/DD" id="txtF5vpnStartDate" asp-for="_ViewsvsVPN.vpnStartDate" autocomplete="off">
             @*<input class="datepicker form-control" type="text" autocomplete="off" style="width:200px; height:30px;text-align:center;font-size:14px" readonly />*@
         </td>
     </tr>
     <tr align="left" height="20">
-        <td id="tbottom">Date End(วันที่สิ้นสุด) <span class="text-red">*จำเป็น</span></td>
-        <td id="insertdata">
+        <th>Date End(วันที่สิ้นสุด) <span class="text-red">*จำเป็น</span></th>
+        <td>
             <input type="text" class="input-with-image datepicker form-control" placeholder="YYYY/MM/DD" id="txtF5vpnEndDate" asp-for="_ViewsvsVPN.vpnEndDate" autocomplete="off">
             @*<input class="datepicker form-control" type="text" autocomplete="off" style="width:200px; height:30px;text-align:center;font-size:14px" readonly />*@
         </td>

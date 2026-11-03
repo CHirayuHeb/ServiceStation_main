@@ -286,6 +286,7 @@ function PositionY(menu) {
             //LoadScript("js/Home/Hour.js", "EventHomeHour");
             LoadScript("js/Create/Index.js", "Create");
             LoadScript("js/RequestForm/Index.js", "RequestForm");
+            LoadScript("js/RequestForm/jsFormProject.js", "RequestForm");
             //LoadScript("lib\\" + "datepicker\\js\\bootstrap-datepicker.min.js", "datepicker");
             //LoadScript("lib\\" + "datepicker\\js\\bootstrap-datepicker.min.css", "datepicker");
             // LoadScript("js\\" + "Home\\Search\\HourControl.js", "HourControl");
@@ -1293,6 +1294,177 @@ function sendMail1(getID, action) {
 
 
 }
+
+function getEl(id) {
+    // checkbox ของ asp-for จะมี hidden ชื่อเดียวกันตามหลัง ต้องเอาตัวที่ไม่ใช่ hidden
+    var list = document.querySelectorAll('[name$="' + id + '"]');
+    for (var i = 0; i < list.length; i++) {
+        if (list[i].type !== 'hidden') return list[i];
+    }
+    return null;
+}
+
+function gv(id) {
+    var el = getEl(id);
+    return el ? (el.value || "").trim() : "";
+}
+
+function gc(id) {
+    var el = getEl(id);
+    return el ? el.checked : false;
+}
+
+// หา element ที่เลื่อนได้ตัวที่ใกล้ที่สุด (ถ้าไม่เจอใช้ window)
+function getScrollParent(el) {
+    var p = el.parentElement;
+    while (p && p !== document.body) {
+        var oy = getComputedStyle(p).overflowY;
+        if ((oy === 'auto' || oy === 'scroll') && p.scrollHeight > p.clientHeight) return p;
+        p = p.parentElement;
+    }
+    return null;
+}
+function scrollToEl(el) {
+    var target = (el.type === 'checkbox' || el.type === 'radio') ? (el.closest('tr') || el) : el;
+
+    // เลื่อนทุก container ที่เลื่อนได้
+    var p = target.parentElement;
+    while (p) {
+        var oy = getComputedStyle(p).overflowY;
+        if ((oy === 'auto' || oy === 'scroll') && p.scrollHeight > p.clientHeight) {
+            var top = target.getBoundingClientRect().top - p.getBoundingClientRect().top + p.scrollTop;
+            p.scrollTop = top - p.clientHeight / 2;
+        }
+        p = p.parentElement;
+    }
+
+    // เลื่อน window ด้วย
+    var y = target.getBoundingClientRect().top + window.pageYOffset;
+    window.scrollTo(0, y - window.innerHeight / 2);
+}
+
+// focusTarget = ชื่อ property (string, ใช้ getEl หาด้วย name) หรือ element ก็ได้
+function fail(msg, focusTarget) {
+    var el = (typeof focusTarget === 'string') ? getEl(focusTarget) : focusTarget;
+
+    swal.fire({
+        title: 'แจ้งเตือน',
+        icon: 'warning',
+        text: msg,
+        returnFocus: false,
+        scrollbarPadding: false,
+        heightAuto: false
+    }).then(function () {
+        if (!el) return;
+
+        setTimeout(function () {
+            scrollToEl(el);
+            el.focus({ preventScroll: true });
+
+            var isChk = (el.type === 'checkbox' || el.type === 'radio');
+            var box = isChk ? (el.closest('.chk-group') || el) : el;
+            box.style.outline = '2px solid #d33';
+            var clear = function () {
+                box.style.outline = '';
+                el.removeEventListener('input', clear);
+                el.removeEventListener('change', clear);
+                box.removeEventListener('change', clear);
+            };
+            el.addEventListener('input', clear);
+            el.addEventListener('change', clear);
+            if (isChk) box.addEventListener('change', clear);
+        }, 300);
+    });
+    return false;
+}
+
+// ตรวจกลุ่ม checkbox/radio ที่ render จาก _LookupChecks.cshtml
+// code = svsps_lookup_category.code เช่น "PROJECT_TYPE"
+//  (1) ถ้า is_required ต้องเลือกอย่างน้อย 1 รายการ
+//  (2) ถ้าติ๊กตัวที่มีช่อง Other ต้องกรอกข้อความ
+function checkLookup(code) {
+    var group = document.querySelector('.chk-group[data-category="' + code + '"]');
+    if (!group) return true;   // หน้านี้ไม่มีหมวดนี้ ข้าม
+
+    var label = group.getAttribute('data-label') || code;
+    var required = group.getAttribute('data-required') === 'true';
+    var inputs = group.querySelectorAll('input[name^="Lookup["]');
+    var checked = group.querySelectorAll('input[name^="Lookup["]:checked');
+
+    if (required && checked.length === 0) {
+        return fail("กรุณาเลือก " + label + " อย่างน้อย 1 รายการ !!!", inputs[0]);
+    }
+
+    for (var i = 0; i < checked.length; i++) {
+        var sel = checked[i].getAttribute('data-other-target');
+        if (!sel) continue;
+        var txt = document.querySelector(sel);
+        if (txt && (txt.value || "").trim() === "") {
+            return fail("กรุณาระบุ " + label + ": Other !!!", txt);
+        }
+    }
+    return true;
+}
+
+function checkFormF9() {
+    // 1. Request Information
+    if (gv("project_name") == "") {
+        return fail("กรุณากรอก Project Name !!!", "project_name");
+    }
+    if (!checkLookup("PROJECT_TYPE")) return false;
+
+    // 2. Objective
+    if (!checkLookup("OBJECTIVE")) return false;
+    if (gv("expected_kpi") == "") {
+        return fail("กรุณากรอกผลลัพธ์ KPI ที่คาดหวัง !!!", "expected_kpi");
+    }
+    if (gv("business_effect") == "") {
+        return fail("กรุณากรอก Effect ส่งผลต่อบริษัท !!!", "business_effect");
+    }
+    if (gv("ben_kosu_hours_per_month") == "" && gv("cost_recurring_thb_per_year") == "" &&
+        gv("ben_error_reduction_pct") == "") {
+        return fail("กรุณากรอก Expected Benefit อย่างน้อย 1 ช่อง !!!", "ben_kosu_hours_per_month");
+    }
+    if (gv("ben_error_reduction_pct") != "" && Number(gv("ben_error_reduction_pct")) > 100) {
+        return fail("ลด Error (%) ต้องไม่เกิน 100 !!!", "ben_error_reduction_pct");
+    }
+
+    // 3. Background
+    if (gv("current_process_problem") == "") {
+        return fail("กรุณากรอกขั้นตอนการทำงานปัจจุบัน ปัญหาที่พบ และผลกระทบ !!!", "current_process_problem");
+    }
+    if (gv("cur_txn_per_month") == "" && gv("cur_hours_per_month") == "" &&
+        gv("cur_users") == "" && gv("cur_errors_per_month") == "") {
+        return fail("กรุณากรอกข้อมูลปัจจุบันอย่างน้อย 1 ช่อง !!!", "cur_txn_per_month");
+    }
+    if (!checkLookup("ATTACHMENT_TYPE")) return false;
+
+    // 4. System / Cost
+    if (!checkLookup("RELATED_SYSTEM")) return false;
+    if (!checkLookup("COST_CATEGORY")) return false;
+
+    // ตัวเลขห้ามติดลบ
+    var nums = ["ben_kosu_hours_per_month", "cost_recurring_thb_per_year", "ben_error_reduction_pct",
+        "cur_txn_per_month", "cur_hours_per_month", "cur_users", "cur_errors_per_month",
+        "cost_one_time_thb"];
+    for (var i = 0; i < nums.length; i++) {
+        var v = gv(nums[i]);
+        if (v != "" && (isNaN(Number(v)) || Number(v) < 0)) {
+            return fail("ค่าตัวเลขต้องไม่ติดลบ (" + nums[i] + ") !!!", nums[i]);
+        }
+    }
+
+    var kosu = gv("srKosu");
+    if (kosu === "" || !/^\d+$/.test(kosu)) {
+        return fail("กรุณากรอกเฉพาะตัวเลขจำนวนเต็ม", "txtgkosu");
+    }
+    if (Number(kosu) < 168) {
+        return fail("KOSU ต้องไม่น้อยกว่า 168", "txtgkosu");
+    }
+    return true;
+}
+
+
 function sendMail(getID, action) {
     //const formdata = new FormData(document.forms.item(0)).serialize();
     let vEdate = document.getElementById("i_EDate").value;
@@ -1637,6 +1809,9 @@ function sendMail(getID, action) {
         }
     }
 
+    else if (vform == "F9") {
+        if (!checkFormF9()) return false;   // เจอผิดแล้ว swal ขึ้นเอง และหยุด
+    }
 
     if (msg != "") {
         swal.fire({
@@ -3413,49 +3588,9 @@ $("#btnLoadData").click(async function () {
 
 
 //capture
-function capture(vSRNo) {
+function capture1(vSRNo) {
 
-    //var vSRNo = vSRNo + '.png';
-    //const form = document.getElementById('formRequest');
-    //// ✅ แก้ให้ textarea แสดงข้อความในภาพ
-    //const textareas = form.querySelectorAll('textarea');
-    //textareas.forEach(textarea => {
-    //    const text = textarea.value;
-    //    const span = document.createElement('div');
-    //    span.textContent = text;
-    //    span.style.cssText = getComputedStyle(textarea).cssText;
-    //    span.style.whiteSpace = 'pre-wrap'; // รักษาบรรทัด
-    //    span.style.border = '1px solid #ccc';
-    //    span.style.padding = '5px';
-    //    span.style.minHeight = textarea.offsetHeight + 'px';
-    //    span.style.width = textarea.offsetWidth + 'px';
-
-    //    // ซ่อนตัวจริง แล้วใส่แทนที่ชั่วคราว
-    //    textarea.style.display = 'none';
-    //    textarea.parentNode.insertBefore(span, textarea);
-    //    textarea.dataset._tempSpan = 'true'; // tag ไว้ลบตอนจบ
-    //});
-
-    //// 📸 Capture
-    //html2canvas(form).then(function (canvas) {
-    //    const link = document.createElement('a');
-    //    link.download = vSRNo;
-    //    link.href = canvas.toDataURL();
-    //    link.click();
-
-    //    // 🔁 cleanup: เอา span ออก แล้วโชว์ textarea กลับ
-    //    textareas.forEach(textarea => {
-    //        const span = textarea.previousSibling;
-    //        if (textarea.dataset._tempSpan === 'true' && span) {
-    //            span.remove();
-    //            textarea.style.display = '';
-    //        }
-
-
-    //    });
-    //});
-
-
+    
     var vSRNo = vSRNo + '.png';
     const form = document.getElementById('formRequest');
 
@@ -3507,6 +3642,81 @@ function capture(vSRNo) {
         });
     });
 
+}
+function capture2(vSRNo) {
+    const fileName = vSRNo + '.png';
+    const form = document.getElementById('formRequest');
+
+    const replacements = [];
+    form.querySelectorAll('textarea').forEach(textarea => {
+        const div = document.createElement('div');
+        const style = getComputedStyle(textarea);
+        div.textContent = textarea.value;
+        div.style.cssText = `font-size:${style.fontSize};font-family:${style.fontFamily};` +
+            `color:${style.color};background-color:${style.backgroundColor};` +
+            `border:1px solid #ccc;padding:5px;white-space:pre-wrap;` +
+            `min-height:${textarea.offsetHeight}px;width:${textarea.offsetWidth}px;`;
+        textarea.style.display = 'none';
+        textarea.parentNode.insertBefore(div, textarea);
+        replacements.push({ div, textarea });
+    });
+
+    const cleanup = () => replacements.forEach(({ div, textarea }) => {
+        div.remove();
+        textarea.style.display = '';
+    });
+
+    html2canvas(form, {
+        useCORS: true,
+        ignoreElements: el => el.classList ?.contains('modal')
+    })
+        .then(canvas => {
+            const link = document.createElement('a');
+            link.download = fileName;
+            link.href = canvas.toDataURL();
+            link.click();
+        })
+        .catch(err => console.error('capture failed', err))
+        .finally(cleanup);   // รันทุกกรณี ทั้งสำเร็จและพัง
+}
+async function capture(vSRNo) {
+    const form = document.getElementById('formRequest');
+
+    // 1) แทน textarea ด้วย div (เหมือนเดิม)
+    const replacements = [];
+    form.querySelectorAll('textarea').forEach(textarea => {
+        const div = document.createElement('div');
+        const s = getComputedStyle(textarea);
+        div.textContent = textarea.value;
+        div.style.cssText = `font-size:${s.fontSize};font-family:${s.fontFamily};` +
+            `color:${s.color};border:1px solid #ccc;padding:5px;white-space:pre-wrap;` +
+            `min-height:${textarea.offsetHeight}px;width:${textarea.offsetWidth}px;`;
+        textarea.style.display = 'none';
+        textarea.parentNode.insertBefore(div, textarea);
+        replacements.push({ div, textarea });
+    });
+
+    // 2) แคป
+    try {
+        const dataUrl = await modernScreenshot.domToPng(form, {
+            backgroundColor: '#ffffff',
+            filter: node => !(node.classList && node.classList.contains('modal'))
+        });
+
+        // 3) ดาวน์โหลดไฟล์
+        const link = document.createElement('a');
+        link.download = vSRNo + '.png';
+        link.href = dataUrl;
+        link.click();
+    } catch (err) {
+        console.error('capture failed', err);
+    } finally {
+        // 4) คืนค่า textarea ทุกกรณี
+        replacements.forEach(({ div, textarea }) => {
+            div.remove();
+            textarea.style.display = '';
+        });
+    }
 }
 function showImageModal(fileUrl) {
 

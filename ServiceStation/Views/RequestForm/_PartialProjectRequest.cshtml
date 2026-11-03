@@ -1,0 +1,456 @@
+﻿@model ServiceStation.Models.Common.Class
+@{
+    string _UserId = User.Claims.FirstOrDefault(s => s.Type == "UserId")?.Value;
+    string _NickName = User.Claims.FirstOrDefault(s => s.Type == "NICKNAME")?.Value;
+    string _Name = User.Claims.FirstOrDefault(s => s.Type == "Name")?.Value;
+    string _SurName = User.Claims.FirstOrDefault(s => s.Type == "SurName")?.Value;
+    string _Division = User.Claims.FirstOrDefault(s => s.Type == "Division")?.Value;
+    string _Section = User.Claims.FirstOrDefault(s => s.Type == "Section")?.Value;
+
+}
+
+
+
+<input type="hidden" asp-for="_Viewsvsps_project_request.request_no" />
+<table class="svc">
+    <tr class="section"><th colspan="4">1. REQUEST INFORMATION / ข้อมูลผู้ร้องขอ</th></tr>
+    <tr>
+        <th>Project Name<span class="req">*</span></th>
+        <td colspan="3"><input class="inp" type="text" asp-for="_Viewsvsps_project_request.project_name"></td>
+    </tr>
+    <tr>
+        <th>Project Type<span class="req">*</span></th>
+        <td colspan="3">
+            <input type="hidden" asp-for="_Viewsvsps_project_request.project_types" id="textproject_types" style="width:100%">
+
+            @{
+                var projectTypes = (Model._Viewsvsps_project_request.project_types ?? "")
+                    .Split('|', StringSplitOptions.RemoveEmptyEntries)
+                    .Select(x => x.Trim())
+                    .ToList();
+
+                var isOtherChecked = projectTypes.Contains("OTHER");
+            }
+
+            @foreach (var group in Model.ListLookupGroupViewModel.Where(x => x.CategoryCode == "PROJECT_TYPE"))
+            {
+                <div class="row" style="margin-left:10px">
+                    @foreach (var item in group.Items)
+                    {
+                        <div class="col-md-2 mb-3">
+                            <label class="form-check">
+                                <!-- เพิ่ม class="project-type-checkbox" และ data-code="@item.Code" เพื่อให้ JS รู้จัก -->
+                                <input type="checkbox"
+                                       class="form-check-input project-type-checkbox"
+                                       name="lookup_@group.CategoryCode"
+                                       value="@item.Code"
+                                       data-code="@item.Code"
+                                       @(projectTypes.Contains(item.Code) ? "checked" : "") />
+
+                                <span class="form-check-label" style="margin-left:5px">
+                                    @item.NameTH
+                                </span>
+
+                                @if (item.Code == "OTHER")
+                                {
+                                    <input class="inp inline form-control form-control-sm"
+                                           type="text"
+                                           id="txtPTypeOther"
+                                           asp-for="_Viewsvsps_project_request.pt_other_text"
+                                           placeholder="กรุณาระบุ..."
+                                           style="width:200px; display:@(isOtherChecked ? "inline-block" : "none"); margin-top:5px;" />
+                                }
+                            </label>
+                        </div>
+                    }
+                </div>
+            }
+
+            @*
+                project_types
+                pt_other_text
+                <label><input type="checkbox" asp-for="_ViewsvsServiceProject.prPType_Automation"> Automation</label>
+                <label><input type="checkbox" asp-for="_ViewsvsServiceProject.prPType_AI"> AI</label>
+                <label><input type="checkbox" asp-for="_ViewsvsServiceProject.prPType_IoT"> IoT</label>
+                <label><input type="checkbox" asp-for="_ViewsvsServiceProject.prPType_SAP"> SAP</label>
+                <label><input type="checkbox" asp-for="_ViewsvsServiceProject.prPType_PLEX"> PLEX</label>
+                <label><input type="checkbox" asp-for="_ViewsvsServiceProject.prPType_Web"> Web</label>
+                <label><input type="checkbox" asp-for="_ViewsvsServiceProject.prPType_PowerPlatform"> Power Platform</label>
+
+                <br />
+                <label><input type="checkbox" asp-for="_ViewsvsServiceProject.prPType_Other" data-other-target="#txtPTypeOther"> Other:</label>
+                <input class="inp inline" type="text" id="txtPTypeOther"
+                       asp-for="_ViewsvsServiceProject.prPType_OtherText"
+                       style="width:260px;display:none;height:25px;">*@
+
+        </td>
+    </tr>
+</table>
+<!-- ===== 2. OBJECTIVE & EXPECTED BENEFIT ===== -->
+<table class="svc">
+    <tr class="section"><th colspan="2">2. OBJECTIVE &amp; EXPECTED BENEFIT / วัตถุประสงค์และผลประโยชน์ที่คาดหวัง</th></tr>
+    <tr>
+        <th>Objective<span class="req">*</span></th>
+        <td>
+            <input type="hidden" asp-for="_Viewsvsps_project_request.objectives" id="textobjectives" style="width:100%">
+
+            @{
+                var projectObj = (Model._Viewsvsps_project_request.objectives ?? "")
+                    .Split('|', StringSplitOptions.RemoveEmptyEntries)
+                    .Select(x => x.Trim())
+                    .ToList();
+
+            }
+
+            @foreach (var group in Model.ListLookupGroupViewModel.Where(x => x.CategoryCode == "OBJECTIVE"))
+            {
+                <div class="row" style="margin-left:10px">
+                    @foreach (var item in group.Items)
+                    {
+                        <div class="col-md-2 mb-3">
+                            <label class="form-check">
+                                <input type="checkbox"
+                                       class="form-check-input Obj-checkbox"
+                                       name="lookup_@group.CategoryCode"
+                                       value="@item.Code"
+                                       @(projectObj.Contains(item.Code) ? "checked" : "") />
+
+                                <span class="form-check-label" style="margin-left:5px">
+                                    @item.NameTH
+                                </span>
+                            </label>
+                        </div>
+
+
+                    }
+                </div>
+
+            }
+
+
+
+            @*objectives
+                <label><input type="checkbox" asp-for="_ViewsvsServiceProject.prObj_ReduceManual"> ลดงาน Manual</label>
+                <label><input type="checkbox" asp-for="_ViewsvsServiceProject.prObj_ReduceTime"> ลดเวลา</label>
+                <label><input type="checkbox" asp-for="_ViewsvsServiceProject.prObj_ReduceCost"> ลดต้นทุน</label>
+                <label><input type="checkbox" asp-for="_ViewsvsServiceProject.prObj_ReduceError"> ลดข้อผิดพลาด</label>
+                <label><input type="checkbox" asp-for="_ViewsvsServiceProject.prObj_Efficiency"> เพิ่มประสิทธิภาพ</label>
+                <label><input type="checkbox" asp-for="_ViewsvsServiceProject.prObj_Compliance"> Compliance/Audit</label>
+                <label><input type="checkbox" asp-for="_ViewsvsServiceProject.prObj_DataReport"> ปรับปรุงข้อมูล/รายงาน</label>*@
+
+        </td>
+    </tr>
+    <tr>
+        <th>ผลลัพธ์ KPI ที่คาดหวัง<span class="req">*</span></th>
+        <td><input class="inp" type="text" asp-for="_Viewsvsps_project_request.expected_kpi"></td>
+    </tr>
+    <tr>
+        <th>Effect ส่งผลต่อบริษัท<span class="req">*</span></th>
+        <td><input class="inp" type="text" asp-for="_Viewsvsps_project_request.business_effect"></td>
+    </tr>
+    <tr>
+        <th>Expected Benefit<span class="req">*</span></th>
+        <td>
+            ลดเวลา <input class="inp inline" type="number"  asp-for="_Viewsvsps_project_request.ben_kosu_hours_per_month"> ชม./เดือน
+            &nbsp; ลดต้นทุน <input class="inp inline" type="number"  asp-for="_Viewsvsps_project_request.ben_cost_saving_thb_per_year"> บาท/ปี
+            &nbsp; ลด Error <input class="inp inline" type="number"asp-for="_Viewsvsps_project_request.ben_error_reduction_pct" style="width:90px"> %
+        </td>
+    </tr>
+</table>
+<!-- ===== 3. BUSINESS BACKGROUND ===== -->
+<table class="svc">
+    <tr class="section"><th colspan="2">3. BUSINESS BACKGROUND &amp; CURRENT PROBLEM / ที่มาและปัญหาปัจจุบัน</th></tr>
+    <tr>
+        <th class="wrap">
+            อธิบายขั้นตอน
+            การทำงานปัจจุบัน
+            ปัญหาที่พบ และผลกระทบต่อธุรกิจ
+            <span class="req">*</span>
+        </th>
+        <td><textarea class="txt" asp-for="_Viewsvsps_project_request.current_process_problem"></textarea></td>
+    </tr>
+    <tr>
+        <th>ข้อมูลปัจจุบัน<span class="req">*</span></th>
+        <td>
+            จำนวนงาน <input class="inp inline" type="number" asp-for="_Viewsvsps_project_request.cur_txn_per_month"> /เดือน
+            &nbsp; เวลาทำงาน <input class="inp inline" type="number" step="any" asp-for="_Viewsvsps_project_request.cur_hours_per_month"> ชม./เดือน
+            &nbsp; ผู้ใช้งาน <input class="inp inline" type="number" asp-for="_Viewsvsps_project_request.cur_users" style="width:90px"> คน
+            &nbsp; ปริมาณ Error <input class="inp inline" type="number" asp-for="_Viewsvsps_project_request.cur_errors_per_month" style="width:90px"> ครั้ง/เดือน
+        </td>
+    </tr>
+    <tr>
+        <th class="wrap">
+            ผลกระทบ
+            หากไม่ดำเนินโครงการ
+        </th>
+        <td><input class="inp" type="text" asp-for="_Viewsvsps_project_request.impact_if_not_done"></td>
+    </tr>
+    <tr>
+        <th>เอกสารแนบ<span class="req">*</span></th>
+        <td>
+            <input type="hidden" asp-for="_Viewsvsps_project_request.attachment_types" id="textattachment_types" style="width:100%">
+            @{
+                var projectAtt = (Model._Viewsvsps_project_request.attachment_types ?? "")
+                    .Split('|', StringSplitOptions.RemoveEmptyEntries)
+                    .Select(x => x.Trim())
+                    .ToList();
+                var isOtherAttChecked = projectAtt.Contains("OTHER");
+            }
+            @foreach (var group in Model.ListLookupGroupViewModel.Where(x => x.CategoryCode == "ATTACHMENT_TYPE"))
+            {
+                <div class="row" style="margin-left: 10px;">
+                    @foreach (var item in group.Items)
+                    {
+                        <div class="col-md-3 mb-3">
+                            <label class="form-check">
+                                <!-- เพิ่ม class "attachment-checkbox" และใส่ data-code เพื่อให้ JS เรียกใช้งานได้ -->
+                                <input type="checkbox"
+                                       class="form-check-input attachment-checkbox"
+                                       name="lookup_@group.CategoryCode"
+                                       value="@item.Code"
+                                       data-code="@item.Code"
+                                       @(projectAtt.Contains(item.Code) ? "checked" : "") />
+                                <span class="form-check-label" style="margin-left: 5px;">
+                                    @item.NameTH
+                                </span>
+                                @if (item.Code == "OTHER")
+                                {
+                                    <input class="inp inline form-control form-control-sm"
+                                           type="text"
+                                           id="txtatt_other_text"
+                                           asp-for="_Viewsvsps_project_request.att_other_text"
+                                           placeholder="กรุณาระบุรายละเอียด..."
+                                           style="width: 260px; display: @(isOtherAttChecked ? "inline-block" : "none"); margin-top: 5px;" />
+                                }
+                            </label>
+                        </div>
+                    }
+                </div>
+            }
+
+
+
+            @*
+                attachment_types
+                att_other_text
+
+                <label><input type="checkbox" asp-for="_Viewsvsps_project_request.prAtt_ProcessFlow"> Process Flow</label>
+                <label><input type="checkbox" asp-for="_ViewsvsServiceProject.prAtt_SampleData"> Sample Data/Excel</label>
+                <label><input type="checkbox" asp-for="_ViewsvsServiceProject.prAtt_Screenshot"> Screenshot</label>
+                <label><input type="checkbox" asp-for="_ViewsvsServiceProject.prAtt_Report"> Report</label>
+
+                <label><input type="checkbox" asp-for="_ViewsvsServiceProject.prAtt_Other" data-other-target="#txtAttOther"> Other:</label>
+                <input class="inp inline" type="text" id="txtAttOther"
+                       asp-for="_ViewsvsServiceProject.prAtt_OtherText"
+                       style="width:260px; display:none;height:25px;">*@
+
+
+        </td>
+    </tr>
+</table>
+<!-- ===== 4. SYSTEM, DATA & USER ===== -->
+<table class="svc">
+    <tr class="section"><th colspan="2">4. SYSTEM, DATA &amp; USER INFORMATION / ระบบ ข้อมูล และผู้ใช้งาน</th></tr>
+    <tr>
+        <th>Related System</th>
+        <td>
+            <input type="hidden" asp-for="_Viewsvsps_project_request.related_systems" id="textrelated_systems" style="width:100%">
+            @{
+                var projectRl = (Model._Viewsvsps_project_request.related_systems ?? "")
+                    .Split('|', StringSplitOptions.RemoveEmptyEntries)
+                    .Select(x => x.Trim())
+                    .ToList();
+
+                var isOtherRlChecked = projectRl.Contains("OTHER");
+            }
+
+            @foreach (var group in Model.ListLookupGroupViewModel.Where(x => x.CategoryCode == "RELATED_SYSTEM"))
+            {
+                <div class="row" style="margin-left:10px">
+                    @foreach (var item in group.Items)
+                    {
+                        <div class="col-md-2 mb-3">
+                            <label class="form-check">
+                                <input type="checkbox"
+                                       class="form-check-input RELATED_SYSTEM-checkbox"
+                                       name="lookup_@group.CategoryCode"
+                                       value="@item.Code"
+                                       data-code="@item.Code"
+                                       @(projectRl.Contains(item.Code) ? "checked" : "") />
+
+                                <span class="form-check-label" style="margin-left:5px">
+                                    @item.NameTH
+                                </span>
+                                @if (item.Code == "OTHER")
+                                {
+
+                                    <input class="inp inline form-control form-control-sm"
+                                           type="text"
+                                           id="txtsys_other_text"
+                                           asp-for="_Viewsvsps_project_request.sys_other_text"
+                                           placeholder="กรุณาระบุ..."
+                                           style="width:260px; display:@(isOtherRlChecked ? "inline-block" : "none");" />
+                                }
+                            </label>
+                        </div>
+
+
+                    }
+                </div>
+
+            }
+            @*<div class="chk-group"> </div>*@
+            @*
+                related_systems
+                sys_other_text
+                <label><input type="checkbox" asp-for="_ViewsvsServiceProject.prSys_SAP"> SAP S/4HANA</label>
+                <label><input type="checkbox" asp-for="_ViewsvsServiceProject.prSys_PLEX"> PLEX</label>
+                <label><input type="checkbox" asp-for="_ViewsvsServiceProject.prSys_PowerApps"> Power Apps</label>
+                <label><input type="checkbox" asp-for="_ViewsvsServiceProject.prSys_PowerAutomate"> Power Automate</label>
+                <label><input type="checkbox" asp-for="_ViewsvsServiceProject.prSys_PowerBI"> Power BI</label>
+                <label><input type="checkbox" asp-for="_ViewsvsServiceProject.prSys_SharePoint"> SharePoint</label>
+                <label><input type="checkbox" asp-for="_ViewsvsServiceProject.prSys_M365"> M365</label>
+                <label><input type="checkbox" asp-for="_ViewsvsServiceProject.prSys_AI"> AI</label>
+                <label><input type="checkbox" asp-for="_ViewsvsServiceProject.prSys_IoT"> IoT/Machine</label>
+                <label><input type="checkbox" asp-for="_ViewsvsServiceProject.prSys_Excel"> Excel</label>
+
+                <label><input type="checkbox" asp-for="_ViewsvsServiceProject.prSys_Other" data-other-target="#txtSysOther"> Other:</label>
+                <input class="inp inline" type="text" id="txtSysOther"
+                       asp-for="_ViewsvsServiceProject.prSys_OtherText"
+                       style="width:260px;display:none;height:25px;">*@
+
+
+
+
+        </td>
+    </tr>
+    <tr>
+        <th>ค่าใช้จ่ายที่คาดว่าจะเกิดขึ้น</th>
+        <td>
+            ครั้งเดียว <input class="inp inline" type="number" step="any" asp-for="_Viewsvsps_project_request.cost_one_time_thb"> บาท
+            &nbsp;|&nbsp; ต่อเนื่อง <input class="inp inline" type="number" step="any" asp-for="_Viewsvsps_project_request.cost_recurring_thb_per_year"> บาท/ปี
+            <div class="chk-group" style="margin-top:10px">
+                @*<span>รายการค่าใช้จ่าย:</span>
+                    cost_categories
+                    cost_other_text
+
+                    <label><input type="checkbox" asp-for="_ViewsvsServiceProject.prCostItem_Dev"> พัฒนา/ติดตั้ง</label>
+                    <label><input type="checkbox" asp-for="_ViewsvsServiceProject.prCostItem_Equip"> อุปกรณ์</label>
+                    <label><input type="checkbox" asp-for="_ViewsvsServiceProject.prCostItem_License"> License/Subscription</label>
+                    <label><input type="checkbox" asp-for="_ViewsvsServiceProject.prCostItem_Maint"> บำรุงรักษา</label>
+
+                    <label><input type="checkbox" asp-for="_ViewsvsServiceProject.prCostItem_Other" data-other-target="#txtCostItemOther"> อื่นๆ</label>
+                    <input class="inp inline" type="text" id="txtCostItemOther"
+                           asp-for="_ViewsvsServiceProject.prCostItem_OtherText"
+                           style="width:220px;height:25px; display:none;">*@
+
+            </div>
+            <div class="note">
+                <b>Reference Cost</b><br>
+                - Copilot 30$ ต่อคน/ต่อเดือน (~1,000 THB)<br>
+                - Power Automate Desktop Premium 500 THB ต่อคน/ต่อเดือน
+            </div>
+        </td>
+    </tr>
+</table>
+<table class="svc">
+    <tr class="section"><th colspan="2">แนบเอกสาร</th></tr>
+    <tr>
+        <th>
+            แนบเอกสาร
+        </th>
+        <td>
+            <input name="files" type="file" id="files" multiple="" class="button " style="width:300px;margin-right:20px;@(@_UserId == @Model._ViewsvsServiceRequest.srRequestBy|| @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode ? "" : "pointer-events: none;")">
+            <button type="button" class="button notification" style="width:140px; height:28px;background-color:#7286D3" data-bs-dismiss="modal" id="btnfile">
+                <img src="~/images/open-folder.png" style="width:25px;height:25px;padding-right:5px;margin-right:8px">
+                @{
+                    var fileCount = Model._ListViewAttachmentUser?.Count() ?? 0;
+                }
+
+                เปิดไฟล์แนบ @fileCount ไฟล์
+                @if (@fileCount > 0)
+                {
+                    <span class="badge">@fileCount</span>
+                }
+
+            </button>
+        </td>
+    </tr>
+    <tr>
+        <th>
+            <label> Kosu (Hrs./Month)</label>
+        </th>
+        <td>
+            <input type="number" style="width:100px;" class="text-gray inp" step="1" min="0" asp-for="_ViewsvsServiceRequest.srKosu" id="txtgkosu"> <span style="color:red">กรอกเฉพาะตัวเลขเท่านั่น</span>
+
+        </td>
+    </tr>
+</table>
+
+
+<script>
+    (function () {
+
+        var groups = [
+            { cb: '.project-type-checkbox', target: 'textproject_types' },
+            { cb: '.Obj-checkbox', target: 'textobjectives' },
+            { cb: '.attachment-checkbox', target: 'textattachment_types' },
+            { cb: '.RELATED_SYSTEM-checkbox', target: 'textrelated_systems' }
+        ];
+
+        function isOther(cb) {
+            var v = (cb.value || '').trim().toUpperCase();
+            var c = (cb.dataset.code || '').trim().toUpperCase();
+            return v === 'OTHER' || c === 'OTHER';
+        }
+
+        // หาช่อง "อื่นๆ" จาก label เดียวกับ checkbox
+        function getOtherInput(cb) {
+            var label = cb.closest('label');
+            return label ? label.querySelector('input[type="text"]') : null;
+        }
+
+        function showHide(input, show, clear) {
+            if (!input) return;
+            input.style.setProperty('display', show ? 'inline-block' : 'none', 'important');
+            if (!show && clear) input.value = '';
+        }
+
+        function syncGroup(g, clearOther) {
+            var checkboxes = document.querySelectorAll(g.cb);
+            if (checkboxes.length === 0) return;
+
+            var values = [];
+
+            checkboxes.forEach(function (cb) {
+                if (cb.checked) values.push(cb.value);
+                if (isOther(cb)) showHide(getOtherInput(cb), cb.checked, clearOther);
+            });
+
+            var targetInput = document.getElementById(g.target);
+            if (targetInput) {
+                targetInput.value = values.length > 0 ? '|' + values.join('|') + '|' : '';
+            }
+        }
+
+        function syncAll(clearOther) {
+            groups.forEach(function (g) { syncGroup(g, clearOther); });
+        }
+
+        window.svcSyncAll = syncAll;
+
+        if (!window.__svcDelegated) {
+            window.__svcDelegated = true;
+            document.addEventListener('change', function (e) {
+                var t = e.target;
+                if (!t || !t.matches || !t.matches('input[type="checkbox"]')) return;
+                groups.forEach(function (g) {
+                    if (t.matches(g.cb)) syncGroup(g, true);
+                });
+            });
+        }
+
+        syncAll(false);
+
+    })();
+</script>

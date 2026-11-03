@@ -46,6 +46,14 @@ namespace ServiceStation.Controllers.RequestForm
         }
 
         //[HttpPost]
+        private static HashSet<string> GetSelected(string csv)
+        {
+            if (string.IsNullOrWhiteSpace(csv)) return new HashSet<string>();
+            return new HashSet<string>(
+                csv.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim()),
+                StringComparer.OrdinalIgnoreCase);
+        }
+
 
         [Authorize("Checked")]
         public ActionResult Index(string id, string vtype, string vForm, string vTeam, string vSubject, string vSrNo, string mmSecCode, string msSubNo, string vtoken)
@@ -53,6 +61,7 @@ namespace ServiceStation.Controllers.RequestForm
 
             try
             {
+
                 string _UserId = User.Claims.FirstOrDefault(s => s.Type == "UserId")?.Value;
 
 
@@ -101,6 +110,13 @@ namespace ServiceStation.Controllers.RequestForm
                 @class._ViewsvsRegisterUSB = new ViewsvsRegisterUSB();
                 @class._ViewsvsRegisterUSB_New = new List<ViewsvsRegisterUSB_New>();
                 @class._ViewsvsRegisterUSB_Cancel = new List<ViewsvsRegisterUSB_Cancel>();
+
+                @class._ViewsvsServiceRequest = new ViewsvsServiceRequest(); //F9
+
+                @class._Viewsvsps_project_request = new Viewsvsps_project_request(); //F9
+                @class.ListLookupGroupViewModel = new List<LookupGroupViewModel>();
+
+
                 if (vForm == "F4")
                 {
                     //ViewsvsMastUSB
@@ -122,7 +138,46 @@ namespace ServiceStation.Controllers.RequestForm
                     ViewBag.listTypeUser = _listofTypeUser;
                 }
 
+                if (vForm == "F9")
+                {
+                  
+                    var lookupGroups =
+                           (from c in _IT.svsps_lookup_category
+                            join i in _IT.svsps_lookup_item
+                               on c.id equals i.lookup_category_id
+                            where c.is_active == true
+                               && c.is_deleted == false
+                               && i.is_active == true
+                               && i.is_deleted == false
+                            orderby c.id, i.sort_order
+                            select new
+                            {
+                                Category = c,
+                                Item = i
+                            })
+                           .ToList()
+                           .GroupBy(x => x.Category.id)
+                           .Select(g => new LookupGroupViewModel
+                           {
+                               CategoryId = g.First().Category.id,
+                               CategoryCode = g.First().Category.code,
+                               CategoryName = g.First().Category.name_th,
+                               SelectionMode = g.First().Category.selection_mode,
+                               IsRequired = g.First().Category.is_required,
 
+                               Items = g.Select(x => new LookupItemViewModel
+                               {
+                                   Id = x.Item.id,
+                                   Code = x.Item.code,
+                                   NameTH = x.Item.name_th,
+                                   NameEN = x.Item.name_en,
+                                   AllowOtherText = x.Item.allow_other_text
+                               }).ToList()
+                           })
+                           .ToList();
+                     //ViewBag.LookupGroups = lookupGroups;
+                    @class.ListLookupGroupViewModel = lookupGroups;
+                }
                 ViewAccEMPLOYEE vAcc = new ViewAccEMPLOYEE();
                 @class._ViewsvsServiceRequest = new ViewsvsServiceRequest();
 
@@ -202,6 +257,13 @@ namespace ServiceStation.Controllers.RequestForm
                                 @class._ViewAccUser.INTERCOMNO = _ViewAccEMPLOYEE.INTERCOMNO;
                             }
                         }
+                    }
+
+
+                    //add 03/11/2026
+                    else if (vForm == "F9")
+                    {
+                        @class._Viewsvsps_project_request = _IT.svsps_project_request.Where(x => x.request_no == vSrNo).FirstOrDefault();
                     }
 
                     if (@class._ViewsvsServiceRequest.srStep > 2)
@@ -829,11 +891,27 @@ namespace ServiceStation.Controllers.RequestForm
             int vsrNo = @classs._ViewsvsServiceRequest.srNo;
             @classs._ViewsvsHistoryApproved = new ViewsvsHistoryApproved();
             @classs._ViewsvsHistoryApproved.htFrom = _IT.rpEmails.Where(x => x.emEmpcode == _UserId).Select(x => x.emName_M365).FirstOrDefault(); ;
-
+            ModelState.Remove("_ViewsvsHistoryApproved.htCC");
             if (@classs._ViewsvsServiceRequest.srStep == 1) // Waiting for approval CS Up of Dept.
             {
                 var EMPCODE_CsIS = _IT.svsMastServiceMain.Where(x => x.mmSecCode == @classs._ViewsvsServiceRequest.srType).Select(x => x.mmEmpCode).First();
-                @classs._ViewsvsHistoryApproved.htTo = _IT.rpEmails.Where(x => x.emEmpcode == EMPCODE_CsIS).Select(x => x.emName_M365).FirstOrDefault(); ;
+                @classs._ViewsvsHistoryApproved.htTo = _IT.rpEmails.Where(x => x.emEmpcode == EMPCODE_CsIS).Select(x => x.emName_M365).FirstOrDefault();
+
+                var empCodeCC = _IT.svsMastServiceMain.Where(x => x.mmSecCode == @classs._ViewsvsServiceRequest.srType).Select(x => x.mmEmpCodecc).First();
+                var vCCemail = "";
+                string[] splitCC = (empCodeCC ?? "").Split(
+                    new[] { ',' },
+                    StringSplitOptions.RemoveEmptyEntries
+                );
+
+                foreach (var i in splitCC)
+                {
+                    var empCC = _IT.rpEmails.Where(w => w.emEmpcode == i).FirstOrDefault();
+                    vCCemail += empCC.emName_M365.ToString() + ",";
+                }
+
+                @classs._ViewsvsHistoryApproved.htCC = vCCemail;
+
             }
             else if (@classs._ViewsvsServiceRequest.srStep == 3)
             {
@@ -859,14 +937,14 @@ namespace ServiceStation.Controllers.RequestForm
 
 
             @classs._ViewsvsHistoryApproved.htStatus = "Approve";
-            @classs._ViewsvsHistoryApproved.htCC = "";
+
             @classs._ViewsvsHistoryApproved.htRemark = "";
             @classs._ViewsvsHistoryApproved.htDate = DateTime.Now.ToString("yyyy/MM/dd");
             @classs._ViewsvsHistoryApproved.htTime = DateTime.Now.ToString("HH:mm:ss");
 
             // 2. เพิ่มบรรทัดนี้เพื่อล้าง ModelState เฉพาะตัว
             // เพื่อให้ asp-for ยอมใช้ค่า "" ที่เราตั้งใหม่แทนค่าเก่าจากฟอร์ม
-            ModelState.Remove("_ViewsvsHistoryApproved.htCC");
+            //  ModelState.Remove("_ViewsvsHistoryApproved.htCC");
             ModelState.Remove("_ViewsvsHistoryApproved.htRemark");
 
             // หรือถ้าอยากล้างทั้งหมดเลย (ปลอดภัยที่สุด)
@@ -1056,7 +1134,7 @@ namespace ServiceStation.Controllers.RequestForm
                         string v_POS_HCM_CODE = "1111"; //default value case null
                                                         //string v_empcsup = _IT.rpEmails.Where(w => w.emName_M365 == @class._ViewsvsHistoryApproved.htTo).Select(x => x.emEmpcode).FirstOrDefault();
 
-                      
+
                         string v_empcsup = _IT.rpEmails
                           .Where(w => w.emName_M365 == @class._ViewsvsHistoryApproved.htTo)
                           .Select(x => x.emEmpcode)
@@ -1169,7 +1247,7 @@ namespace ServiceStation.Controllers.RequestForm
                             .Where(x => x.EMP_CODE == v_empcsup)
                             .FirstOrDefault();
 
-                     
+
 
                         if (_ViewAccEMPLOYEE == null)
                         {
@@ -1178,7 +1256,7 @@ namespace ServiceStation.Controllers.RequestForm
                             return Json(new { c1 = config, c2 = msg });
                         }
 
-                        if (_ViewAccEMPLOYEE.POS_CODE == "CS")  _ViewAccEMPLOYEE.POS_CODE = "SM";
+                        if (_ViewAccEMPLOYEE.POS_CODE == "CS") _ViewAccEMPLOYEE.POS_CODE = "SM";
 
                         if (!int.TryParse(v_POS_HCM_CODE, out int posHcmCode))
                         {
@@ -1704,8 +1782,10 @@ namespace ServiceStation.Controllers.RequestForm
                     if (@class._ViewsvsHistoryApproved != null) //normal case
                     {
                         vEmailTO = _IT.rpEmails.Where(w => w.emName_M365 == @class._ViewsvsHistoryApproved.htTo).FirstOrDefault();
-                        var fnameApprove = vEmailTO.emName_M365.Split(" ")[1].ToString();
-                        v_approveBy = _HRMS.AccEMPLOYEE.Where(x => x.EMP_ENAME == fnameApprove && x.QUIT_CODE == null).Select(x => x.NICKNAME).FirstOrDefault();
+                        // var fnameApprove = vEmailTO.emName_M365.Split(" ")[1].ToString();
+                        v_approveBy = _HRMS.AccEMPLOYEE.Where(x => x.EMP_CODE == vEmailTO.emEmpcode).Select(x => x.NICKNAME).FirstOrDefault();
+                        // v_approveBy = _HRMS.AccEMPLOYEE.Where(x => x.EMP_ENAME == fnameApprove && x.QUIT_CODE == null).Select(x => x.NICKNAME).FirstOrDefault();
+
                         v_EmpApproveBy = vEmailTO.emEmpcode.ToString();
                     }
                     else //case save
@@ -1886,6 +1966,11 @@ namespace ServiceStation.Controllers.RequestForm
             {
                 getSForm = SaveSystemRegister(@class, vsrNo);
             }
+            else if (vform == "F9") //project Request
+            {
+                getSForm = SaveServiceProject(@class._Viewsvsps_project_request, vsrNo);
+            }
+
             return getSForm;
 
 
@@ -2539,7 +2624,124 @@ namespace ServiceStation.Controllers.RequestForm
             return returnVal;
         }
 
+        public string SaveServiceProject(Viewsvsps_project_request model2, int vsrNo)
+        {
+            string vmsg = "";
+            // string reqNo = $"PR-{DateTime.Now.Year}-{vsrNo:D4}";
+            string reqNo = vsrNo.ToString();
+            using (var tx = _IT.Database.BeginTransaction())
+            {
+                try
+                {
+                    var model = model2;   // ใช้ข้อมูลจากฟอร์ม
 
+                    var existing = _IT.svsps_project_request.FirstOrDefault(x => x.request_no == reqNo);
+
+                    if (existing == null)
+                    {
+                        model.id = 0;
+                        model.request_no = reqNo;
+                        model.status_item_id = 39;   // DRAFT
+                        _IT.svsps_project_request.Add(model);
+                        vmsg = "Insert success";
+                    }
+                    else
+                    {
+                        model.id = existing.id;
+                        model.request_no = existing.request_no;
+                        model.status_item_id = existing.status_item_id;
+                        model.assigned_to = existing.assigned_to;
+                        model.reviewer_comment = existing.reviewer_comment;
+
+                        _IT.Entry(existing).CurrentValues.SetValues(model);
+                        vmsg = "Update success";
+                    }
+
+                    _IT.SaveChanges();
+                    tx.Commit();
+                }
+                catch (Exception e)
+                {
+                    tx.Rollback();
+                    vmsg = "Save Fail !!!! " + (e.InnerException?.Message ?? e.Message);
+                }
+            }
+            return vmsg;
+        }
+        // อ่านค่าจาก Request.Form: Lookup[CODE] (หลายค่า) และ LookupOther[CODE] แล้วใส่ลง model
+        private void ApplyLookupFromForm(Viewsvsps_project_request model)
+        {
+            string Csv(string cat)
+            {
+                var vals = Request.Form["Lookup[" + cat + "]"]
+                    .Where(s => !string.IsNullOrWhiteSpace(s))
+                    .Select(s => s.Trim())
+                    .Distinct()
+                    .ToList();
+                return vals.Count == 0 ? null : string.Join(",", vals);
+            }
+
+            // เก็บข้อความ Other เฉพาะเมื่อติ๊กตัวเลือกที่ allow_other_text จริง
+            string Other(string cat, string csv)
+            {
+                if (string.IsNullOrEmpty(csv)) return null;
+                var selected = csv.Split(',');
+                int catId = _IT.svsps_lookup_category.Where(c => c.code == cat).Select(c => c.id).FirstOrDefault();
+                bool hasOther = _IT.svsps_lookup_item.Any(i => i.lookup_category_id == catId
+                                                               && i.allow_other_text
+                                                               && selected.Contains(i.code));
+                if (!hasOther) return null;
+                var txt = Request.Form["LookupOther[" + cat + "]"].FirstOrDefault(s => !string.IsNullOrWhiteSpace(s));
+                return txt == null ? null : txt.Trim();
+            }
+
+            model.project_types = Csv("PROJECT_TYPE");
+            model.pt_other_text = Other("PROJECT_TYPE", model.project_types);
+
+            model.objectives = Csv("OBJECTIVE");
+
+            model.attachment_types = Csv("ATTACHMENT_TYPE");
+            model.att_other_text = Other("ATTACHMENT_TYPE", model.attachment_types);
+
+            model.related_systems = Csv("RELATED_SYSTEM");
+            model.sys_other_text = Other("RELATED_SYSTEM", model.related_systems);
+
+            model.cost_categories = Csv("COST_CATEGORY");
+            model.cost_other_text = Other("COST_CATEGORY", model.cost_categories);
+        }
+
+        // copy เฉพาะ field ที่ผู้ใช้กรอกในฟอร์ม
+        private static void CopyFormFields(Viewsvsps_project_request to, Viewsvsps_project_request from)
+        {
+            to.project_name = from.project_name;
+            to.project_types = from.project_types;
+            to.pt_other_text = from.pt_other_text;
+
+            to.objectives = from.objectives;
+            to.expected_kpi = from.expected_kpi;
+            to.business_effect = from.business_effect;
+            to.ben_kosu_hours_per_month = from.ben_kosu_hours_per_month;
+            to.ben_cost_saving_thb_per_year = from.ben_cost_saving_thb_per_year;
+            to.ben_error_reduction_pct = from.ben_error_reduction_pct;
+
+            to.current_process_problem = from.current_process_problem;
+            to.cur_txn_per_month = from.cur_txn_per_month;
+            to.cur_hours_per_month = from.cur_hours_per_month;
+            to.cur_users = from.cur_users;
+            to.cur_errors_per_month = from.cur_errors_per_month;
+            to.impact_if_not_done = from.impact_if_not_done;
+
+            to.attachment_types = from.attachment_types;
+            to.att_other_text = from.att_other_text;
+
+            to.related_systems = from.related_systems;
+            to.sys_other_text = from.sys_other_text;
+
+            to.cost_one_time_thb = from.cost_one_time_thb;
+            to.cost_recurring_thb_per_year = from.cost_recurring_thb_per_year;
+            to.cost_categories = from.cost_categories;
+            to.cost_other_text = from.cost_other_text;
+        }
 
         public ActionResult DeteleDataFile(string id, string vname)
         {

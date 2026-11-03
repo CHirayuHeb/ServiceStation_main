@@ -31,6 +31,8 @@ namespace ServiceStation.Models.Table.IT
         public string mmEmpCode { get; set; }
         public string mmIssueBy { get; set; }
         public string mmUpdateBy { get; set; }
+
+        public string mmEmpCodecc { get; set; }
     }
     [Table("svsMastServiceSub")]
     public class ViewsvsMastServiceSub
@@ -506,7 +508,7 @@ namespace ServiceStation.Models.Table.IT
 
     public class RegisterUSBNewViewModel
     {
-       
+
         public int nuNewNo { get; set; }
         public int nuNo { get; set; }
         public string nuType { get; set; }
@@ -523,5 +525,223 @@ namespace ServiceStation.Models.Table.IT
         public string nuUpdateBy { get; set; }
     }
 
+    //[Table("svsServiceProject")]
+    public class ViewsvsServiceProject
+    {
+        [Key]
+        public int prNo { get; set; }
+        public string prProjectName { get; set; }
+        public bool prPType_Automation { get; set; }
+        public bool prPType_AI { get; set; }
+        public bool prPType_IoT { get; set; }
+        public bool prPType_SAP { get; set; }
+        public bool prPType_PLEX { get; set; }
+        public bool prPType_Web { get; set; }
+        public bool prPType_PowerPlatform { get; set; }
+        public bool prPType_Dashboard { get; set; }
+        public bool prPType_Other { get; set; }
+        public string prPType_OtherText { get; set; }
+        public bool prObj_ReduceManual { get; set; }
+        public bool prObj_ReduceTime { get; set; }
+        public bool prObj_ReduceCost { get; set; }
+        public bool prObj_ReduceError { get; set; }
+        public bool prObj_Efficiency { get; set; }
+        public bool prObj_Compliance { get; set; }
+        public bool prObj_DataReport { get; set; }
+        public string prKPI { get; set; }
+        public string prEffect { get; set; }
+        public double? prBenefit_HoursPerMonth { get; set; }   // ลดเวลา (ชม./เดือน)
+        public double? prBenefit_CostPerYear { get; set; }     // ลดต้นทุน (บาท/ปี)
+        public double? prBenefit_ErrorPct { get; set; }        // ลด Error (%)
+
+        public string prBackground { get; set; }
+
+        public int? prCur_JobsPerMonth { get; set; }
+        public double? prCur_HoursPerMonth { get; set; }
+        public int? prCur_Users { get; set; }
+        public int? prCur_ErrorPerMonth { get; set; }
+
+        public string prImpactIfNot { get; set; }
+
+        public bool prAtt_ProcessFlow { get; set; }
+        public bool prAtt_SampleData { get; set; }
+        public bool prAtt_Screenshot { get; set; }
+        public bool prAtt_Report { get; set; }
+        public bool prAtt_Other { get; set; }
+        [StringLength(500)]
+        public string prAtt_OtherText { get; set; }
+        // ===== 4. System, Data & User Information =====
+        public bool prSys_SAP { get; set; }
+        public bool prSys_PLEX { get; set; }
+        public bool prSys_PowerApps { get; set; }
+        public bool prSys_PowerAutomate { get; set; }
+        public bool prSys_PowerBI { get; set; }
+        public bool prSys_SharePoint { get; set; }
+        public bool prSys_M365 { get; set; }
+        public bool prSys_AI { get; set; }
+        public bool prSys_IoT { get; set; }
+        public bool prSys_Excel { get; set; }
+        public bool prSys_Other { get; set; }
+        [StringLength(500)]
+        public string prSys_OtherText { get; set; }
+        public double? prCost_OneTime { get; set; }            // ครั้งเดียว (บาท)
+        public double? prCost_PerYear { get; set; }            // ต่อเนื่อง (บาท/ปี)
+        public bool prCostItem_Dev { get; set; }
+        public bool prCostItem_Equip { get; set; }
+        public bool prCostItem_License { get; set; }
+        public bool prCostItem_Maint { get; set; }
+        public bool prCostItem_Other { get; set; }
+        public string prCostItem_OtherText { get; set; }
+        // ===== Audit (format: yyyy/MM/dd HH:mm:ss) =====
+        public string prCreatedBy { get; set; }
+        public string prCreatedDate { get; set; }
+        public string prUpdatedBy { get; set; }
+        public string prUpdatedDate { get; set; }
+    }
+
+
+    [Table("svsps_project_request")]
+    public class Viewsvsps_project_request
+    {
+        [Key]
+        public long id { get; set; }                                   // bigint
+
+        [StringLength(20)]
+        public string request_no { get; set; }                         // varchar(20)
+
+        [StringLength(300)]
+        public string project_name { get; set; }                       // nvarchar(300)
+
+        // ---- 1. Request Information ----
+        [StringLength(1000)]
+        public string project_types { get; set; }                      // varchar(1000)  CSV ของ code จาก PROJECT_TYPE
+        [StringLength(500)]
+        public string pt_other_text { get; set; }                      // nvarchar(500)
+
+        // ---- 2. Objective & Expected Benefit ----
+        [StringLength(1000)]
+        public string objectives { get; set; }                         // varchar(1000)  CSV ของ code จาก OBJECTIVE
+        public string expected_kpi { get; set; }                       // nvarchar(max)
+        public string business_effect { get; set; }                    // nvarchar(max)
+
+        public decimal? ben_kosu_hours_per_month { get; set; }         // decimal
+        public decimal? ben_cost_saving_thb_per_year { get; set; }     // decimal
+        public decimal? ben_error_reduction_pct { get; set; }          // decimal(5,?)
+
+        // ---- 3. Business Background ----
+        public string current_process_problem { get; set; }            // nvarchar(max)
+        public int? cur_txn_per_month { get; set; }                    // int
+        public decimal? cur_hours_per_month { get; set; }              // decimal
+        public int? cur_users { get; set; }                            // int
+        public int? cur_errors_per_month { get; set; }                 // int
+        public string impact_if_not_done { get; set; }                 // nvarchar(max)
+
+        [StringLength(1000)]
+        public string attachment_types { get; set; }                   // varchar(1000)  CSV ของ code จาก ATTACHMENT_TYPE
+        [StringLength(500)]
+        public string att_other_text { get; set; }                     // nvarchar(500)
+        [StringLength(1000)]
+        public string attachment_folder_path { get; set; }             // nvarchar(1000)
+
+        // ---- 4. System, Data & User ----
+        [StringLength(1000)]
+        public string related_systems { get; set; }                    // varchar(1000)  CSV ของ code จาก RELATED_SYSTEM
+        [StringLength(500)]
+        public string sys_other_text { get; set; }                     // nvarchar(500)
+
+        public decimal? cost_one_time_thb { get; set; }                // decimal
+        public decimal? cost_recurring_thb_per_year { get; set; }      // decimal
+        [StringLength(1000)]
+        public string cost_categories { get; set; }                    // varchar(1000)  CSV ของ code จาก COST_CATEGORY
+        [StringLength(500)]
+        public string cost_other_text { get; set; }                    // nvarchar(500)
+
+        // ---- Workflow ----
+        public int? status_item_id { get; set; }                       // int
+        [StringLength(200)]
+        public string assigned_to { get; set; }                        // nvarchar(200)
+        public string reviewer_comment { get; set; }                   // nvarchar(max)
+        
+    }
+    [Table("svsps_lookup_item")]
+    public class Viewsvsps_lookup_item
+    {
+        [Key]
+        public int id { get; set; }
+
+        public int lookup_category_id { get; set; }
+        public string code { get; set; }
+        public string name_th { get; set; }
+        public string name_en { get; set; }
+
+        public int? parent_item_id { get; set; }
+
+        public bool allow_other_text { get; set; }
+        public int sort_order { get; set; }
+        public bool is_active { get; set; }
+
+        public DateTime created_at { get; set; }
+        public long created_by { get; set; }
+
+        public DateTime? updated_at { get; set; }
+        public long? updated_by { get; set; }
+
+        public bool is_deleted { get; set; }
+
+        //[Timestamp]
+        //public byte[] row_version { get; set; }
+    }
+    [Table("svsps_lookup_category")]
+    public class Viewsvsps_lookup_category
+    {
+        [Key]
+        public int id { get; set; }
+
+        public string code { get; set; }
+        public string name_th { get; set; }
+        public string name_en { get; set; }
+
+        public string selection_mode { get; set; }
+
+        public bool is_required { get; set; }
+        public bool is_active { get; set; }
+
+        public DateTime created_at { get; set; }
+        public long created_by { get; set; }
+
+        public DateTime? updated_at { get; set; }
+        public long? updated_by { get; set; }
+
+        public bool is_deleted { get; set; }
+
+        //[Timestamp]
+        //public byte[] row_version { get; set; }
+    }
+
+
+ 
+
+    public class LookupGroupViewModel
+    {
+        public int CategoryId { get; set; }
+        public string CategoryCode { get; set; }
+        public string CategoryName { get; set; }
+        public string SelectionMode { get; set; }
+        public bool IsRequired { get; set; }
+
+        public List<LookupItemViewModel> Items { get; set; }
+            = new List<LookupItemViewModel>();
+    }
+
+    public class LookupItemViewModel
+    {
+        public int Id { get; set; }
+        public string Code { get; set; }
+        public string NameTH { get; set; }
+        public string NameEN { get; set; }
+        public bool AllowOtherText { get; set; }
+
+        public bool IsSelected { get; set; }
+    }
 
 }

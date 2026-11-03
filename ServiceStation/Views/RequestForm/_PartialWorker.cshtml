@@ -17,24 +17,19 @@
             @*<input type="submit" value="Submit" class="btn btn-primary">*@
         </div>
     </div>
-    <table id="Toptable" class="center" style="@( ( @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode || _UserId == @ViewBag._empcs) && @Model._ViewsvsServiceRequest.srStep !=5 ? "" : "pointer-events: none;")">
-        <tr>
-            <td align="left" colspan="2" id="tbottom">สถานะ</td>
+    <table  class="svc" style="@( ( @_UserId == @Model._ViewsvsServiceRequest.srApproveEmpcode || _UserId == @ViewBag._empcs) && @Model._ViewsvsServiceRequest.srStep !=5 ? "" : "pointer-events: none;")">
+        <tr class="section">
+            <th align="left" colspan="2">สถานะ</th>
         </tr>
         <tr>
             <td align="left" colspan="2">
                 กรุณาเลือก @Html.DropDownListFor(m => m._ViewsvsServiceRequest.srStatus, (SelectList)ViewBag.vbformfStatus, new { @class = "form-control", id = "txtwsrStatus", autocomplete = "off", required = "required", @style = "width:200px;font-size:12px" })
-                @*<select class="form-control" id="txtwsrStatus" style="width:250px;font-size:12px" asp-for="_ViewsvsServiceRequest.srStatus">
-                        <option value="">กรุณาเลือก</option>
-                        <option value="Pending​">Pending​</option>
-                        <option value="In Process​​">In Process​​</option>
-                        <option value="Done​">Done​</option>
-                    </select>*@
+            
             </td>
         </tr>
-        <tr>
-            <td align="left" id="tbottom">วันคาดว่างานเสร็จสิ้น <span style="color:red;"> *จำเป็นต้องกรอก</span></td>
-            <td align="left" id="tbottom">วันที่งานเสร็จสิ้น <span style="color:red"> *จำเป็นต้องกรอก</span></td>
+        <tr class="section">
+            <th align="left">วันคาดว่างานเสร็จสิ้น <span style="color:red;"> *จำเป็นต้องกรอก</span></th>
+            <th align="left">วันที่งานเสร็จสิ้น <span style="color:red"> *จำเป็นต้องกรอก</span></th>
         </tr>
         <tr>
             <td align="left">
@@ -45,17 +40,17 @@
                 <input class="input-with-image datepicker form-control" type="text" autocomplete="off" style="width:50%; height:30px;text-align:center;font-size:12px" readonly asp-for="_ViewsvsServiceRequest.srFinishDate" id="txtwFinishDate" />
             </td>
         </tr>
-        <tr>
-            <td align="left" colspan="2" id="tbottom">เวลาการทำงานทั้งหมด(ชั่วโมง) <span style="color:red"> *จำเป็นต้องกรอก</span></td>
+        <tr class="section">
+            <th align="left" colspan="2">เวลาการทำงานทั้งหมด(ชั่วโมง) <span style="color:red"> *จำเป็นต้องกรอก</span></th>
         </tr>
         <tr>
             <td align="left" colspan="2">
-                <input type="number" class="text-gray" step="0.25" min="0" asp-for="_ViewsvsServiceRequest.srTotalWorkTime" id="txtwTotalWorkTime"> <span style="color:red">จำเป็นต้องกรอก</span>
+                <input type="number" class="text-gray form-control" step="0.25" min="0" asp-for="_ViewsvsServiceRequest.srTotalWorkTime" id="txtwTotalWorkTime" style="width:100px"> <span style="color:red">จำเป็นต้องกรอก</span>
                 @*<input type="number" step="0.25" min="0" class="form-control" name="input" value="0" style="width:100px" asp-for="_ViewsvsServiceRequest.srTotalWorkTime" />*@
             </td>
         </tr>
-        <tr>
-            <td align="left" colspan="2" id="tbottom">วิธีการแก้ไข<span style="color:red"> *จำเป็นต้องกรอก</span></td>
+        <tr class="section">
+            <th align="left" colspan="2" >วิธีการแก้ไข<span style="color:red"> *จำเป็นต้องกรอก</span></th>
         </tr>
         <tr>
             <td align="left" colspan="2">

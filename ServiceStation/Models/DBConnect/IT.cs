@@ -78,6 +78,14 @@ namespace ServiceStation.Models.DBConnect
         public DbSet<ViewsvsRegisterUSB_New> svsRegisterUSB_New { get; set; }
         public DbSet<ViewsvsMastUSB> svsMastUSB { get; set; }
 
+        public DbSet<ViewsvsServiceProject> svsServiceProject { get; set; }
+
+
+        //new for project Request
+        public DbSet<Viewsvsps_project_request> svsps_project_request { get; set; }
+        public DbSet<Viewsvsps_lookup_item> svsps_lookup_item { get; set; }
+        public DbSet<Viewsvsps_lookup_category> svsps_lookup_category { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
