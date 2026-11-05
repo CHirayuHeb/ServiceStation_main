@@ -1458,8 +1458,8 @@ function checkFormF9() {
     if (kosu === "" || !/^\d+$/.test(kosu)) {
         return fail("กรุณากรอกเฉพาะตัวเลขจำนวนเต็ม", "txtgkosu");
     }
-    if (Number(kosu) < 168) {
-        return fail("KOSU ต้องไม่น้อยกว่า 168", "txtgkosu");
+    if (Number(kosu) < 80) {
+        return fail("KOSU ต้องไม่น้อยกว่า 80", "txtgkosu");
     }
     return true;
 }
